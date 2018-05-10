@@ -2,7 +2,7 @@ Package: FluxCalR
 Type: Package
 Title: Calculate CO2 and CH4 gas flux measured with static chamber method
 Version: 0.1.0
-Author: Junbin Zhao <junbinzhao1985@gmail.com>
+Author: Junbin Zhao
 Maintainer: Junbin Zhao <junbinzhao1985@gmail.com>
 Description: This R package is used to calculate CO2 and CH4 gas fluxes measured with static chamber method. It provide a 
     easy way to calculate multiple flux measurements in one data file together. The format of data input are specialized to 
@@ -13,3 +13,4 @@ License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports: tidyverse, lubridate, assertthat
+RoxygenNote: 6.0.1
