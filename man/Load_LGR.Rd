@@ -2,19 +2,22 @@
 % Please edit documentation in R/Load.R
 \name{Load_LGR}
 \alias{Load_LGR}
-\title{Load a Matrix}
+\title{Load_LGR}
 \usage{
 Load_LGR(file, Time_format = "mdy_hms")
 }
 \arguments{
-\item{infile}{Path to the input file}
+\item{file}{set "file" as raw data file name (may include the directory path, as string) WITHOUT changing anything}
+
+\item{Time_format}{depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", default: "mdy_hms"}
 }
 \value{
-A matrix of the infile
+a dataframe with all the loaded data in the right format
 }
 \description{
-This function loads a file as a matrix. It assumes that the first column
-contains the rownames and the subsequent columns are the sample identifiers.
-Any rows with duplicated row names will be dropped with the first one being
-kepted.
+Functions used to load raw data output from LGR Ultraportable Gas Analyzers to feed the function "FluxCal"
+}
+\examples{
+Flux <- Load_LGR("C:/gga17Feb2017_f0000.txt")
+
 }

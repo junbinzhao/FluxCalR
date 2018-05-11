@@ -1,15 +1,15 @@
-#' @title
+#' @title Load_LGR
 #'
-#' @description
+#' @description Functions used to load raw data output from LGR Ultraportable Gas Analyzers to feed the function "FluxCal"
 #'
-#' @param
+#' @param file set "file" as raw data file name (may include the directory path, as string) WITHOUT changing anything
+#' @param Time_format depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", default: "mdy_hms"
 #'
-#' @return
+#' @return a dataframe with all the loaded data in the right format
 #'
-#' @examples
+#' @examples Flux <- Load_LGR("C:/gga17Feb2017_f0000.txt")
 #'
 #' @export
-
 ## Function for loading data from LGR ----------
 Load_LGR <- function(file, ## set "file" as raw data file name (as string) WITHOUT changing anything
                      Time_format="mdy_hms" ## depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms"
@@ -30,13 +30,36 @@ Load_LGR <- function(file, ## set "file" as raw data file name (as string) WITHO
   }
   return(flux)
 }
+##----------------------
 
-
+#' @title Load_other
+#'
+#' @description Functions used to load raw data output from other similar analyzers (e.g. LICOR) to feed the function "FluxCal"
+#'
+#' @param file set "file" as raw data file name (may include the directory path, as string) WITHOUT changing anything
+#' @param Time_format depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", default: "mdy_hms"
+#' @param Date add the date of measurement in the format of "mm/dd/yyyy"
+#' @param Time header name of the timestamps in the file (string)
+#' @param CO2 header name of the CO2 concentrations in the file (string)
+#' @param CH4 header name of the CH4 concentrations in the file (string). Default: no CH4 is measured
+#' @param Ta header name of ambient air temperature in the file (string). If not measured, a constant value can be used. Default: 25 degree C
+#' @param skip rows to be skipped at the beginning. Default: no rows will be skipped
+#' @param sep delimiter to separate columns. Default: comma (",")
+#'
+#' @return a dataframe with all the loaded data in the right format
+#'
+#' @examples Flux <- Load_other("C:/Licor.txt",
+#'                    Time_format = "hms",
+#'                    Date = "5/11/2018",
+#'                    Time = "time",
+#'                    CO2 = "[co2]")
+#'
+#' @export
 ## Function for loading data from other sources ----------
 Load_other <- function(file, ## set "file" as raw data file name (as string) WITHOUT changing anything
                        Time_format="mdy_hms", ## depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", or if only time is recorded use "hms"
                        Date = "1/31/2018", # add the date of measurement in the format of "mm/dd/yyyy"
-                       Time, # header name of the timestamps in the file (string)
+                       Time = NA, # header name of the timestamps in the file (string)
                        CO2, # header name of the CO2 concentrations in the file (string)
                        CH4 = NA, # header name of the CH4 concentrations in the file (string). Default: no CH4 is measured
                        Ta = 25, # header name of ambient air temperature in the file (string). If not measured, a constant value can be used. Default: 25 degree C

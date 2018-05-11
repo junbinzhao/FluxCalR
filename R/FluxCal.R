@@ -1,16 +1,23 @@
-#' @title
+#' @title FluxCal
 #'
-#' @description
+#' @description Calculate CO2 and CH4 gas flux from the data loaded by the function "Load_LGR" or "Load_other"
 #'
-#' @param
+#' @param data the data loaded by the function "Load_LGR" or "Load_other"
+#' @param t window width for slope calculation, unit: minutes
+#' @param spt set"spt", how many groups you would like to split your data into as you selet the peaks and valleys
+#' @param Time_keys load a file with times (HH:MM:SS) that separate the flux calculation, with header as either "Start" or "End". if no file provided, a graph window will pop up to allow manually select the end points.
+#' @param Type_keys select if "end" time or "start" time will be used to separate the flux; default "start"
+#' @param vol volume of the chamber; unit: dm^3 or L
+#' @param Ta air temperature; unit: degree C. A file name with a column "Ta" in the file. The length of Ta must be the same as number of measurements. Default: use the average ambient air temperature measured by analyzer
+#' @param Area base area of the chamber; unit: m^2
+#' @param output_d the output directory
 #'
-#' @return
+#' @return A dataframe with the calculated the fluxes
 #'
 #' @examples
+#'     FluxCal(data = Flux, t = 3, vol = 1, Area = 1)
 #'
 #' @export
-
-
 ## Flux calculation function starts from here ---------------
 FluxCal <- function(data, ## the data loaded by the function "Load_LGR" or "Load_other"
                     t, ## window width for slope calculation, unit: minutes
