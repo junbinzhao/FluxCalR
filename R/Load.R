@@ -7,7 +7,10 @@
 #'
 #' @return a dataframe with all the loaded data in the right format
 #'
-#' @examples Flux <- Load_LGR("C:/gga17Feb2017_f0000.txt")
+#' @examples
+#' # get the directory of the example raw data from LGR
+#' example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
+#' Flux <- Load_LGR(example_data) # input is a string with the directory of the data file and file name
 #'
 #' @export
 ## Function for loading data from LGR ----------

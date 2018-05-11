@@ -18,6 +18,8 @@ a dataframe with all the loaded data in the right format
 Functions used to load raw data output from LGR Ultraportable Gas Analyzers to feed the function "FluxCal"
 }
 \examples{
-Flux <- Load_LGR("C:/gga17Feb2017_f0000.txt")
+# get the directory of the example raw data from LGR
+example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
+Flux <- Load_LGR(example_data) # input is a string with the directory of the data file and file name
 
 }
