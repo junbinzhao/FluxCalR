@@ -17,7 +17,11 @@
 #' @return A dataframe with the calculated the fluxes
 #'
 #' @examples
-#'     FluxCal(data = Flux, t = 3, vol = 1, Area = 1)
+#' # get the directory of the example raw data from LGR
+#' example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
+#' Flux <- Load_LGR(example_data) # input is a string with the directory of the data file and file name
+#' # Calculate the flux over a 3-minute window
+#' FluxCal(data = Flux, t = 3, vol = 1, Area = 1)
 #'
 #' @export
 ## Flux calculation function starts from here ---------------
