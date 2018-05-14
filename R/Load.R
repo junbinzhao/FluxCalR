@@ -1,21 +1,22 @@
-#' @title Load_LGR
+#' @title Load LGR data
 #'
-#' @description Functions used to load raw data output from LGR Ultraportable Gas Analyzers to feed the function "FluxCal"
+#' @description Function used to load raw data output from LGR Ultraportable Gas Analyzers to feed the "data" argument in function "FluxCal()".
 #'
-#' @param file set "file" as raw data file name (may include the directory path, as string) WITHOUT changing anything
-#' @param Time_format depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", default: "mdy_hms"
+#' @param file A string contains the directory path and file name of the raw data. The data should be provided as what is exported from the LGR analyzer.
+#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the output timestamp from the analyzer.
 #'
-#' @return a dataframe with all the loaded data in the right format
+#' @return A dataframe with all data in the right format for function "FluxCal()".
 #'
 #' @examples
-#' # get the directory of the example raw data from LGR
+#' # get the directory of the example LGR raw data
 #' example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
-#' Flux <- Load_LGR(example_data) # input is a string with the directory of the data file and file name
+#' # load the data
+#' Flux <- Load_LGR(example_data)
 #'
 #' @export
 ## Function for loading data from LGR ----------
-Load_LGR <- function(file, ## set "file" as raw data file name (as string) WITHOUT changing anything
-                     Time_format="mdy_hms" ## depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms"
+Load_LGR <- function(file,
+                     Time_format="mdy_hms"
 ){
   # Load the raw data after deleting the text massages at the beginning and the end of each raw data file generate by LGR
   flux <- read.table(file, sep= ",", header = T,skip = 1,fill = T,stringsAsFactors = F)
@@ -34,21 +35,21 @@ Load_LGR <- function(file, ## set "file" as raw data file name (as string) WITHO
 }
 ##----------------------
 
-#' @title Load_other
+#' @title Load data from other analyzers
 #'
-#' @description Functions used to load raw data output from other similar analyzers (e.g. LICOR) to feed the function "FluxCal"
+#' @description Function used to load raw data output from other similar analyzers (e.g. LICOR) to feed the "data" argument in function "FluxCal()".
 #'
-#' @param file set "file" as raw data file name (may include the directory path, as string) WITHOUT changing anything
-#' @param Time_format depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", default: "mdy_hms"
-#' @param Date add the date of measurement in the format of "mm/dd/yyyy"
-#' @param Time header name of the timestamps in the file (string)
-#' @param CO2 header name of the CO2 concentrations in the file (string)
-#' @param CH4 header name of the CH4 concentrations in the file (string). Default: no CH4 is measured
-#' @param Ta header name of ambient air temperature in the file (string). If not measured, a constant value can be used. Default: 25 degree C
-#' @param skip rows to be skipped at the beginning. Default: no rows will be skipped
-#' @param sep delimiter to separate columns. Default: comma (",")
+#' @param file A string contains the directory path and file name of the raw data.
+#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the output timestamp from the analyzer. In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.
+#' @param Date A string indicates date of the measurements in the format of "mm/dd/yyyy".
+#' @param Time A string indicates column name of the timestamps in the data file.
+#' @param CO2 A string indicates column name of the CO2 concentrations in the data file.
+#' @param CH4 A string indicates column name of the CH4 concentrations in the data file. Default: no CH4 is measured.
+#' @param Ta A string indicates column name of ambient air temperature in the data file. If not measured, a constant value can be used. Default: 25 degree C.
+#' @param skip A number indicates rows to be skipped at the beginning of the data file. Default: 0, no rows will be skipped.
+#' @param sep A string indicates delimiter to separate columns. Default: comma (",").
 #'
-#' @return a dataframe with all the loaded data in the right format
+#' @return a dataframe with all data in the right format for function "FluxCal()".
 #'
 #' @examples Flux <- Load_other("C:/Licor.txt",
 #'                    Time_format = "hms",
@@ -58,18 +59,18 @@ Load_LGR <- function(file, ## set "file" as raw data file name (as string) WITHO
 #'
 #' @export
 ## Function for loading data from other sources ----------
-Load_other <- function(file, ## set "file" as raw data file name (as string) WITHOUT changing anything
-                       Time_format="mdy_hms", ## depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", or if only time is recorded use "hms"
-                       Date = "1/31/2018", # add the date of measurement in the format of "mm/dd/yyyy"
-                       Time, # header name of the timestamps in the file (string)
-                       CO2, # header name of the CO2 concentrations in the file (string)
-                       CH4 = NULL, # header name of the CH4 concentrations in the file (string). Default: no CH4 is measured
-                       Ta = 25, # header name of ambient air temperature in the file (string). If not measured, a constant value can be used. Default: 25 degree C
-                       skip = 0, # rows to be skipped at the beginning. Default: no rows will be skipped
-                       sep = "," # delimiter to separate columns. Default: comma (",")
+Load_other <- function(file,
+                       Time_format="mdy_hms",
+                       Date = "1/31/2018",
+                       Time,
+                       CO2,
+                       CH4 = NULL,
+                       Ta = 25,
+                       skip = 0,
+                       sep = ","
 )
 {
-  # Load the raw data after deleting the text massages at the beginning and the end of each raw data file generate by LGR
+  # Load the raw data after deleting the text massages at the beginning and the end of each raw data file
   flux <- read.table(file, sep= sep, header = T,skip = skip,fill = T,stringsAsFactors = F)
   flux <- subset(flux,!is.na(flux[,2])) # remove the comments generated by analyzer
   flux <- data.frame()

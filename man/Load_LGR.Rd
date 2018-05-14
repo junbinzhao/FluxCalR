@@ -2,24 +2,25 @@
 % Please edit documentation in R/Load.R
 \name{Load_LGR}
 \alias{Load_LGR}
-\title{Load_LGR}
+\title{Load LGR data}
 \usage{
 Load_LGR(file, Time_format = "mdy_hms")
 }
 \arguments{
-\item{file}{set "file" as raw data file name (may include the directory path, as string) WITHOUT changing anything}
+\item{file}{A string contains the directory path and file name of the raw data. The data should be provided as what is exported from the LGR analyzer.}
 
-\item{Time_format}{depending on the output timestamp, you may change into "dmy_hms" or "ymd_hms", default: "mdy_hms"}
+\item{Time_format}{A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the output timestamp from the analyzer.}
 }
 \value{
-a dataframe with all the loaded data in the right format
+A dataframe with all data in the right format for function "FluxCal()".
 }
 \description{
-Functions used to load raw data output from LGR Ultraportable Gas Analyzers to feed the function "FluxCal"
+Function used to load raw data output from LGR Ultraportable Gas Analyzers to feed the "data" argument in function "FluxCal()".
 }
 \examples{
-# get the directory of the example raw data from LGR
+# get the directory of the example LGR raw data
 example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
-Flux <- Load_LGR(example_data) # input is a string with the directory of the data file and file name
+# load the data
+Flux <- Load_LGR(example_data)
 
 }
