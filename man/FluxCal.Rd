@@ -4,8 +4,9 @@
 \alias{FluxCal}
 \title{FluxCal}
 \usage{
-FluxCal(data, t, spt = 1, Time_keys = NA, Type_keys = "start", vol,
-  Ta = NA, Area, output_d = "Flux_output.csv")
+FluxCal(data, t, spt = 1, Time_keys = NULL, Type_keys = "start", vol,
+  Ta = NULL, Area, output_d = "Flux_output.csv", ylim_CO2 = NULL,
+  ylim_CH4 = NULL)
 }
 \arguments{
 \item{data}{the data loaded by the function "Load_LGR" or "Load_other"}
@@ -25,6 +26,10 @@ FluxCal(data, t, spt = 1, Time_keys = NA, Type_keys = "start", vol,
 \item{Area}{base area of the chamber; unit: m^2}
 
 \item{output_d}{the output directory}
+
+\item{ylim_CO2}{add y-axis scale range for CO2 concentration (ppm) for plotting purpose. If not specified, it will be set based on the CO2 range of the entire dataset}
+
+\item{ylim_CH4}{add y-axis scale range for CH4 concentration (ppm) for plotting purpose. If not specified, it will be set based on the CH4 range of the entire dataset}
 }
 \value{
 A dataframe with the calculated the fluxes

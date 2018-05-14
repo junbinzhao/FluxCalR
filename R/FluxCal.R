@@ -11,6 +11,8 @@
 #' @param Ta air temperature; unit: degree C. A file name with a column "Ta" in the file. The length of Ta must be the same as number of measurements. Default: use the average ambient air temperature measured by analyzer
 #' @param Area base area of the chamber; unit: m^2
 #' @param output_d the output directory
+#' @param ylim_CO2 add y-axis scale range for CO2 concentration (ppm) for plotting purpose. If not specified, it will be set based on the CO2 range of the entire dataset
+#' @param ylim_CH4 add y-axis scale range for CH4 concentration (ppm) for plotting purpose. If not specified, it will be set based on the CH4 range of the entire dataset
 #'
 #' @return A dataframe with the calculated the fluxes
 #'
@@ -22,20 +24,19 @@
 FluxCal <- function(data, ## the data loaded by the function "Load_LGR" or "Load_other"
                     t, ## window width for slope calculation, unit: minutes
                     spt=1, ## set"spt", how many groups you would like to split your data into as you selet the peaks and valleys
-                    Time_keys = NA, # load a file with times (HH:MM:SS) that separate the flux calculation, with header as either "Start" or "End".
+                    Time_keys = NULL, # load a file with times (HH:MM:SS) that separate the flux calculation, with header as either "Start" or "End".
                     # if no file provided, a graph window will pop up to allow manually select the end points
                     Type_keys = "start", # select if "end" time or "start" time will be used to separate the flux; default "start"
                     vol, # volume of the chamber; unit: dm^3 or L
-                    Ta = NA, # air temperature; unit: degree C. A file name with a column "Ta" in the file. The length of Ta must be the same as number of measurements
+                    Ta = NULL, # air temperature; unit: degree C. A file name with a column "Ta" in the file. The length of Ta must be the same as number of measurements
                     # Default: use the average ambient air temperature measured by analyzer
                     Area, # base area of the chamber; unit: m^2
-                    output_d = "Flux_output.csv" # the output directory
+                    output_d = "Flux_output.csv", # the output directory
+                    ylim_CO2 = NULL,
+                    ylim_CH4 = NULL
 ) {
-  # packages
-  library(tidyverse)
-  library(lubridate)
-  library(assertthat)
-
+  # define the pipe from the package "magrittr"
+  `%>%` <- magrittr::`%>%`
   # constants
   R_index = 0.08205783 # universal gas constant; unit: L*atm*K^-1*mol^-1
   Mol_CO2 = 44 # molar mass for CO2; unit: g/mol
@@ -50,25 +51,36 @@ FluxCal <- function(data, ## the data loaded by the function "Load_LGR" or "Load
 
   # add one column as row index and one as time (HH:MM:SS)
   flux <- cbind(Row=row(flux)[,1],flux) %>%
-    mutate(time=paste(hour(Time),sprintf("%02d",minute(Time)),sprintf("%02d",floor(second(Time))),sep = ":"))
+    dplyr::mutate(time=paste(hour(Time),sprintf("%02d",minute(Time)),sprintf("%02d",floor(second(Time))),sep = ":"))
 
   ######## select the points to separate the measurements
   ### 1. if NO Time_keys are provided
-  if (is.na(Time_keys)){
+  if (is.null(Time_keys)){
     # plot CO2 vs index for locating the peaks and valleys
     In <- c() # create a variable as Index
     for (i in 1:spt){
       x11(16,10)
-      with(flux[c(((i-1)*nr/spt)+1):c(i*nr/spt),],
+      if (is.null(ylim_CO2)){
+        with(flux[c(((i-1)*nr/spt)+1):c(i*nr/spt),],
+             plot(Time,X.CO2.d_ppm,
+                  ylab = "CO2 in ppm",
+                  main = "Click on the peaks and valleys",
+                  cex.main=2.5, col.main="red",
+                  cex = 0.8, xaxt="n"
+             ))
+      } else {
+        with(flux[c(((i-1)*nr/spt)+1):c(i*nr/spt),],
            plot(Time,X.CO2.d_ppm,
                 ylab = "CO2 in ppm",
                 main = "Click on the peaks and valleys",
                 cex.main=2.5, col.main="red",
-                ylim = c(360,450), cex = 0.8, xaxt="n"
+                ylim = ylim_CO2, cex = 0.8, xaxt="n"
            ))
+      }
+
 
       # add time interval ticks
-      a <- pretty_dates(flux$Time[c(((i-1)*nr/spt)+1):c(i*nr/spt)],10)
+      a <- lubridate::pretty_dates(flux$Time[c(((i-1)*nr/spt)+1):c(i*nr/spt)],10)
       # which(minute(flux$Time) %in% c(0,15,30,45) & floor(second(flux$Time)) %in% c(0,1))
       axis.POSIXct(1, at= a,format = "%H:%M")
       abline(v=a, lty="dotted",col="grey")
@@ -153,7 +165,7 @@ FluxCal <- function(data, ## the data loaded by the function "Load_LGR" or "Load
   }
 
   # determine which temperature will be used for flux calculation
-  if (is.string(Ta)){
+  if (assertthat::is.string(Ta)){
     Tk_CO2 <- read.table(Ta,sep = ",",header = T)$Ta+273.2
     Tk_CH4 <- read.table(Ta,sep = ",",header = T)$Ta+273.2
   } else {
@@ -172,10 +184,17 @@ FluxCal <- function(data, ## the data loaded by the function "Load_LGR" or "Load
   # Plot the regressions for visualization purpose
   x11(14,10)
   par(mfrow=c(2,1),mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
-  with(flux,plot(X.CO2.d_ppm,
+  if (is.null(ylim_CO2)){
+    with(flux,plot(X.CO2.d_ppm,
                  ylab="CO2 readings in ppm", xlab = "",
                  bty="n", xaxt="n"#,ylim=c(380,460)
   ))
+  } else {
+    with(flux,plot(X.CO2.d_ppm,
+                   ylab="CO2 readings in ppm", xlab = "",
+                   bty="n", xaxt="n",ylim=ylim_CO2
+    ))
+  }
 
   # CO2 regression lines
   for (i in 1:nrow(R2.CO2)){
@@ -191,8 +210,13 @@ FluxCal <- function(data, ## the data loaded by the function "Load_LGR" or "Load
 
 
   # CH4 flux regression lines in seperate plot
-  with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n"#, ylim=c(1.7,3)
+  if (is.null(ylim_CH4)){
+    with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n"#, ylim=c(1.7,3)
   ))
+  } else {
+    with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n", ylim=ylim_CH4
+    ))
+  }
 
   for (i in 1:nrow(R2.CH4)){
     Slm <- lm(flux$X.CH4.d_ppm[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]]~

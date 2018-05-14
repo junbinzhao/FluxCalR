@@ -4,8 +4,8 @@
 \alias{Load_other}
 \title{Load_other}
 \usage{
-Load_other(file, Time_format = "mdy_hms", Date = "1/31/2018", Time = NA,
-  CO2, CH4 = NA, Ta = 25, skip = 0, sep = ",")
+Load_other(file, Time_format = "mdy_hms", Date = "1/31/2018", Time, CO2,
+  CH4 = NULL, Ta = 25, skip = 0, sep = ",")
 }
 \arguments{
 \item{file}{set "file" as raw data file name (may include the directory path, as string) WITHOUT changing anything}
