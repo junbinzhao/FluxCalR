@@ -30,7 +30,8 @@
 #' # load the data
 #' Flux <- Load_LGR(example_data)
 #' # manually select time cues and calculate the fluxes over a 3-minute window
-#' FluxCal(data = Flux, t = 3, vol = 208, Area = 0.26)
+#' Flux_Feb_17 <- FluxCal(data = Flux, t = 3, vol = 208, Area = 0.26)
+#' Flux_Feb_17
 #' # input the time cues as a file and calculate the fluxes over a 3-minute window
 #' Time_Ta <- system.file("extdata", "Time & Ta.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 #' Flux_Feb_17 <- FluxCal(data = Flux, t = 3,
