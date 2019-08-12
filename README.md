@@ -1,5 +1,5 @@
 # FluxCalR
-This R package is used to calculate CO2 and CH4 gas fluxes measured with static chamber method. It provide a 
+This R package is used to calculate CO2 and CH4 gas fluxes measured with static chamber method. It provides a 
     easy way to calculate multiple flux measurements from one data file. 
     
 Load the package in R by:
