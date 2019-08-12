@@ -18,9 +18,9 @@ The functioning of the package is based on other R packages: `tidyverse`, `lubri
 
 The format of data input are specialized to that of from **Los Gatos Research (LGR) Ultraportable Gas Analyzers** 
     <http://www.lgrinc.com/analyzers/ultraportable/>. Use the the function **`Load_LGR()`** to load raw data from LGR; 
-    it automatic removes the extra rows at the beginning and the end, and convert timestamps into the format that is readable in R. 
+    it automatically removes the extra lines at the beginning and the end, and convert timestamps into the format that is readable in R. 
     
-A function (**`Load_other()`**) is also provided to load and convert data from other sources (e.g., LICOR) into the format that is 
+A function (**`Load_other()`**) is provided to load and convert data from other sources (e.g., LICOR) into the format that is 
     compliant with the flux calculation fuction. 
 
 **Calculate fluxes**
@@ -28,7 +28,7 @@ A function (**`Load_other()`**) is also provided to load and convert data from o
 The function **`FluxCal()`** calculates CO<sub>2</sub> and/or CH<sub>4</sub> flux rates based on the time cues provided for each measurement (i.e. either 
     start or end time). Two options are available to input the time cues: 
 1. (default) after executing the function, manually clicking on a pop-up graph with CO<sub>2</sub> concentration time series to choose 
-    the END time, which could be identified by the "peaks" or "valleys"; or 
+    the END time, which could be seen as the "peaks" or "valleys" in the time series; or 
 2. loading a file (.csv) into the argument "Time_keys" with times (HH:MM:SS) indicating start or end of each flux measurement. 
     The header for the time must be either "Start" or "End". 
     (see an example file "Time & Ta.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata)
