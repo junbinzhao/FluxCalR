@@ -47,18 +47,19 @@ Based on the time cues and window width provided for the calculation, the functi
 }
 \examples{
 # get the directory of the example LGR raw data
-example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
+example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
 # load the data
-Flux <- Load_LGR(example_data)
+Flux <- Load_LGR(example_data1)
 # manually select time cues and calculate the fluxes over a 3-minute window
-FluxCal(data = Flux, t = 3, vol = 208, Area = 0.26)
+Flux_output1 <- FluxCal(data = Flux, t = 3, vol = 208, Area = 0.26)
+Flux_output1
 # input the time cues as a file and calculate the fluxes over a 3-minute window
-Time_Ta <- system.file("extdata", "Time & Ta.csv", package = "FluxCalR") # directory of the file with time cues and Ta
-Flux_Feb_17 <- FluxCal(data = Flux, t = 3,
+Time_Ta1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+Flux_output2 <- FluxCal(data = Flux, t = 3,
                        Time_keys = Time_Ta,
                        Ta = Time_Ta,
                        vol = 208, Area = 0.26,
                        output_d = FALSE) # don't create a output file
-Flux_Feb_17
+Flux_output2
 
 }
