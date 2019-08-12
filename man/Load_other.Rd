@@ -33,10 +33,13 @@ a dataframe with all data in the right format for function "FluxCal()".
 Function used to load raw data output from other similar analyzers (e.g. LICOR) to feed the "data" argument in function "FluxCal()".
 }
 \examples{
-Flux <- Load_other("C:/Licor.txt",
-                   Time_format = "hms",
-                   Date = "5/11/2018",
-                   Time = "time",
-                   CO2 = "[co2]")
+# get the directory of the example data
+example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
+# load the data
+Flux <- Load_other(example_data,
+                   Time_format = "mdy_hms",
+                   Time = "Date_time",
+                   CO2 = "CO2_PPM",
+                   Ta = "Tem_C")
 
 }
