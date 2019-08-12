@@ -18,10 +18,10 @@ The functioning of the package is based on other R packages: `tidyverse`, `lubri
 
 The format of data input are specialized to that of from **Los Gatos Research (LGR) Ultraportable Gas Analyzers** 
     <http://www.lgrinc.com/analyzers/ultraportable/>. Use the the function **`Load_LGR()`** to load raw data from LGR; 
-    it automatically removes the extra lines at the beginning and the end, and convert timestamps into the format that is readable in R. See details ``?Load_LGR()``.
+    it automatically removes the extra lines at the beginning and the end, and convert timestamps into the format that is readable in R. See details and examples ``?Load_LGR()``.
     
 A function (**`Load_other()`**) is provided to load and convert data from other sources (e.g., LICOR) into the format that is 
-    compliant with the flux calculation fuction. See details ``?Load_other()``.
+    compliant with the flux calculation fuction. See details and examples ``?Load_other()``.
 
 **Calculate fluxes**
 
@@ -36,7 +36,7 @@ The function **`FluxCal()`** calculates CO<sub>2</sub> and/or CH<sub>4</sub> flu
 Based on the time cues and window width provided for the calculation, the function will automatically scan over data that cover
     *1.5x* length of the window width and calculate the fluxes based on the best linear regression (i.e. largest R<sup>2</sup>). After the
     calculations are done, a graph with regression lines plotted on the CO<sub>2</sub> and/or CH<sub>4</sub> concentration time series will pop up 
-    for checkup purposes. See details ``?FluxCal()``.
+    for checkup purposes. See details and examples ``?FluxCal()``.
 
 *To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com).*
 
