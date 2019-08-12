@@ -19,7 +19,7 @@ Function used to load raw data output from LGR Ultraportable Gas Analyzers to fe
 }
 \examples{
 # get the directory of the example LGR raw data
-example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
+example_data <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
 # load the data
 Flux <- Load_LGR(example_data)
 
