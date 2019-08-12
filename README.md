@@ -10,8 +10,8 @@ The format of data input are specialized to that of from **Los Gatos Research (L
     <http://www.lgrinc.com/analyzers/ultraportable/>. Use the the function **`Load_LGR()`** to load raw data from LGR; 
     it automatic removes the extra rows at the beginning and the end, and convert timestamps into the format that is readable in R. 
     
-A function (**`Load_other()`**) is also provided to load and convert data from other sources (e.g. LICOR) into the format that is 
-    compatible with the flux calculation fuction. 
+A function (**`Load_other()`**) is also provided to load and convert data from other sources (e.g., LICOR) into the format that is 
+    compliant with the flux calculation fuction. 
     
 The function **`FluxCal()`** calculates CO2 and/or CH4 flux rates based on the time cues provided for each measurement (i.e. either 
     start or end time). Two options are available to input the time cues: 
