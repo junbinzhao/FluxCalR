@@ -4,7 +4,7 @@
 \alias{Load_other}
 \title{Load data from other analyzers}
 \usage{
-Load_other(file, Time_format = "mdy_hms", Date = "1/31/2018", Time, CO2,
+Load_other(file, Time_format = "mdy_hms", Date = NULL, Time, CO2,
   CH4 = NULL, Ta = 25, skip = 0, sep = ",")
 }
 \arguments{
@@ -12,7 +12,7 @@ Load_other(file, Time_format = "mdy_hms", Date = "1/31/2018", Time, CO2,
 
 \item{Time_format}{A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the output timestamp from the analyzer. In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.}
 
-\item{Date}{A string indicates date of the measurements in the format of "mm/dd/yyyy".}
+\item{Date}{A string indicates date of the measurements in the format of "mm/dd/yyyy". This argument is used only when date is not included in the timestamps.}
 
 \item{Time}{A string indicates column name of the timestamps in the data file.}
 
