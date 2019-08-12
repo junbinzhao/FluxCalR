@@ -55,6 +55,6 @@ scientific explorations of forthcoming data releases from the *Gaia* mission
 
 # Acknowledgements
 
-I acknowledge the helps of Matthew J. Simon and Michal Gazovic for testing the code.
+I acknowledge the helps of Matthew J. Simon and Michal Gazovic for testing the code on the their datasets.
 
 # References
