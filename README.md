@@ -28,7 +28,7 @@ A function (**`Load_other()`**) is provided to load and convert data from other 
 The function **`FluxCal()`** calculates CO<sub>2</sub> and/or CH<sub>4</sub> flux rates based on the time cues provided for each measurement (i.e. either 
     start or end time). Two options are available to input the time cues: 
 1. (default) after executing the function, manually clicking on a pop-up graph with CO<sub>2</sub> concentration time series to choose 
-    the END time, which could be seen as the "peaks" or "valleys" in the time series; or 
+    the END time, which can usually be recognized as the "peaks" or "valleys" in the time series; or 
 2. loading a file (.csv) into the argument "Time_keys" with times (HH:MM:SS) indicating start or end of each flux measurement. 
     The header for the time must be either "Start" or "End". 
     (see an example file "Time & Ta.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata)
