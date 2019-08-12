@@ -25,7 +25,9 @@ Based on the time cues and window width provided for the calculation, the functi
     *1.5x* length of the window width and calculate the fluxes based on the best linear regression (i.e. largest R2). After the
     calculations are done, a graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up 
     for checkup purposes. 
-    
+
+To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com).
+
 **Please cite the package as:**
 
-Junbin Zhao (2018). FluxCalR: calculate CO<sub>2</sub> and CH<sub>4</sub> gas fluxes measured with static chamber method. R package version 0.1.0. https://github.com/junbinzhao/FluxCalR/
+Junbin Zhao (2018). FluxCalR: a R package for calculating CO<sub>2</sub> and CH<sub>4</sub> gas fluxes from static chambers. R package version 0.1.0. https://github.com/junbinzhao/FluxCalR/
