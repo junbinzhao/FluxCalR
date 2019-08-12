@@ -21,35 +21,11 @@ bibliography: paper.bib
 
 # Summary
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+As the main drivers of climate change, greenhouse gas (e.g., CO<sub>2</sub> and CH<sub>4</sub>) emissions have been monitored intensively across the globe. Static chamber is one of the most commonly used approach for measuring greenhouse gas flux from ecosystems (e.g., stem/soil respiration, CH<sub>4</sub> emission, etc.) for its easy implementation, high accuracy and low cost [@Pumpanen:2004]. To perform the measurements, commercial infrared gas analyzers (IRGA) are usually used to record the changes of greenhouse gas concentrations within the chamber at a certain temporal resolution (e.g., 1s). However, to calculate the fluxes from the measured gas concentrations can be tedious and subjective considering that the original dataset usually includes large amount of unwanted records for the periods between the measurements and the window for calculating each flux has to be defined manually. Therefore, a tool that can efficiently calculate the concentrations into fluxes in a more objective fashion is needed. 
 
-``Gala`` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for ``Gala`` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. ``Gala`` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the ``Astropy`` package [@astropy] (``astropy.units`` and
-``astropy.coordinates``).
+The R package ``FluxCalR`` calculates CO<sub>2</sub> and CH<sub>4</sub> gas fluxes measured with static chamber method. It provides an easy way to calculate multiple measurements from one data file. In particularly, it greatly improves the efficiency of processing the manually measured fluxes with irregular durations during and between measurements. It is flexible in the required environmental variables for calculating the fluxes and has multiple options of selecting the measurement window. It optimizes the calculation of each flux by choosing the greatest determination coefficient (R<sup>2</sup>) within defined data range, making the calculation repeatable. The package automates the flux calculation to the degree that it can be integrated into the workflow of further data analyses. At the same time, the package also provides graphs to visualize the linear regressions on top of the original data to ensure no mismatch occurs. 
 
-``Gala`` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in ``Gala`` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+The package is meant to be used by ecosystem researchers who carry out flux measurements using static chamber methods. It simplifies and shortens the process of tedious flux calculations and helps one focus more on the post-data-analysis with the ready calculated fluxes. The original functions in the package have been used for flux calculations in the previous publications [@Zhao:2016; @Zhao:2017] and in other ongoing research projects performed in the Everglades.  
 
 
 
