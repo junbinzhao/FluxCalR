@@ -30,4 +30,4 @@ To report problems, seek support or contribute, please contact the author Junbin
 
 **Please cite the package as:**
 
-Junbin Zhao (2018). FluxCalR: a R package for calculating CO<sub>2</sub> and CH<sub>4</sub> gas fluxes from static chambers. R package version 0.1.0. https://github.com/junbinzhao/FluxCalR/
+Junbin Zhao (2018). FluxCalR: a R package for calculating CO<sub>2</sub> and CH<sub>4</sub> fluxes from static chambers. R package version 0.1.0. https://github.com/junbinzhao/FluxCalR/
