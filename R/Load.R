@@ -63,7 +63,7 @@ Load_other <- function(file,
                        Time_format="mdy_hms",
                        Date = NULL,
                        Time,
-                       CO2,
+                       CO2 = NULL,
                        CH4 = NULL,
                        Ta = 25,
                        skip = 0,
@@ -88,8 +88,12 @@ Load_other <- function(file,
       }
     }
   }
-  # add a column as CO2 concentration with correct name
-  X.CO2.d_ppm <- flux1[,CO2] 
+  # add a column as CO2 concentration
+  if (is.null(CO2)){
+    X.CO2.d_ppm <- NA # create a column with NAs if CO2 is not measured
+  } else {
+    X.CO2.d_ppm <- flux1[,CO2]
+  }
   # add a column as CH4 concentration
   if (is.null(CH4)){
     X.CH4.d_ppm <- NA # create a column with NAs if CH4 is not measured
