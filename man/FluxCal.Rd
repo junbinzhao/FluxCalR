@@ -27,7 +27,7 @@ Default: if no file name is provided (NULL), the average ambient air temperature
 
 \item{Area}{A number indicates base area of the chamber; unit: m^2.}
 
-\item{output_d}{A string includes output directory and file name (.csv) to export the calculated fluxes. Default: a file named "Flux_output.csv" with calculated fluxes will be created under the current work directory. ``FALSE``, do not create the file.}
+\item{output_d}{A string includes output directory and file name (.csv) to export the calculated fluxes. Default: a file named "Flux_output.csv" with calculated fluxes will be created under the current work directory. FALSE, do not create the file.}
 
 \item{ylim_CO2}{A numeric vector of length 2, giving the y-axis scale range for CO2 concentration (ppm) for plotting purpose. If not specified (default), it will be set based on the CO2 range of the entire dataset}
 
