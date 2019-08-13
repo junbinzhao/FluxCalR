@@ -15,14 +15,14 @@ FluxCal(data, t, spt = 1, Time_keys = NULL, Type_keys = "start", vol,
 
 \item{spt}{A number indicates the number of graphs to split the CO2 time series into for MANUALLY selecting the time cues. Cutting CO2 time series into several sections will aid the visualization and selection of the time cues when the data is too long. Default: 1. This argument is used only when no data is provided for the "Time_keys" argument.}
 
-\item{Time_keys}{A string inidicates the directory and the name of the csv file that includes start or end time (HH:MM:SS) of each flux measurement.The header for the time must be either "Start" or "End". (see an example file "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
+\item{Time_keys}{A string inidicates the directory and the name of the csv file that includes start or end time (HH:MM:SS) of each flux measurement.The header for the time must be either "Start" or "End". (see example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
 Default: if no file is provided (NULL), a graph window will pop up to allow manually selecting the END time, which could be normally recognized as the local "peaks" or "valleys" of the time series.}
 
 \item{Type_keys}{Either "start" or "end" (string) to indicate if start or end time will be used as the cues; default "start". This will only valid if a file name is provided for argument "Time_keys".}
 
 \item{vol}{A number indicates volume of the chamber; unit: dm^3 or L.}
 
-\item{Ta}{A name (string) of a file contains a column "Ta" with the air temperature values (ideally, this is temperature measured inside of the chamber during the flux measurement; unit: degree C. See an example file "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata). The length of Ta within the file must be the same as the number of flux measurements.
+\item{Ta}{A name (string) of a file contains a column "Ta" with the air temperature values (ideally, this is temperature measured inside of the chamber during the flux measurement; unit: degree C. See example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata). The length of Ta within the file must be the same as the number of flux measurements.
 Default: if no file name is provided (NULL), the average ambient air temperature measured by the analyzer or Ta input from function "Load_other" will be used.}
 
 \item{Area}{A number indicates base area of the chamber; unit: m^2.}
@@ -41,7 +41,7 @@ Calculate CO2 and CH4 gas fluxes from the data loaded by the function "Load_LGR(
 
 (1) (default) after executing the function, manually clicking on a pop-up graph with CO2 concentration time series to choose the END time, which could be identified as the local "peaks" or "valleys" in the time series; or
 
-(2) loading a file (.csv) into the argument "Time_keys" with times (HH:MM:SS) indicating start or end of each flux measurement. The header for the time must be either "Start" or "End". (see an example file "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
+(2) loading a file (.csv) into the argument "Time_keys" with times (HH:MM:SS) indicating start or end of each flux measurement. The header for the time must be either "Start" or "End". (see example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
 
 Based on the time cues and window width provided for the calculation, the function will automatically scan over data that cover 1.5x length of the window width and calculate the fluxes based on the best linear regression (i.e., largest R2). After the calculations are done, a graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for checkup purposes.
 }
