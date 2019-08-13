@@ -195,10 +195,14 @@ FluxCal <- function(data,
   # create a index for each slope and calculate the flux
   # CO2
   R2.CO2 <- data.frame(R2.CO2,Id.slope=row(R2.CO2)[,1]) %>%
-    dplyr::mutate(FCO2=((Slope_CO2*vol)/(R_index*Tk_CO2)/Area)) # umol CO2 m-2 s-1
+    dplyr::mutate(FCO2=ifelse(is.na(Slope_CO2),
+                              NA,
+                              ((Slope_CO2*vol)/(R_index*Tk_CO2)/Area))) # umol CO2 m-2 s-1
   # CH4
   R2.CH4 <- data.frame(R2.CH4,Id.slope=row(R2.CH4)[,1]) %>%
-    dplyr::mutate(FCH4=((Slope_CH4*vol)/(R_index*Tk_CH4)/Area)) # umol CH4 m-2 s-1
+    dplyr::mutate(FCH4=ifelse(is.na(Slope_CH4),
+                              NA,
+                              ((Slope_CH4*vol)/(R_index*Tk_CH4)/Area))) # umol CH4 m-2 s-1
 
   # Plot the regressions for visualization purpose
   x11(14,10)
