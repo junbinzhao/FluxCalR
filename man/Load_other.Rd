@@ -26,7 +26,7 @@ Load_other(file, Time_format = "mdy_hms", Date = NULL, Time, CO2 = NULL,
 
 \item{sep}{A string indicates delimiter to separate columns. Default: comma (",").}
   
-\item{...}{Other arguments used in the function ``read.table()``.}
+\item{...}{Other arguments used in the function "read.table()". See details "?read.table()"}
 }
 \value{
 a dataframe with all data in the right format for function "FluxCal()".
