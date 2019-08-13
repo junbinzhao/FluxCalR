@@ -139,6 +139,7 @@ FluxCal <- function(data,
       Slm <- try(summary(lm(flux$X.CO2.d_ppm[(b-t*60/f):b]~flux$Row[(b-t*60/f):b])),silent = TRUE)
       if (class(Slm)=="try-error"){ # if no CO2 data is provided
         R2.CO2[a,1:7] <- NA
+        Ta_CO2[a] <- NA
       } else {
       if (Slm$r.squared > R2.CO2[a,1]) {
         R2.CO2[a,1] <- Slm$r.squared
@@ -166,6 +167,7 @@ FluxCal <- function(data,
       Slm <- try(summary(lm(flux$X.CH4.d_ppm[(b-t*60/f):b]~flux$Row[(b-t*60/f):b])),silent=TRUE)
       if (class(Slm)=="try-error"){ # if no CH4 data is provided
         R2.CH4[a,1:7] <- NA
+        Ta_CH4[a] <- NA
       } else {
       if (Slm$r.squared > R2.CH4[a,1]) {
         R2.CH4[a,1] <- Slm$r.squared
@@ -216,15 +218,15 @@ FluxCal <- function(data,
   x11(14,10)
   par(mfrow=c(2,1),mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
   if (is.null(ylim_CO2)){
-    try(with(flux,plot(X.CO2.d_ppm,
+    suppressWarnings(try(with(flux,plot(X.CO2.d_ppm,
                  ylab="CO2 readings in ppm", xlab = "",
                  bty="n", xaxt="n"#,ylim=c(380,460)
-  )),silent=TRUE)
+  )),silent=TRUE))
   } else {
-    try(with(flux,plot(X.CO2.d_ppm,
+    suppressWarnings(try(with(flux,plot(X.CO2.d_ppm,
                    ylab="CO2 readings in ppm", xlab = "",
                    bty="n", xaxt="n",ylim=ylim_CO2
-    )),silent=TRUE)
+    )),silent=TRUE))
   }
 
   # CO2 regression lines
@@ -242,11 +244,11 @@ FluxCal <- function(data,
 
   # CH4 flux regression lines in seperate plot
   if (is.null(ylim_CH4)){
-    try(with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n"#, ylim=c(1.7,3)
-    )),silent=TRUE)
+    suppressWarnings(try(with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n"#, ylim=c(1.7,3)
+    )),silent=TRUE))
   } else {
-    try(with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n", ylim=ylim_CH4
-    )),silent=TRUE)
+    suppressWarnings(try(with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n", ylim=ylim_CH4
+    )),silent=TRUE))
   }
 
   for (i in 1:nrow(R2.CH4)){
@@ -260,7 +262,7 @@ FluxCal <- function(data,
          col="red",cex=1.2,pos = 3),silent=TRUE)
   }
   par(new=T)
-  try(with(flux,plot(Time,X.CH4.d_ppm,type = "n",axes = F, xlab = "", ylab = "")),silent=TRUE)
+  suppressWarnings(try(with(flux,plot(Time,X.CH4.d_ppm,type = "n",axes = F, xlab = "", ylab = "")),silent=TRUE))
   # add time interval ticks
   c <- try(lubridate::pretty_dates(flux$Time,n=10),silent=TRUE)
   try(axis.POSIXct(1, at= c,format = "%H:%M"),silent=TRUE)
