@@ -38,6 +38,7 @@ Based on the time cues and window width provided for the calculation, the functi
     for checkup purposes. See details and examples ``?FluxCal()``.
 
 **Community Guidelines**
+
 *To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com). Requests/suggestions for new features are welcome*
 
 **Please cite the package as:**
