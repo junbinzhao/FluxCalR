@@ -39,7 +39,7 @@ Based on the time cues and window width provided for the calculation, the functi
 
 **Community Guidelines**
 
-*To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com). Requests/suggestions for new features are welcome*
+*To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com). Requests/suggestions for new features are also welcome.*
 
 **Please cite the package as:**
 
