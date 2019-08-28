@@ -37,7 +37,8 @@ Based on the time cues and window width provided for the calculation, the functi
     calculations are done, a graph with regression lines plotted on the CO<sub>2</sub> and/or CH<sub>4</sub> concentration time series will pop up 
     for checkup purposes. See details and examples ``?FluxCal()``.
 
-*To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com).*
+**Community Guidelines**
+*To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com). Requests/suggestions for new features are welcome*
 
 **Please cite the package as:**
 
