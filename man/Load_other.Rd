@@ -4,8 +4,8 @@
 \alias{Load_other}
 \title{Load data from other analyzers}
 \usage{
-Load_other(file, Time_format = "mdy_hms", Date = "1/31/2018", Time, CO2,
-  CH4 = NULL, Ta = 25, skip = 0, sep = ",")
+Load_other(file, Time_format = "mdy_hms", Date = "1/31/2018", Time,
+  CO2, CH4 = NULL, Ta = 25, skip = 0, sep = ",")
 }
 \arguments{
 \item{file}{A string contains the directory path and file name of the raw data.}

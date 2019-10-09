@@ -1,0 +1,39 @@
+@article{Pumpanen:2004,
+title = "Comparison of different chamber techniques for measuring soil CO2 efflux",
+journal = "Agricultural and Forest Meteorology",
+volume = "123",
+number = "3",
+pages = "159 - 176",
+year = "2004",
+issn = "0168-1923",
+doi = "https://doi.org/10.1016/j.agrformet.2003.12.001",
+url = "http://www.sciencedirect.com/science/article/pii/S0168192303002934",
+author = "Jukka Pumpanen and Pasi Kolari and Hannu Ilvesniemi and Kari Minkkinen and Timo Vesala and Sini Niinistö and Annalea Lohila and Tuula Larmola and Micaela Morero and Mari Pihlatie and Ivan Janssens and Jorge Curiel Yuste and José M Grünzweig and Sascha Reth and Jens-Arne Subke and Kathleen Savage and Werner Kutsch and Geir Østreng and Waldemar Ziegler and Peter Anthoni and Anders Lindroth and Pertti Hari",
+keywords = "Chamber, Diffusion, Porosity, Soil CO efflux, Turbulence"
+}
+
+@article{Zhao:2016,
+author = {Zhao, Junbin and Peichl, Matthias and Nilsson, Mats B.},
+doi = {10.1111/gcb.13119},
+isbn = {1365-2486},
+issn = {13652486},
+journal = {Global Change Biology},
+keywords = {Dissolved organic carbon,Methane flux,Mire,Snow exclusion,Soil freezing,Soil temperature,Vegetation,Winter climate change},
+number = {2},
+pages = {750-762},
+pmid = {26452333},
+title = {{Enhanced winter soil frost reduces methane emission during the subsequent growing season in a boreal peatland}},
+volume = {22},
+year = {2016}
+}
+
+@article{Zhao:2017,
+author = {Zhao, Junbin and Peichl, Matthias and Nilsson, Mats B.},
+doi = {10.1111/gcb.13621},
+issn = {13541013},
+journal = {Global Change Biology},
+pages = {1-15},
+title = {{Long-term enhanced winter soil frost alters growing season CO2 fluxes through its impact on vegetation development in a boreal peatland}},
+url = {http://doi.wiley.com/10.1111/gcb.13621},
+year = {2017}
+}
