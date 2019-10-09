@@ -30,7 +30,8 @@
 #' # load the data
 #' Flux <- Load_LGR(example_data)
 #' # manually select time cues and calculate the fluxes over a 3-minute window
-#' FluxCal(data = Flux, t = 3, vol = 208, Area = 0.26)
+#' Flux_Feb_17 <- FluxCal(data = Flux, t = 3, vol = 208, Area = 0.26)
+#' Flux_Feb_17
 #' # input the time cues as a file and calculate the fluxes over a 3-minute window
 #' Time_Ta <- system.file("extdata", "Time & Ta.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 #' Flux_Feb_17 <- FluxCal(data = Flux, t = 3,
@@ -135,7 +136,11 @@ FluxCal <- function(data,
   colnames(R2.CO2) <- c("R2_CO2","Index_CO2","Slope_CO2","p_CO2","Flux","Date","time_CO2")
   for (a in 1:length(In)){
     for (b in In[a]:c(In[a]-0.5*t*60/f)){ # select 0.5 of the window width as testing for largest R2
-      Slm <- summary(lm(flux$X.CO2.d_ppm[(b-t*60/f):b]~flux$Row[(b-t*60/f):b]))
+      Slm <- try(summary(lm(flux$X.CO2.d_ppm[(b-t*60/f):b]~flux$Row[(b-t*60/f):b])),silent = TRUE)
+      if (class(Slm)=="try-error"){ # if no CO2 data is provided
+        R2.CO2[a,1:7] <- NA
+        Ta_CO2[a] <- NA
+      } else {
       if (Slm$r.squared > R2.CO2[a,1]) {
         R2.CO2[a,1] <- Slm$r.squared
         # output the time at the start of the slope
@@ -149,6 +154,7 @@ FluxCal <- function(data,
                               floor(lubridate::second(flux$Time[(b-t*60/f)])))
         Ta_CO2[a] <- mean(flux$AmbT_C[(b-t*60/f):b])
       }
+      }
     }
   }
 
@@ -158,7 +164,11 @@ FluxCal <- function(data,
   colnames(R2.CH4) <- c("R2_CH4","Index_CH4","Slope_CH4","p_CH4","Flux","Date","time_CH4")
   for (a in 1:length(In)){
     for (b in In[a]:c(In[a]-0.5*t*60/f)){
-      Slm <- summary(lm(flux$X.CH4.d_ppm[(b-t*60/f):b]~flux$Row[(b-t*60/f):b]))
+      Slm <- try(summary(lm(flux$X.CH4.d_ppm[(b-t*60/f):b]~flux$Row[(b-t*60/f):b])),silent=TRUE)
+      if (class(Slm)=="try-error"){ # if no CH4 data is provided
+        R2.CH4[a,1:7] <- NA
+        Ta_CH4[a] <- NA
+      } else {
       if (Slm$r.squared > R2.CH4[a,1]) {
         R2.CH4[a,1] <- Slm$r.squared
         R2.CH4[a,2] <- b
@@ -170,6 +180,7 @@ FluxCal <- function(data,
                               lubridate::minute(flux$Time[(b-t*60/f)]),":",
                               floor(lubridate::second(flux$Time[(b-t*60/f)])))
         Ta_CH4[a] <- mean(flux$AmbT_C[(b-t*60/f):b])
+      }
       }
     }
   }
@@ -186,65 +197,15 @@ FluxCal <- function(data,
   # create a index for each slope and calculate the flux
   # CO2
   R2.CO2 <- data.frame(R2.CO2,Id.slope=row(R2.CO2)[,1]) %>%
-    dplyr::mutate(FCO2=((Slope_CO2*vol)/(R_index*Tk_CO2)/Area)) # umol CO2 m-2 s-1
+    dplyr::mutate(FCO2=ifelse(is.na(Slope_CO2),
+                              NA,
+                              ((Slope_CO2*vol)/(R_index*Tk_CO2)/Area))) # umol CO2 m-2 s-1
   # CH4
   R2.CH4 <- data.frame(R2.CH4,Id.slope=row(R2.CH4)[,1]) %>%
-    dplyr::mutate(FCH4=((Slope_CH4*vol)/(R_index*Tk_CH4)/Area)) # umol CH4 m-2 s-1
-
-  # Plot the regressions for visualization purpose
-  x11(14,10)
-  par(mfrow=c(2,1),mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
-  if (is.null(ylim_CO2)){
-    with(flux,plot(X.CO2.d_ppm,
-                 ylab="CO2 readings in ppm", xlab = "",
-                 bty="n", xaxt="n"#,ylim=c(380,460)
-  ))
-  } else {
-    with(flux,plot(X.CO2.d_ppm,
-                   ylab="CO2 readings in ppm", xlab = "",
-                   bty="n", xaxt="n",ylim=ylim_CO2
-    ))
-  }
-
-  # CO2 regression lines
-  for (i in 1:nrow(R2.CO2)){
-    Slm <- lm(flux$X.CO2.d_ppm[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]]~
-                flux$Row[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]])
-    lines(flux$Row[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]], Slm$fitted.values,
-          col="green", lwd=3)
-    text(flux$Row[In[i]-t*60/f],flux$X.CO2.d_ppm[In[i]-t*60/f],
-         labels = paste(R2.CO2[i,8]), # bquote(bold(atop(paste(R^2,"=",.(round(R2.CO2[i,1],2))),
-         # paste("b=",.(round(R2.CO2[i,3],2)))))),
-         col = "red",cex = 1.2,pos = 3)
-  }
-
-
-  # CH4 flux regression lines in seperate plot
-  if (is.null(ylim_CH4)){
-    with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n"#, ylim=c(1.7,3)
-  ))
-  } else {
-    with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n", ylim=ylim_CH4
-    ))
-  }
-
-  for (i in 1:nrow(R2.CH4)){
-    Slm <- lm(flux$X.CH4.d_ppm[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]]~
-                flux$Row[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]])
-    lines(flux$Row[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]], Slm$fitted.values,
-          col="green", lwd=3)
-    text(flux$Row[In[i]-t*60/f],flux$X.CH4.d_ppm[In[i]-t*60/f],
-         labels = paste(R2.CH4[i,8]), # bquote(bold(atop(paste(R^2,"=",.(round(R2.CH4[i,1],2))),
-         # paste("b=",.(round(R2.CH4[i,3]*1000,2)),"e-3")))),
-         col="red",cex=1.2,pos = 3)
-  }
-  par(new=T)
-  with(flux,plot(Time,X.CH4.d_ppm,type = "n",axes = F, xlab = "", ylab = ""))
-  # add time interval ticks
-  c <- lubridate::pretty_dates(flux$Time,n=10)
-  axis.POSIXct(1, at= c,format = "%H:%M")
-
-  # output of the function
+    dplyr::mutate(FCH4=ifelse(is.na(Slope_CH4),
+                              NA,
+                              ((Slope_CH4*vol)/(R_index*Tk_CH4)/Area))) # umol CH4 m-2 s-1
+  # output of the calculations
   output <- cbind(R2.CO2[,c(6,2,7,3,9,1)],
                   Ta_CO2 = Tk_CO2-273.2,
                   R2.CH4[,c(2,7,3,9,1)],
@@ -252,6 +213,59 @@ FluxCal <- function(data,
   if (assertthat::is.string(output_d)){
     write.csv(output,file = output_d,row.names = F)
   }
+  
+  # Plot the regressions for visualization purpose
+  x11(14,10)
+  par(mfrow=c(2,1),mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
+  if (is.null(ylim_CO2)){
+    suppressWarnings(try(with(flux,plot(X.CO2.d_ppm,
+                 ylab="CO2 readings in ppm", xlab = "",
+                 bty="n", xaxt="n"#,ylim=c(380,460)
+  )),silent=TRUE))
+  } else {
+    suppressWarnings(try(with(flux,plot(X.CO2.d_ppm,
+                   ylab="CO2 readings in ppm", xlab = "",
+                   bty="n", xaxt="n",ylim=ylim_CO2
+    )),silent=TRUE))
+  }
+
+  # CO2 regression lines
+  for (i in 1:nrow(R2.CO2)){
+    Slm <- try(lm(flux$X.CO2.d_ppm[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]]~
+                flux$Row[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]]),silent=TRUE)
+    try(lines(flux$Row[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]], Slm$fitted.values,
+          col="green", lwd=3),silent=TRUE)
+    try(text(flux$Row[In[i]-t*60/f],flux$X.CO2.d_ppm[In[i]-t*60/f],
+         labels = paste(R2.CO2[i,8]), # bquote(bold(atop(paste(R^2,"=",.(round(R2.CO2[i,1],2))),
+         # paste("b=",.(round(R2.CO2[i,3],2)))))),
+         col = "red",cex = 1.2,pos = 3),silent=TRUE)
+  }
+
+
+  # CH4 flux regression lines in seperate plot
+  if (is.null(ylim_CH4)){
+    suppressWarnings(try(with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n"#, ylim=c(1.7,3)
+    )),silent=TRUE))
+  } else {
+    suppressWarnings(try(with(flux,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n", ylim=ylim_CH4
+    )),silent=TRUE))
+  }
+
+  for (i in 1:nrow(R2.CH4)){
+    Slm <- try(lm(flux$X.CH4.d_ppm[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]]~
+                flux$Row[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]]),silent=TRUE)
+    try(lines(flux$Row[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]], Slm$fitted.values,
+          col="green", lwd=3),silent=TRUE)
+    try(text(flux$Row[In[i]-t*60/f],flux$X.CH4.d_ppm[In[i]-t*60/f],
+         labels = paste(R2.CH4[i,8]), # bquote(bold(atop(paste(R^2,"=",.(round(R2.CH4[i,1],2))),
+         # paste("b=",.(round(R2.CH4[i,3]*1000,2)),"e-3")))),
+         col="red",cex=1.2,pos = 3),silent=TRUE)
+  }
+  par(new=T)
+  suppressWarnings(try(with(flux,plot(Time,X.CH4.d_ppm,type = "n",axes = F, xlab = "", ylab = "")),silent=TRUE))
+  # add time interval ticks
+  c <- try(lubridate::pretty_dates(flux$Time,n=10),silent=TRUE)
+  try(axis.POSIXct(1, at= c,format = "%H:%M"),silent=TRUE)
 
   return(output)
 }
