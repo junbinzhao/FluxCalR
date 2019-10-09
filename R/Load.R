@@ -1,15 +1,16 @@
 #' @title Load LGR data
 #'
-#' @description Function used to load raw data output from LGR Ultraportable Gas Analyzers to feed the "data" argument in function "FluxCal()".
+#' @description Function used to load raw data from LGR Ultraportable Gas Analyzers to feed the "data" argument in the function "FluxCal()".
 #'
 #' @param file A string contains the directory path and file name of the raw data. The data should be provided as what is exported from the LGR analyzer.
-#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the output timestamp from the analyzer.
+#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the data timestamps from the analyzer.
 #'
 #' @return A dataframe with all data in the right format for function "FluxCal()".
 #'
 #' @examples
 #' # get the directory of the example LGR raw data
-#' example_data <- system.file("extdata", "gga17Feb2017_f0000.txt", package = "FluxCalR")
+#' example_data <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
+#' example_data
 #' # load the data
 #' Flux <- Load_LGR(example_data)
 #'
@@ -40,22 +41,27 @@ Load_LGR <- function(file,
 #' @description Function used to load raw data output from other similar analyzers (e.g. LICOR) to feed the "data" argument in function "FluxCal()".
 #'
 #' @param file A string contains the directory path and file name of the raw data.
-#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the output timestamp from the analyzer. In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.
-#' @param Date A string indicates date of the measurements in the format of "mm/dd/yyyy". Use this argument only when date is not included in the timestamps.
+#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the data timestamp from the analyzer. In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.
+#' @param Date A string indicates date of the measurements in the format of "mm/dd/yyyy". This argument is used only when date is not included in the timestamps.
 #' @param Time A string indicates column name of the timestamps in the data file.
-#' @param CO2 A string indicates column name of the CO2 concentrations in the data file.
+#' @param CO2 A string indicates column name of the CO2 concentrations in the data file. Default: no CO2 is measured.
 #' @param CH4 A string indicates column name of the CH4 concentrations in the data file. Default: no CH4 is measured.
 #' @param Ta A string indicates column name of ambient air temperature in the data file. If not measured, a constant value can be used. Default: 25 degree C.
 #' @param skip A number indicates rows to be skipped at the beginning of the data file. Default: 0, no rows will be skipped.
 #' @param sep A string indicates delimiter to separate columns. Default: comma (",").
+#' @param ... Other arguments used in the function "read.table()". See details *?read.table()*
 #'
 #' @return a dataframe with all data in the right format for function "FluxCal()".
 #'
-#' @examples Flux <- Load_other("C:/Licor.txt",
-#'                    Time_format = "hms",
-#'                    Date = "5/11/2018",
-#'                    Time = "time",
-#'                    CO2 = "[co2]")
+#' @examples
+#' # get the directory of the example data
+#' example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
+#' # load the data
+#' Flux <- Load_other(example_data,
+#'                    Time_format = "mdy_hms",
+#'                    Time = "Date_time",
+#'                    CO2 = "CO2_PPM",
+#'                    Ta = "Tem_C")
 #'
 #' @export
 ## Function for loading data from other sources ----------

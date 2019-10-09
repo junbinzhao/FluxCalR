@@ -25,7 +25,7 @@ Load_other(file, Time_format = "mdy_hms", Date = NULL, Time, CO2 = NULL,
 \item{skip}{A number indicates rows to be skipped at the beginning of the data file. Default: 0, no rows will be skipped.}
 
 \item{sep}{A string indicates delimiter to separate columns. Default: comma (",").}
-  
+
 \item{...}{Other arguments used in the function "read.table()". See details "?read.table()"}
 }
 \value{
