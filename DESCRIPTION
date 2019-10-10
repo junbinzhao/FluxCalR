@@ -10,7 +10,7 @@ Depends: R (>= 3.4.1)
 License: MIT
 Encoding: UTF-8
 LazyData: true
-Imports: tidyverse, lubridate, assertthat, magrittr
+Imports: dplyr, lubridate, assertthat, magrittr
 RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown
