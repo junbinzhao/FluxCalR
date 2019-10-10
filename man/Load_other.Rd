@@ -4,8 +4,8 @@
 \alias{Load_other}
 \title{Load data from other analyzers}
 \usage{
-Load_other(file, Time_format = "mdy_hms", Date = NULL, Time, CO2 = NULL,
-  CH4 = NULL, Ta = 25, skip = 0, sep = ",",...)
+Load_other(file, Time_format = "mdy_hms", Date = NULL, Time,
+  CO2 = NULL, CH4 = NULL, Ta = 25, skip = 0, sep = ",", ...)
 }
 \arguments{
 \item{file}{A string contains the directory path and file name of the raw data.}
@@ -26,7 +26,7 @@ Load_other(file, Time_format = "mdy_hms", Date = NULL, Time, CO2 = NULL,
 
 \item{sep}{A string indicates delimiter to separate columns. Default: comma (",").}
 
-\item{...}{Other arguments used in the function "read.table()". See details "?read.table()"}
+\item{...}{Other arguments used in the function "read.table()". See details *?read.table()*}
 }
 \value{
 a dataframe with all data in the right format for function "FluxCal()".

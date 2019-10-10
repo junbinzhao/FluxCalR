@@ -29,12 +29,12 @@ Default: if no file name is provided (NULL), the average ambient air temperature
 
 \item{output_d}{A string includes output directory and file name (.csv) to export the calculated fluxes. Default: a file named "Flux_output.csv" with calculated fluxes will be created under the current work directory. FALSE, do not create the file.}
 
-\item{ylim_CO2}{A numeric vector of length 2, giving the y-axis scale range for CO2 concentration (ppm) for plotting purpose. If not specified (default), it will be set based on the CO2 range of the entire dataset}
+\item{ylim_CO2}{A numeric vector of length 2, giving the y-axis scale range for CO2 concentration (ppm) for plotting purpose. If not specified (default), it will be set based on the CO2 range of the entire dataset.}
 
-\item{ylim_CH4}{A numeric vector of length 2, giving the y-axis scale range for CH4 concentration (ppm) for plotting purpose. If not specified (default), it will be set based on the CH4 range of the entire dataset}
+\item{ylim_CH4}{A numeric vector of length 2, giving the y-axis scale range for CH4 concentration (ppm) for plotting purpose. If not specified (default), it will be set based on the CH4 range of the entire dataset.}
 }
 \value{
-A dataframe with calculated CO2 and CH4 fluxes ("FCO2" and "FCH4", respectively; unit: umol m-2 s-1) and other parameters (i.e. date, time, index, regression slopes, R2 and Ta). A copy of the dataframe will be saved as "Flux_output.csv" under the work directory or as what is provided in the argument "output_d". A graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for checkup purposes.
+A dataframe with calculated CO2 and CH4 fluxes ("FCO2" and "FCH4", respectively; unit: umol m^-2 s^-1) and other parameters (i.e. date, time, index, regression slopes, R2 and Ta). A copy of the dataframe will be saved as "Flux_output.csv" under the work directory or as what is provided in the argument "output_d". A graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for checkup purposes.
 }
 \description{
 Calculate CO2 and CH4 gas fluxes from the data loaded by the function "Load_LGR()" or "Load_other()". The function "FluxCal()" calculates CO2 and/or CH4 flux rates based on the time cues provided for each measurement (i.e., either start or end time). Two options are available to input the time cues:
@@ -46,7 +46,7 @@ Calculate CO2 and CH4 gas fluxes from the data loaded by the function "Load_LGR(
 Based on the time cues and window width provided for the calculation, the function will automatically scan over data that cover 1.5x length of the window width and calculate the fluxes based on the best linear regression (i.e., largest R2). After the calculations are done, a graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for checkup purposes.
 }
 \examples{
-#### data from LGR 
+#### data from LGR
 # get the directory of the example LGR raw data
 example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
 example_data1
@@ -58,27 +58,28 @@ Flux_output1
 # input the time cues as a file and calculate the fluxes over a 3-minute window
 Time_Ta1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 Flux_output2 <- FluxCal(data = Flux_lgr, t = 3,
-                       Time_keys = Time_Ta1,
-                       Ta = Time_Ta1,
-                       vol = 208, Area = 0.26,
-                       output_d = FALSE) # don't create a output file
+                        Time_keys = Time_Ta1,
+                        Ta = Time_Ta1,
+                        vol = 208, Area = 0.26,
+                        output_d = FALSE) # don't create a output file
 Flux_output2
-  
+
 #### data from other sources
 # get the directory of the example data
 example_data2 <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
 example_data2
 # load the data
 Flux_other <- Load_other(example_data2,
-                   Time_format = "mdy_hms",
-                   Time = "Date_time",
-                   CO2 = "CO2_PPM",
-                   Ta = "Tem_C")
+                         Time_format = "mdy_hms",
+                         Time = "Date_time",
+                         CO2 = "CO2_PPM",
+                         Ta = "Tem_C")
 # input the time cues as a file and calculate the fluxes over a 3-minute window
 Time_Ta2 <- system.file("extdata", "Time & Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 Flux_output3 <- FluxCal(data = Flux_other, t = 3,
-                       Time_keys = Time_Ta2,
-                       vol = 208, Area = 0.26,
-                       output_d = FALSE) # don't create a output file
+                        Time_keys = Time_Ta2,
+                        vol = 208, Area = 0.26,
+                        output_d = FALSE) # don't create a output file
 Flux_output3
+
 }
