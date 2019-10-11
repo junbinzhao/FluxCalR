@@ -30,6 +30,10 @@ Sel_cue <- function(data,
     ylim <- ylim
   }
 
+  # define the instructions
+  exp1 <- paste0("1. Select time cues by clicking on the points at the ",cue," of each measurement;")
+  exp2 <- "2. After finishing selecting, click 'Stop -> Stop locator' in the up-left corner..."
+
   # plot flux vs time for locating the peaks and valleys
   In <- c() # create a variable as Index
   for (i in 1:spt){
@@ -37,8 +41,8 @@ Sel_cue <- function(data,
     with(data[c(((i-1)*nr/spt)+1):c(i*nr/spt),],
          plot(Time,flux_plot,
               ylab = ylab,
-              main = "Click on the peaks and valleys",
-              cex.main=2.5, col.main="red",
+              main = bquote(atop(.(exp1),.(exp2))), # add instruction
+              cex.main=1.5, col.main="blue",
               ylim = ylim, cex = 0.8, xaxt="n"
          ))
     # add time interval ticks
