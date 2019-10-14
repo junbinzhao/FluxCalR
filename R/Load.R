@@ -50,7 +50,7 @@ Load_LGR <- function(file,
 #' @param CH4 A string indicates column name of the CH4 concentrations in the data file. Default: no CH4 is measured.
 #' @param Ta A string indicates column name of ambient air temperature in the data file. If not measured, a constant value can be used. Default: 25 degree C.
 #' @param skip A number indicates rows to be skipped at the beginning of the data file. Default: 0, no rows will be skipped.
-#' @param sep A string indicates delimiter to separate columns. Default: comma (",").
+#' @param sep A string indicates delimiter that separates columns. Default: comma (",").
 #' @param ... Other arguments used in the function "read.table()". See details *?read.table()*
 #'
 #' @return a dataframe with all data in the right format for function "FluxCal()".
