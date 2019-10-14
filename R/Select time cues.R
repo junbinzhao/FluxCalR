@@ -27,7 +27,7 @@
 #'
 #' @return A data frame that includes two columns:
 #' "No", the number of each measurement;
-#' "Start" or "End", the time selected as the start or end of each measurement (HH:MM:SS?)
+#' "Start" or "End", the time selected as the start or end of each measurement (HH:MM:SS)
 #'
 #' @example
 #'
@@ -60,7 +60,7 @@ Sel_cue <- function(data,
 
   # define the instructions
   exp1 <- paste0("1. Select time cues by clicking on the points at the ",cue," of each measurement;")
-  exp2 <- "2. After finishing selecting, click 'Stop -> Stop locator' in the up-left corner..."
+  exp2 <- "2. After finishing selecting, click 'Stop -> Stop locator' in the up-left corner of the window."
 
   # plot flux vs time for locating the peaks and valleys
   In <- c() # create a variable as Index
@@ -86,15 +86,12 @@ Sel_cue <- function(data,
 
   # sort the "In" in ascending order in case of click in the wrong order
   In <- sort(In)
-  if (cue == "End"){ # selected cues are the end time
-    End <- data$Time[In]
-    Time_q <- data.frame(No=seq(1,length(In)), # number of measurements
-                         End)
-  } else { # selected cues are the start time
-    Start <- data$Time[In]
-    Time_q <- data.frame(No=seq(1,length(In)), # number of measurements
-                         Start)
-  }
+  # create the output data frame
+  Time_q <- data.frame(seq(1,length(In)), # number of measurements
+                       strftime(data$Time[In],format="%H:%M:%S","UTC")) # the time HMS of the cues
+  # name the output file according to the selected critieria
+  names(Time_q) <- c("No",cue)
+
   # output the time cues if necessary
   if (assertthat::is.string(save)){
     write.csv(Time_q,file = save,row.names = F)

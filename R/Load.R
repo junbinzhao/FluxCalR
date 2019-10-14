@@ -41,9 +41,11 @@ Load_LGR <- function(file,
 #' @description Function used to load raw data output from other similar analyzers (e.g. LICOR) to feed the "data" argument in function "FluxCal()".
 #'
 #' @param file A string contains the directory path and file name of the raw data.
-#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the data timestamp from the analyzer. In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.
-#' @param Date A string indicates date of the measurements in the format of "mm/dd/yyyy". This argument is used only when date is not included in the timestamps.
 #' @param Time A string indicates column name of the timestamps in the data file.
+#' @param Time_format A string indicates the format of timestamps. Default: "mdy_hms".
+#' It can be changed into "dmy_hms" or "ymd_hms", depending on the data timestamp from the analyzer.
+#' In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.
+#' @param Date_ms A string indicates date of the measurements in the format of "mm/dd/yyyy". This argument is used only when date is not included in the timestamps.
 #' @param CO2 A string indicates column name of the CO2 concentrations in the data file. Default: no CO2 is measured.
 #' @param CH4 A string indicates column name of the CH4 concentrations in the data file. Default: no CH4 is measured.
 #' @param Ta A string indicates column name of ambient air temperature in the data file. If not measured, a constant value can be used. Default: 25 degree C.
@@ -58,17 +60,17 @@ Load_LGR <- function(file,
 #' example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
 #' # load the data
 #' Flux <- Load_other(example_data,
-#'                    Time_format = "mdy_hms",
 #'                    Time = "Date_time",
+#'                    Time_format = "mdy_hms",
 #'                    CO2 = "CO2_PPM",
 #'                    Ta = "Tem_C")
 #'
 #' @export
 ## Function for loading data from other sources ----------
 Load_other <- function(file,
-                       Time_format="mdy_hms",
-                       Date = NULL,
                        Time,
+                       Time_format="mdy_hms",
+                       Date_ms = NULL,
                        CO2 = NULL,
                        CH4 = NULL,
                        Ta = 25,
@@ -90,7 +92,7 @@ Load_other <- function(file,
       if (Time_format=="ymd_hms"){
         Time <- lubridate::ymd_hms(flux1[,Time]) # with Time_format = "ymd_hms"
       } else {
-        Time <- paste0(Date,"_",flux1[,Time]) # if only time is provided, then combine the time with date first
+        Time <- paste0(Date_ms,"_",flux1[,Time]) # if only time is provided, then combine the time with date first
         Time <- lubridate::mdy_hms(Time)
       }
     }
