@@ -29,10 +29,19 @@
 #' "No", the number of each measurement;
 #' "Start" or "End", the time selected as the start or end of each measurement (HH:MM:SS)
 #'
-#' @example
+#' @examples
+#' #### data from LGR
+#' # get the directory of the example LGR raw data
+#' example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
+#' example_data1
+#' # load the data
+#' Flux_lgr <- Load_LGR(example_data1)
+#' # select cues
+#' Cues <- Sel_cue(Flux_lgr, save = FALSE)
+#' Cues
 #'
 #' @export
-## function to manually select the time cues
+## function to manually select the time cues --------
 Sel_cue <- function(data,
                     Flux = "CO2",
                     cue = "End",

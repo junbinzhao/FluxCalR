@@ -4,17 +4,19 @@
 \alias{Load_other}
 \title{Load data from other analyzers}
 \usage{
-Load_other(file, Time_format = "mdy_hms", Date = NULL, Time,
+Load_other(file, Time, Time_format = "mdy_hms", Date_ms = NULL,
   CO2 = NULL, CH4 = NULL, Ta = 25, skip = 0, sep = ",", ...)
 }
 \arguments{
 \item{file}{A string contains the directory path and file name of the raw data.}
 
-\item{Time_format}{A string indicates the format of timestamps. Default: "mdy_hms". It can be changed into "dmy_hms" or "ymd_hms", depending on the data timestamp from the analyzer. In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.}
-
-\item{Date}{A string indicates date of the measurements in the format of "mm/dd/yyyy". This argument is used only when date is not included in the timestamps.}
-
 \item{Time}{A string indicates column name of the timestamps in the data file.}
+
+\item{Time_format}{A string indicates the format of timestamps. Default: "mdy_hms".
+It can be changed into "dmy_hms" or "ymd_hms", depending on the data timestamp from the analyzer.
+In case date and time are recorded separately, "hms" can be used here and add the date to the "Date" argument.}
+
+\item{Date_ms}{A string indicates date of the measurements in the format of "mm/dd/yyyy". This argument is used only when date is not included in the timestamps.}
 
 \item{CO2}{A string indicates column name of the CO2 concentrations in the data file. Default: no CO2 is measured.}
 
@@ -39,8 +41,8 @@ Function used to load raw data output from other similar analyzers (e.g. LICOR) 
 example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
 # load the data
 Flux <- Load_other(example_data,
-                   Time_format = "mdy_hms",
                    Time = "Date_time",
+                   Time_format = "mdy_hms",
                    CO2 = "CO2_PPM",
                    Ta = "Tem_C")
 
