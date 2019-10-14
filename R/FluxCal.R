@@ -123,7 +123,7 @@ FluxCal <- function(data,
   }
 
   # function to calculate R2, slopes and fluxes ----------
-  Cal_slope <- function(flux = "CO2") {
+  Cal <- function(flux = "CO2") {
     dft <- data.frame(matrix(0,nrow(Cue),9)) # for record the data
     names(dft) <- c("R2","Index","Slope","p","Flux","Date","Start","End","Ta")
     ########## 1. calculate the max R2 and slopes of the regression winthin the window with an extended range
