@@ -17,7 +17,7 @@
 #' Default: if no file is provided (NULL), a graph window will pop up to allow manually selecting the END time, which could be normally recognized as the local "peaks" or "valleys" of the time series.
 #' @param Type_keys Either "start" or "end" (string) to indicate if start or end time will be used as the cues; default "start". This will only valid if a file name is provided for argument "Time_keys".
 #' @param Ta A name (string) of a file contains a column "Ta" with the air temperature values (ideally, this is temperature measured inside of the chamber during the flux measurement; unit: degree C. See example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata). The length of Ta within the file must be the same as the number of flux measurements.
-#' Default: if no file name is provided (NULL), the average ambient air temperature measured by the analyzer or Ta input from function "Load_other" will be used.
+#' Default: if no file name is provided (NULL), the average ambient air temperature measured by the LGR analyzer or, if the data measured with other analyzers, Ta input from function "Load_other" will be used.
 #' @param output_d A string includes output directory and file name (.csv) to export the calculated fluxes. Default: a file named "Flux_output.csv" with calculated fluxes will be created under the current work directory. FALSE, do not create the file.
 #' @param ylim_CO2 A numeric vector of length 2, giving the y-axis scale range for CO2 concentration (ppm) for plotting purpose. If not specified (default), it will be set based on the CO2 range of the entire dataset.
 #' @param ylim_CH4 A numeric vector of length 2, giving the y-axis scale range for CH4 concentration (ppm) for plotting purpose. If not specified (default), it will be set based on the CH4 range of the entire dataset.
@@ -79,7 +79,8 @@ FluxCal <- function(data,
                     Other,
                     ext = 1.5,
                     output_d = "Flux_output.csv",
-                    digits = 3
+                    digits = 3,
+                    check_plot = TRUE
 ) {
   # define the pipe from the package "magrittr"
   `%>%` <- magrittr::`%>%`
@@ -94,7 +95,7 @@ FluxCal <- function(data,
                              sprintf("%02d",lubridate::minute(Time)),
                              sprintf("%02d",floor(lubridate::second(Time))),sep = ":"))
 
-  ### get the row index for the moving window in calculation ------
+  ### get the row index for the moving window in calculation ---------
   mov <- ext-1 # the extend of moving
   if (Cue_type == "End"){ ### if end time is given
     In1 <- match(Cue$End,data$time) # start moving
@@ -121,83 +122,63 @@ FluxCal <- function(data,
                 " in the 'Cue' 1 second forward..."))
   }
 
-  ### calculate the max R2 of the regression before local max and min
-  # R2 of CO2 fluxes
-  Ta_CO2 <- vector() # for calculating average ambient temperature
-  R2.CO2 <- data.frame(matrix(0,length(In),7))
-  colnames(R2.CO2) <- c("R2_CO2","Index_CO2","Slope_CO2","p_CO2","Flux","Date","time_CO2")
-  for (a in 1:length(In)){
-    # the window is moving backwards from the end point
-    for (b in In[a]:c(In[a]-0.5*t*60/f)){ # select 0.5 of the window width as testing for largest R2
-      Slm <- try(summary(lm(data$X.CO2.d_ppm[(b-t*60/f):b]~data$Row[(b-t*60/f):b])),silent = TRUE)
-      if (class(Slm)=="try-error"){ # if no CO2 data is provided
-        R2.CO2[a,1:7] <- NA
-        Ta_CO2[a] <- NA
-      } else {
-      if (Slm$r.squared > R2.CO2[a,1]) {
-        R2.CO2[a,1] <- Slm$r.squared
-        # output the time at the start of the slope
-        R2.CO2[a,2] <- b
-        R2.CO2[a,3] <- Slm$coefficients[2]/f
-        R2.CO2[a,4] <- Slm$coefficients[8]
-        R2.CO2[a,5] <- "CO2"
-        R2.CO2[a,6] <- paste0(lubridate::year(data$Time[1]),"-",lubridate::month(data$Time[1]),"-",lubridate::day(data$Time[1]))
-        R2.CO2[a,7] <- paste0(lubridate::hour(data$Time[(b-t*60/f)]),":",
-                              lubridate::minute(data$Time[(b-t*60/f)]),":",
-                              floor(lubridate::second(data$Time[(b-t*60/f)])))
-        Ta_CO2[a] <- mean(data$AmbT_C[(b-t*60/f):b])
-      }
-      }
+  # function to calculate R2, slopes and fluxes ----------
+  Cal_slope <- function(flux = "CO2") {
+    dft <- data.frame(matrix(0,nrow(Cue),9)) # for record the data
+    names(dft) <- c("R2","Index","Slope","p","Flux","Date","Start","End","Ta")
+    ########## 1. calculate the max R2 and slopes of the regression winthin the window with an extended range
+    for (a in 1:nrow(Cue)){
+      # the window is moving backwards from the end point
+      for (b in In1[a]:In2[a]){
+        if (flux == "CO2"){ # for CO2
+          Slm <- try(summary(lm(data$X.CO2.d_ppm[(b-t*60/f):b]~data$Row[(b-t*60/f):b])),silent = TRUE)
+        } else { # for CH4
+          Slm <- try(summary(lm(data$X.CH4.d_ppm[(b-t*60/f):b]~data$Row[(b-t*60/f):b])),silent = TRUE)
+        }
+        # if no data is provided
+        if (class(Slm)=="try-error"){
+          dft[a,1:8] <- NA
+          dft[a,9] <- NA
+        } else {
+        if (Slm$r.squared > dft[a,1]) {
+          dft[a,1] <- Slm$r.squared
+          dft[a,2] <- b # output the row index at the start of the slope
+          dft[a,3] <- Slm$coefficients[2]/f
+          dft[a,4] <- Slm$coefficients[8]
+          dft[a,5] <- flux
+          dft[a,6] <- paste0(lubridate::year(data$Time[1]),"-", # the date
+                             lubridate::month(data$Time[1]),"-",
+                             lubridate::day(data$Time[1]))
+          dft[a,7] <- paste0(lubridate::hour(data$Time[(b-t*60/f)]),":", # the start time of the slope
+                             lubridate::minute(data$Time[(b-t*60/f)]),":",
+                             floor(lubridate::second(data$Time[(b-t*60/f)])))
+          dft[a,8] <- paste0(lubridate::hour(data$Time[b]),":", # the end time of the slope
+                             lubridate::minute(data$Time[b]),":",
+                             floor(lubridate::second(data$Time[b])))
+          dft[a,9] <- mean(data$AmbT_C[(b-t*60/f):b])
+        }
+        }
+      } # end b loop
+    } # end a loop, end of calculate the slopes
+
+    ####### 2. determine which temperature will be used for flux calculation
+    if (is.null(Ta)){ # if no Ta provided, use the ones measured by analyzer
+      dft <- data.frame(dft,Tk=dft$Ta+273.2)
+    } else { # if Ta is provided as a data frame, use the column "Ta"
+      dft <- data.frame(dft,Tk=Ta$Ta+273.2)
     }
-  }
 
-  # R2 of CH4 fluxes
-  Ta_CH4 <- vector() # for calculating average ambient temperature
-  R2.CH4 <- data.frame(matrix(0,length(In),7))
-  colnames(R2.CH4) <- c("R2_CH4","Index_CH4","Slope_CH4","p_CH4","Flux","Date","time_CH4")
-  for (a in 1:length(In)){
-    for (b in In[a]:c(In[a]-0.5*t*60/f)){
-      Slm <- try(summary(lm(data$X.CH4.d_ppm[(b-t*60/f):b]~data$Row[(b-t*60/f):b])),silent=TRUE)
-      if (class(Slm)=="try-error"){ # if no CH4 data is provided
-        R2.CH4[a,1:7] <- NA
-        Ta_CH4[a] <- NA
-      } else {
-      if (Slm$r.squared > R2.CH4[a,1]) {
-        R2.CH4[a,1] <- Slm$r.squared
-        R2.CH4[a,2] <- b
-        R2.CH4[a,3] <- Slm$coefficients[2]/f
-        R2.CH4[a,4] <- Slm$coefficients[8]
-        R2.CH4[a,5] <- "CH4"
-        R2.CH4[a,6] <- paste0(lubridate::year(data$Time[1]),"-",lubridate::month(data$Time[1]),"-",lubridate::day(data$Time[1]))
-        R2.CH4[a,7] <- paste0(lubridate::hour(data$Time[(b-t*60/f)]),":",
-                              lubridate::minute(data$Time[(b-t*60/f)]),":",
-                              floor(lubridate::second(data$Time[(b-t*60/f)])))
-        Ta_CH4[a] <- mean(data$AmbT_C[(b-t*60/f):b])
-      }
-      }
-    }
-  }
+    ######## 3. create a index for each slope and calculate the flux
+    dft <- data.frame(dft,
+                      Num=row(dft)[,1] # add the Number of measurements
+                      ) %>%
+      dplyr::mutate(Flux=ifelse(is.na(Slope),
+                                NA,
+                                round(((Slope*vol)/(R_index*Tk)/Area),digits = digits))) # umol m-2 s-1
+  } # end of the function
 
-  # determine which temperature will be used for flux calculation
-  if (assertthat::is.string(Ta)){
-    Tk_CO2 <- read.table(Ta,sep = ",",header = T)$Ta+273.2
-    Tk_CH4 <- read.table(Ta,sep = ",",header = T)$Ta+273.2
-  } else {
-    Tk_CO2 <- Ta_CO2+273.2
-    Tk_CH4 <- Ta_CH4+273.2
-  }
+  ###### calculate the flux using the function and arrange the output file ------------------
 
-  # create a index for each slope and calculate the flux
-  # CO2
-  R2.CO2 <- data.frame(R2.CO2,Id.slope=row(R2.CO2)[,1]) %>%
-    dplyr::mutate(FCO2=ifelse(is.na(Slope_CO2),
-                              NA,
-                              round(((Slope_CO2*vol)/(R_index*Tk_CO2)/Area),digits = digits))) # umol CO2 m-2 s-1
-  # CH4
-  R2.CH4 <- data.frame(R2.CH4,Id.slope=row(R2.CH4)[,1]) %>%
-    dplyr::mutate(FCH4=ifelse(is.na(Slope_CH4),
-                              NA,
-                              round(((Slope_CH4*vol)/(R_index*Tk_CH4)/Area),digits = digits))) # umol CH4 m-2 s-1
   # output of the calculations
   output <- cbind(R2.CO2[,c(6,2,7,9,1)],
                   Ta_CO2 = round(Tk_CO2-273.2,digits = 2),

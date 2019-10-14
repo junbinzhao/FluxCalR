@@ -26,7 +26,7 @@
 #' FALSE, do not create the file.
 #'
 #' @return A data frame that includes two columns:
-#' "No", the number of each measurement;
+#' "Num", the number of each measurement;
 #' "Start" or "End", the time selected as the start or end of each measurement (HH:MM:SS)
 #'
 #' @examples
@@ -99,7 +99,7 @@ Sel_cue <- function(data,
   Time_q <- data.frame(seq(1,length(In)), # number of measurements
                        strftime(data$Time[In],format="%H:%M:%S","UTC")) # the time HMS of the cues
   # name the output file according to the selected critieria
-  names(Time_q) <- c("No",cue)
+  names(Time_q) <- c("Num",cue)
 
   # output the time cues if necessary
   if (assertthat::is.string(save)){
