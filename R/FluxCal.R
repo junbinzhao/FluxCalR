@@ -78,9 +78,12 @@ FluxCal <- function(data,
                     Ta = NULL,
                     Other,
                     ext = 1.5,
-                    output_d = "Flux_output.csv",
+                    output = "Flux_output.csv",
                     digits = 3,
-                    check_plot = TRUE
+                    check_plot = TRUE,
+                    ylim_CO2 = NULL,
+                    ylim_CH4 = NULL
+
 ) {
   # define the pipe from the package "magrittr"
   `%>%` <- magrittr::`%>%`
@@ -123,7 +126,7 @@ FluxCal <- function(data,
   }
 
   # function to calculate R2, slopes and fluxes ----------
-  Cal <- function(flux = "CO2") {
+  CalFUN <- function(flux = "CO2") {
     dft <- data.frame(matrix(0,nrow(Cue),9)) # for record the data
     names(dft) <- c("R2","Index","Slope","p","Flux","Date","Start","End","Ta")
     ########## 1. calculate the max R2 and slopes of the regression winthin the window with an extended range
@@ -175,18 +178,54 @@ FluxCal <- function(data,
       dplyr::mutate(Flux=ifelse(is.na(Slope),
                                 NA,
                                 round(((Slope*vol)/(R_index*Tk)/Area),digits = digits))) # umol m-2 s-1
+    if (check_plot == TRUE){ # if checking plot is needed, then make a graph
+
+
+
+    }
+    return(dft)
   } # end of the function
 
-  ###### calculate the flux using the function and arrange the output file ------------------
+  ###### calculate the flux using the function and, if required, output the file and plot the result ------------------
+  if (check_plot == TRUE){ # if the checking plot is needed, create a window for plotting
+    if (Cal == "CO2_CH4"){ # both CO2 and CH4 are calculated, plot 2 graphs
+      x11(width = 16,height = 10)
+      par(mfrow=c(2,1),mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
+    } else { # only CO2 or CH4 is calculated, plot 1 graph
+      x11(width = 16,height = 5)
+      par(mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
+    }
+  }
+  # calculate and plot
+  if (Cal == "CO2_CH4"){ # both CO2 and CH4 are calculated
+    df_CO2 <- CalFUN(flux = "CO2")
+    df_CH4 <- CalFUN(flux = "CH4")
+    dfoutput <- rbind(df_CO2,df_CH4)
+  } else { # only CO2 or CH4 is calculated
+    dfoutput <- CalFUN(flux = Cal)
+  }
+  # check if the data frame needs to be output as a file
+  if (assertthat::is.string(output)){
+    write.csv(dfoutput,file = output,row.names = F)
+  }
+
+  return(dfoutput)
+
+
+
+
+
+
+
+
+
+
 
   # output of the calculations
-  output <- cbind(R2.CO2[,c(6,2,7,9,1)],
+  dfoutput <- cbind(R2.CO2[,c(6,2,7,9,1)],
                   Ta_CO2 = round(Tk_CO2-273.2,digits = 2),
                   R2.CH4[,c(2,7,9,1)],
                   Ta_CH4 = round(Tk_CH4-273.2,digits = 2))
-  if (assertthat::is.string(output_d)){
-    write.csv(output,file = output_d,row.names = F)
-  }
 
   # Plot the regressions for visualization purpose
   x11(width = 16,height = 10)
@@ -241,6 +280,6 @@ FluxCal <- function(data,
   c <- try(lubridate::pretty_dates(data$Time,n=10),silent=TRUE)
   try(axis.POSIXct(1, at= c,format = "%H:%M"),silent=TRUE)
 
-  return(output)
+  return(dfoutput)
 }
 ## function end here#####
