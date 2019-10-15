@@ -178,6 +178,8 @@ FluxCal <- function(data,
       dplyr::mutate(Flux=ifelse(is.na(Slope),
                                 NA,
                                 round(((Slope*vol)/(R_index*Tk)/Area),digits = digits))) # umol m-2 s-1
+
+    ######### 4. plot the result if required
     if (check_plot == TRUE){ # if checking plot is needed, then make a graph
 
 
