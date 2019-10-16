@@ -128,7 +128,7 @@ FluxCal <- function(data,
   # function to calculate R2, slopes and fluxes ----------
   CalFUN <- function(flux = "CO2") {
     dft <- data.frame(matrix(0,nrow(Cue),9)) # for record the data
-    names(dft) <- c("R2","Index","Slope","p","Flux","Date","Start","End","Ta")
+    names(dft) <- c("Num","Date","Start","End","Gas","Slope","R2","Ta","Index")
     ########## 1. calculate the max R2 and slopes of the regression winthin the window with an extended range
     for (a in 1:nrow(Cue)){
       # the window is moving backwards from the end point
@@ -140,25 +140,25 @@ FluxCal <- function(data,
         }
         # if no data is provided
         if (class(Slm)=="try-error"){
-          dft[a,1:8] <- NA
-          dft[a,9] <- NA
+          stop(paste0("Make sure ",flux," data are provided and specified in the correct way (See the help)."))
         } else {
-        if (Slm$r.squared > dft[a,1]) {
-          dft[a,1] <- Slm$r.squared
-          dft[a,2] <- b # output the row index at the start of the slope
-          dft[a,3] <- Slm$coefficients[2]/f
-          dft[a,4] <- Slm$coefficients[8]
-          dft[a,5] <- flux
-          dft[a,6] <- paste0(lubridate::year(data$Time[1]),"-", # the date
+          dft[a,1] <- a # the Number of measurements
+        if (Slm$r.squared > dft[a,"R2"]) {
+          dft[a,2] <- paste0(lubridate::year(data$Time[1]),"-", # the date
                              lubridate::month(data$Time[1]),"-",
                              lubridate::day(data$Time[1]))
-          dft[a,7] <- paste0(lubridate::hour(data$Time[(b-t*60/f)]),":", # the start time of the slope
+          dft[a,3] <- paste0(lubridate::hour(data$Time[(b-t*60/f)]),":", # the start time of the slope
                              lubridate::minute(data$Time[(b-t*60/f)]),":",
                              floor(lubridate::second(data$Time[(b-t*60/f)])))
-          dft[a,8] <- paste0(lubridate::hour(data$Time[b]),":", # the end time of the slope
+          dft[a,4] <- paste0(lubridate::hour(data$Time[b]),":", # the end time of the slope
                              lubridate::minute(data$Time[b]),":",
                              floor(lubridate::second(data$Time[b])))
-          dft[a,9] <- mean(data$AmbT_C[(b-t*60/f):b])
+          dft[a,5] <- flux
+          dft[a,6] <- try(Slm$coefficients[2]/f,silent = TRUE) # slope as against 1s
+          dft[a,7] <- try(Slm$r.squared,silent = TRUE)
+          dft[a,8] <- round(mean(data$AmbT_C[(b-t*60/f):b]),digits=2)
+          dft[a,9] <- b # output the row index at the start of the slope for plotting the graphs
+          # dft[a,4] <- Slm$coefficients[8] # p value
         }
         }
       } # end b loop
@@ -168,16 +168,13 @@ FluxCal <- function(data,
     if (is.null(Ta)){ # if no Ta provided, use the ones measured by analyzer
       dft <- data.frame(dft,Tk=dft$Ta+273.2)
     } else { # if Ta is provided as a data frame, use the column "Ta"
-      dft <- data.frame(dft,Tk=Ta$Ta+273.2)
+      dft <- data.frame(dft,Tk=Ta$Ta+273.2) %>%
+        dplyr::mutate(Ta=Tk-273.2) # replace the Ta with the provided values
     }
 
-    ######## 3. create a index for each slope and calculate the flux
-    dft <- data.frame(dft,
-                      Num=row(dft)[,1] # add the Number of measurements
-                      ) %>%
-      dplyr::mutate(Flux=ifelse(is.na(Slope),
-                                NA,
-                                round(((Slope*vol)/(R_index*Tk)/Area),digits = digits))) # umol m-2 s-1
+    ######## 3. calculate the flux
+    dft <- dft %>%
+      dplyr::mutate(Flux=try(round(((Slope*vol)/(R_index*Tk)/Area),digits = digits),silent=TRUE)) # umol m-2 s-1
 
     ######### 4. plot the result if required
     if (check_plot == TRUE){ # if checking plot is needed, then make a graph
@@ -202,85 +199,16 @@ FluxCal <- function(data,
   if (Cal == "CO2_CH4"){ # both CO2 and CH4 are calculated
     df_CO2 <- CalFUN(flux = "CO2")
     df_CH4 <- CalFUN(flux = "CH4")
-    dfoutput <- rbind(df_CO2,df_CH4)
+    dfoutput <- rbind(df_CO2,df_CH4) %>%
+      dplyr::select(-Index,-Tk) # don't output the row index and Tk
   } else { # only CO2 or CH4 is calculated
-    dfoutput <- CalFUN(flux = Cal)
+    dfoutput <- CalFUN(flux = Cal) %>%
+      dplyr::select(-Index,-Tk) # don't output the row index and Tk
   }
   # check if the data frame needs to be output as a file
   if (assertthat::is.string(output)){
     write.csv(dfoutput,file = output,row.names = F)
   }
-
-  return(dfoutput)
-
-
-
-
-
-
-
-
-
-
-
-  # output of the calculations
-  dfoutput <- cbind(R2.CO2[,c(6,2,7,9,1)],
-                  Ta_CO2 = round(Tk_CO2-273.2,digits = 2),
-                  R2.CH4[,c(2,7,9,1)],
-                  Ta_CH4 = round(Tk_CH4-273.2,digits = 2))
-
-  # Plot the regressions for visualization purpose
-  x11(width = 16,height = 10)
-  par(mfrow=c(2,1),mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
-  if (is.null(ylim_CO2)){
-    suppressWarnings(try(with(data,plot(X.CO2.d_ppm,
-                 ylab="CO2 readings in ppm", xlab = "",
-                 bty="n", xaxt="n"#,ylim=c(380,460)
-  )),silent=TRUE))
-  } else {
-    suppressWarnings(try(with(data,plot(X.CO2.d_ppm,
-                   ylab="CO2 readings in ppm", xlab = "",
-                   bty="n", xaxt="n",ylim=ylim_CO2
-    )),silent=TRUE))
-  }
-
-  # CO2 regression lines
-  for (i in 1:nrow(R2.CO2)){
-    Slm <- try(lm(data$X.CO2.d_ppm[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]]~
-                data$Row[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]]),silent=TRUE)
-    try(lines(data$Row[(R2.CO2[i,2]-t*60/f):R2.CO2[i,2]], Slm$fitted.values,
-          col="green", lwd=3),silent=TRUE)
-    try(text(data$Row[In[i]-t*60/f],data$X.CO2.d_ppm[In[i]-t*60/f],
-         labels = paste(R2.CO2[i,8]), # bquote(bold(atop(paste(R^2,"=",.(round(R2.CO2[i,1],2))),
-         # paste("b=",.(round(R2.CO2[i,3],2)))))),
-         col = "red",cex = 1.2,pos = 3),silent=TRUE)
-  }
-
-
-  # CH4 flux regression lines in seperate plot
-  if (is.null(ylim_CH4)){
-    suppressWarnings(try(with(data,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n"#, ylim=c(1.7,3)
-    )),silent=TRUE))
-  } else {
-    suppressWarnings(try(with(data,plot(X.CH4.d_ppm, ylab="CH4 readings in ppm", xlab="Time",bty="n", xaxt="n", ylim=ylim_CH4
-    )),silent=TRUE))
-  }
-
-  for (i in 1:nrow(R2.CH4)){
-    Slm <- try(lm(data$X.CH4.d_ppm[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]]~
-                data$Row[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]]),silent=TRUE)
-    try(lines(data$Row[(R2.CH4[i,2]-t*60/f):R2.CH4[i,2]], Slm$fitted.values,
-          col="green", lwd=3),silent=TRUE)
-    try(text(data$Row[In[i]-t*60/f],data$X.CH4.d_ppm[In[i]-t*60/f],
-         labels = paste(R2.CH4[i,8]), # bquote(bold(atop(paste(R^2,"=",.(round(R2.CH4[i,1],2))),
-         # paste("b=",.(round(R2.CH4[i,3]*1000,2)),"e-3")))),
-         col="red",cex=1.2,pos = 3),silent=TRUE)
-  }
-  par(new=T)
-  suppressWarnings(try(with(data,plot(Time,X.CH4.d_ppm,type = "n",axes = F, xlab = "", ylab = "")),silent=TRUE))
-  # add time interval ticks
-  c <- try(lubridate::pretty_dates(data$Time,n=10),silent=TRUE)
-  try(axis.POSIXct(1, at= c,format = "%H:%M"),silent=TRUE)
 
   return(dfoutput)
 }
