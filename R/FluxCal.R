@@ -116,7 +116,7 @@ FluxCal <- function(data,
                     they must be larger than the window size (win) set for calculation!"))
       }
     }
-  }
+  } # here get two time cues In1 (End) and In2 (Start)!!
 
   # return an error if the indices includes NAs
   if (anyNA(In1)|anyNA(In2)) {
@@ -134,9 +134,9 @@ FluxCal <- function(data,
       # the window is moving backwards from the end point
       for (b in In1[a]:In2[a]){
         if (flux == "CO2"){ # for CO2
-          Slm <- try(summary(lm(data$X.CO2.d_ppm[(b-t*60/f):b]~data$Row[(b-t*60/f):b])),silent = TRUE)
+          Slm <- try(summary(lm(data$X.CO2.d_ppm[(b-win*60/f):b]~data$Row[(b-win*60/f):b])),silent = TRUE)
         } else { # for CH4
-          Slm <- try(summary(lm(data$X.CH4.d_ppm[(b-t*60/f):b]~data$Row[(b-t*60/f):b])),silent = TRUE)
+          Slm <- try(summary(lm(data$X.CH4.d_ppm[(b-win*60/f):b]~data$Row[(b-win*60/f):b])),silent = TRUE)
         }
         # if no data is provided
         if (class(Slm)=="try-error"){
@@ -147,9 +147,9 @@ FluxCal <- function(data,
           dft[a,2] <- paste0(lubridate::year(data$Time[1]),"-", # the date
                              lubridate::month(data$Time[1]),"-",
                              lubridate::day(data$Time[1]))
-          dft[a,3] <- paste0(lubridate::hour(data$Time[(b-t*60/f)]),":", # the start time of the slope
-                             lubridate::minute(data$Time[(b-t*60/f)]),":",
-                             floor(lubridate::second(data$Time[(b-t*60/f)])))
+          dft[a,3] <- paste0(lubridate::hour(data$Time[(b-win*60/f)]),":", # the start time of the slope
+                             lubridate::minute(data$Time[(b-win*60/f)]),":",
+                             floor(lubridate::second(data$Time[(b-win*60/f)])))
           dft[a,4] <- paste0(lubridate::hour(data$Time[b]),":", # the end time of the slope
                              lubridate::minute(data$Time[b]),":",
                              floor(lubridate::second(data$Time[b])))
@@ -157,7 +157,7 @@ FluxCal <- function(data,
           dft[a,6] <- try(Slm$coefficients[2]/f,silent = TRUE) # slope as against 1s
           dft[a,7] <- try(Slm$r.squared,silent = TRUE)
           dft[a,8] <- round(mean(data$AmbT_C[(b-t*60/f):b]),digits=2)
-          dft[a,9] <- b # output the row index at the start of the slope for plotting the graphs
+          dft[a,9] <- b # output the row index at the END of the slope for plotting the graphs
           # dft[a,4] <- Slm$coefficients[8] # p value
         }
         }
@@ -178,9 +178,44 @@ FluxCal <- function(data,
 
     ######### 4. plot the result if required
     if (check_plot == TRUE){ # if checking plot is needed, then make a graph
-
-
-
+      # determine if the CO2 or CH4 column is used for ploting and ylim range
+      if (flux=="CO2"){ # for CO2
+        var <- "X.CO2.d_ppm"
+        if (is.null(ylim_CO2)){
+          ylim <- range(data$X.CO2.d_ppm)
+        } else {
+          ylim <- ylim_CO2
+        }
+      } else { # for CH4
+        var <- "X.CH4.d_ppm"
+        if (is.null(ylim_CH4)){
+          ylim <- range(data$X.CH4.d_ppm)
+        } else {
+          ylim <- ylim_CH4
+        }
+      }
+      # plot the data against the row index
+      try(plot(data[,var],
+               ylab=paste0(flux," readings in ppm"),
+               xlab="Time",bty="n", xaxt="n",
+               ylim=ylim),silent=TRUE)
+      # plot the regression lines
+      for (i in 1:nrow(dft)){
+        Slm <- try(lm(data[(dft[i,"Index"]-win*60/f):dft[i,"Index"],var]~
+                        data$Row[(dft[i,"Index"]-win*60/f):dft[i,"Index"]]),silent=TRUE)
+        try(lines(data$Row[(dft[i,"Index"]-win*60/f):dft[i,"Index"]], Slm$fitted.values,
+                  col="green", lwd=3),silent=TRUE)
+        try(text(data[In[i]-win*60/f,"Row"],data[In[i]-win*60/f,var],
+                 labels = paste(dft[i,"Num"]),
+                 col="red",cex=1.2,pos = 3),silent=TRUE)
+      }
+      # add x-axis as time
+      par(new=T)
+      try(plot(data[,"Time"],data[,var],
+               type = "n",axes = F, xlab = "", ylab = ""),silent=TRUE)
+      # add time interval ticks
+      c <- try(lubridate::pretty_dates(data$Time,n=10),silent=TRUE)
+      try(axis.POSIXct(1, at= c,format = "%H:%M"),silent=TRUE)
     }
     return(dft)
   } # end of the function
