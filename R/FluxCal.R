@@ -76,7 +76,7 @@ FluxCal <- function(data,
                     Cue,
                     Cue_type = "End",
                     Ta = NULL,
-                    Other,
+                    Other = NULL,
                     ext = 1.5,
                     output = "Flux_output.csv",
                     digits = 3,
@@ -147,16 +147,12 @@ FluxCal <- function(data,
           dft[a,2] <- paste0(lubridate::year(data$Time[1]),"-", # the date
                              lubridate::month(data$Time[1]),"-",
                              lubridate::day(data$Time[1]))
-          dft[a,3] <- paste0(lubridate::hour(data$Time[(b-win*60/f)]),":", # the start time of the slope
-                             lubridate::minute(data$Time[(b-win*60/f)]),":",
-                             floor(lubridate::second(data$Time[(b-win*60/f)])))
-          dft[a,4] <- paste0(lubridate::hour(data$Time[b]),":", # the end time of the slope
-                             lubridate::minute(data$Time[b]),":",
-                             floor(lubridate::second(data$Time[b])))
+          dft[a,3] <- strftime(data$Time[(b-win*60/f)],format="%H:%M:%S","UTC") # the start time of the slope
+          dft[a,4] <- strftime(data$Time[b],format="%H:%M:%S","UTC") # the end time of the slope
           dft[a,5] <- flux
           dft[a,6] <- try(Slm$coefficients[2]/f,silent = TRUE) # slope as against 1s
           dft[a,7] <- try(Slm$r.squared,silent = TRUE)
-          dft[a,8] <- round(mean(data$AmbT_C[(b-t*60/f):b]),digits=2)
+          dft[a,8] <- round(mean(data$AmbT_C[(b-win*60/f):b]),digits=2)
           dft[a,9] <- b # output the row index at the END of the slope for plotting the graphs
           # dft[a,4] <- Slm$coefficients[8] # p value
         }
@@ -168,13 +164,20 @@ FluxCal <- function(data,
     if (is.null(Ta)){ # if no Ta provided, use the ones measured by analyzer
       dft <- data.frame(dft,Tk=dft$Ta+273.2)
     } else { # if Ta is provided as a data frame, use the column "Ta"
-      dft <- data.frame(dft,Tk=Ta$Ta+273.2) %>%
+      dft <- data.frame(dft,Tk=df_Ta$Ta+273.2) %>%
         dplyr::mutate(Ta=Tk-273.2) # replace the Ta with the provided values
     }
 
     ######## 3. calculate the flux
     dft <- dft %>%
       dplyr::mutate(Flux=try(round(((Slope*vol)/(R_index*Tk)/Area),digits = digits),silent=TRUE)) # umol m-2 s-1
+
+    # when other meta data need to be passed along from the Ta data frame
+    if (!is.null(Other)){
+      dft <- try(data.frame(dft,df_Ta[,c(Other)]),silent = TRUE)
+      if (class(dft=="try-error"))
+        stop("Please check the 'Other' argument is properly specified as column names (see the help)!")
+    }
 
     ######### 4. plot the result if required
     if (check_plot == TRUE){ # if checking plot is needed, then make a graph
