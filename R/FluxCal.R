@@ -75,7 +75,7 @@ FluxCal <- function(data,
                     Area,
                     Cue,
                     Cue_type = "End",
-                    Ta = NULL,
+                    df_Ta = NULL,
                     Other = NULL,
                     ext = 1.5,
                     output = "Flux_output.csv",
@@ -149,10 +149,10 @@ FluxCal <- function(data,
                              lubridate::day(data$Time[1]))
           dft[a,3] <- strftime(data$Time[(b-win*60/f)],format="%H:%M:%S","UTC") # the start time of the slope
           dft[a,4] <- strftime(data$Time[b],format="%H:%M:%S","UTC") # the end time of the slope
-          dft[a,5] <- flux
-          dft[a,6] <- try(Slm$coefficients[2]/f,silent = TRUE) # slope as against 1s
-          dft[a,7] <- try(Slm$r.squared,silent = TRUE)
-          dft[a,8] <- round(mean(data$AmbT_C[(b-win*60/f):b]),digits=2)
+          dft[a,5] <- flux # CO2 or CH4
+          dft[a,6] <- try(round(Slm$coefficients[2]/f,digits = digits),silent = TRUE) # slope as against 1s
+          dft[a,7] <- try(round(Slm$r.squared,digits = 2),silent = TRUE) # R2
+          dft[a,8] <- round(mean(data$AmbT_C[(b-win*60/f):b]),digits=2) # temperautre
           dft[a,9] <- b # output the row index at the END of the slope for plotting the graphs
           # dft[a,4] <- Slm$coefficients[8] # p value
         }
@@ -161,7 +161,7 @@ FluxCal <- function(data,
     } # end a loop, end of calculate the slopes
 
     ####### 2. determine which temperature will be used for flux calculation
-    if (is.null(Ta)){ # if no Ta provided, use the ones measured by analyzer
+    if (is.null(df_Ta)){ # if no Ta provided, use the ones measured by analyzer
       dft <- data.frame(dft,Tk=dft$Ta+273.2)
     } else { # if Ta is provided as a data frame, use the column "Ta"
       dft <- data.frame(dft,Tk=df_Ta$Ta+273.2) %>%
@@ -208,7 +208,7 @@ FluxCal <- function(data,
                         data$Row[(dft[i,"Index"]-win*60/f):dft[i,"Index"]]),silent=TRUE)
         try(lines(data$Row[(dft[i,"Index"]-win*60/f):dft[i,"Index"]], Slm$fitted.values,
                   col="green", lwd=3),silent=TRUE)
-        try(text(data[In[i]-win*60/f,"Row"],data[In[i]-win*60/f,var],
+        try(text(data[dft[i,"Index"]-win*60/f,"Row"],data[dft[i,"Index"]-win*60/f,var],
                  labels = paste(dft[i,"Num"]),
                  col="red",cex=1.2,pos = 3),silent=TRUE)
       }
@@ -226,8 +226,8 @@ FluxCal <- function(data,
   ###### calculate the flux using the function and, if required, output the file and plot the result ------------------
   if (check_plot == TRUE){ # if the checking plot is needed, create a window for plotting
     if (Cal == "CO2_CH4"){ # both CO2 and CH4 are calculated, plot 2 graphs
-      x11(width = 16,height = 10)
-      par(mfrow=c(2,1),mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
+      x11(width = 16,height = 12)
+      par(mfrow=c(2,1),mar=c(2,1,2,1),xpd=NA,oma=c(4,4,1,1))
     } else { # only CO2 or CH4 is calculated, plot 1 graph
       x11(width = 16,height = 5)
       par(mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
