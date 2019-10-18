@@ -112,7 +112,7 @@ FluxCal <- function(data,
       In2 <- match(Cue$Start,data$time)+win*60/f
       # return an error if the window length is larger than the range between start and end
       if (any(as.numeric(difftime(Cue$Start,Cue$End,units = "secs"))<win*60)){
-        stop(paste0("Check the differences between start and end time,
+        stop(paste0("Error: check the differences between start and end time,
                     they must be larger than the window size (win) set for calculation!"))
       }
     }
@@ -120,7 +120,7 @@ FluxCal <- function(data,
 
   # return an error if the indices includes NAs
   if (anyNA(In1)|anyNA(In2)) {
-    stop(paste0("Change the timestamp of measurement No.",
+    stop(paste0("Error: change the timestamp of measurement No.",
                 which(is.na(In1)),which(is.na(In2)),
                 " in the 'Cue' 1 second forward..."))
   }
@@ -140,7 +140,7 @@ FluxCal <- function(data,
         }
         # if no data is provided
         if (class(Slm)=="try-error"){
-          stop(paste0("Make sure ",flux," data are provided and specified in the correct way (See the help)."))
+          stop(paste0("Error: make sure ",flux," data are provided and specified in the correct way (See the help)."))
         } else {
           dft[a,1] <- a # the Number of measurements
         if (Slm$r.squared > dft[a,"R2"]) {
@@ -176,7 +176,7 @@ FluxCal <- function(data,
     if (!is.null(Other)){
       dft <- try(data.frame(dft,df_Ta[,c(Other)]),silent = TRUE)
       if (class(dft=="try-error"))
-        stop("Please check the 'Other' argument is properly specified as column names (see the help)!")
+        stop("Error: please check the 'Other' argument is properly specified as column names (see the help)!")
     }
 
     ######### 4. plot the result if required
