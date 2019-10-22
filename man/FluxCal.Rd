@@ -35,7 +35,8 @@ that need to be passed along to the final output data frame. Default: NULL.}
 
 \item{df_Ta}{A data frame contains a column "Ta" with the air temperature values (ideally, this is temperature measured inside
  of the chamber during the flux measurement; unit: degree C. This can be the same data frame as in `df_cue`.
- See example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata). The length of Ta within the file must be the same as the number of flux measurements.
+ See example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
+ Note the row number of the data frame must be the same as the number of flux measurements.
 Default: NULL, then the temperature used is either the average ambient air temperature measured by the LGR analyzer
 (column "AmbT_C") or, if the data measured by other analyzers, Ta input from function `LoadOther()`.}
 
@@ -57,13 +58,18 @@ If not specified (default), it will be set based on the CO2 range of the entire 
 If not specified (default), it will be set based on the CH4 range of the entire dataset.}
 }
 \value{
-A dataframe with calculated CO2 and CH4 fluxes ("FCO2" and "FCH4", respectively; unit: umol m^-2 s^-1) and other parameters (i.e. date, time, index, regression slopes, R2 and Ta). A copy of the dataframe will be saved as "Flux_output.csv" under the work directory or as what is provided in the argument "output_d". A graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for checkup purposes.
+A data frame with 9 columns, including number of measurement ("Num"), date of measurement ("Date"), start and end time
+for each flux calculation ("Start" and "End"), gas name ("Gas", either CO2 or CH4), slope ("Slope") and R2 ("R2") of the
+regressions, air temperature used for calculation ("Ta") and the calculated fluxes ("Flux", unit: umol m-2 s-1).
+As default, a copy of the data frame will be saved as "Flux_output.csv" under the work directory (or as what is provided in the
+argument `output`) and a graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for
+checkup purposes.
 }
 \description{
 A function to calculate CO2 and CH4 gas fluxes from the data loaded by the function `LoadLGR()` or `Load_other()`.
-It takes a time cue data frame (argument `df_cue`), either created by the function `SelCue()` or prepared by the user following the format of
-"Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata, to separate the
-measurements and calculate the fluxes for all measurements at once.
+It takes a time cue data frame (argument `df_cue`), either created by the function `SelCue()` or prepared by the user following
+the format of "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata,
+to separate the measurements and then calculate the fluxes for all the measurements at once.
 Note that the header for the time cue column must be either *"Start"* or *"End"*.
 Based on the time cues and window width provided for the calculation, the function will automatically scan over data that cover
  1.5x (default) length of the window and calculate the fluxes based on the best linear regression (i.e., largest R2).

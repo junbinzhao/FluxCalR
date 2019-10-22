@@ -1,9 +1,9 @@
 #' @title Calculate CO2 and CH4 gas fluxes
 #'
 #' @description A function to calculate CO2 and CH4 gas fluxes from the data loaded by the function `LoadLGR()` or `Load_other()`.
-#' It takes a time cue data frame (argument `df_cue`), either created by the function `SelCue()` or prepared by the user following the format of
-#' "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata, to separate the
-#' measurements and calculate the fluxes for all measurements at once.
+#' It takes a time cue data frame (argument `df_cue`), either created by the function `SelCue()` or prepared by the user following
+#' the format of "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata,
+#' to separate the measurements and then calculate the fluxes for all the measurements at once.
 #' Note that the header for the time cue column must be either *"Start"* or *"End"*.
 #' Based on the time cues and window width provided for the calculation, the function will automatically scan over data that cover
 #'  1.5x (default) length of the window and calculate the fluxes based on the best linear regression (i.e., largest R2).
@@ -27,7 +27,8 @@
 #' that need to be passed along to the final output data frame. Default: NULL.
 #' @param df_Ta A data frame contains a column "Ta" with the air temperature values (ideally, this is temperature measured inside
 #'  of the chamber during the flux measurement; unit: degree C. This can be the same data frame as in `df_cue`.
-#'  See example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata). The length of Ta within the file must be the same as the number of flux measurements.
+#'  See example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
+#'  Note the row number of the data frame must be the same as the number of flux measurements.
 #' Default: NULL, then the temperature used is either the average ambient air temperature measured by the LGR analyzer
 #' (column "AmbT_C") or, if the data measured by other analyzers, Ta input from function `LoadOther()`.
 #' @param ext A number indicates a range of how many times of the window width (`win`) should the calculation scan through to
@@ -42,7 +43,12 @@
 #' @param ylim_CH4 A numeric vector of length 2, giving the y-axis scale range for CH4 concentration (ppm) for `check_plot`.
 #' If not specified (default), it will be set based on the CH4 range of the entire dataset.
 #'
-#' @return A dataframe with calculated CO2 and CH4 fluxes ("FCO2" and "FCH4", respectively; unit: umol m^-2 s^-1) and other parameters (i.e. date, time, index, regression slopes, R2 and Ta). A copy of the dataframe will be saved as "Flux_output.csv" under the work directory or as what is provided in the argument "output_d". A graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for checkup purposes.
+#' @return A data frame with 9 columns, including number of measurement ("Num"), date of measurement ("Date"), start and end time
+#' for each flux calculation ("Start" and "End"), gas name ("Gas", either CO2 or CH4), slope ("Slope") and R2 ("R2") of the
+#' regressions, air temperature used for calculation ("Ta") and the calculated fluxes ("Flux", unit: umol m-2 s-1).
+#' As default, a copy of the data frame will be saved as "Flux_output.csv" under the work directory (or as what is provided in the
+#' argument `output`) and a graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up for
+#' checkup purposes.
 #'
 #' @examples
 #' #### data from LGR
@@ -171,18 +177,18 @@ FluxCal <- function(data,
           stop(paste0("Error: make sure ",flux," data are provided and specified in the correct way (See the help)."))
         } else {
           dft[a,"Num"] <- a # the Number of measurements
-        if (Slm$r.squared > dft[a,"R2"]) {
-          dft[a,"Date"] <- paste0(lubridate::year(data$Time[1]),"-", # the date
-                             lubridate::month(data$Time[1]),"-",
-                             lubridate::day(data$Time[1]))
-          dft[a,"Start"] <- strftime(data$Time[(b-win_f)],format="%H:%M:%S","UTC") # the start time of the slope
-          dft[a,"End"] <- strftime(data$Time[b],format="%H:%M:%S","UTC") # the end time of the slope
-          dft[a,"Gas"] <- flux # CO2 or CH4
-          dft[a,"Slope"] <- try(round(Slm$coefficients[2]/f,digits = digits),silent = TRUE) # slope as against 1s
-          dft[a,"R2"] <- try(round(Slm$r.squared,digits = 2),silent = TRUE) # R2
-          dft[a,"Ta"] <- round(mean(data$AmbT_C[(b-win_f):b]),digits=2) # temperautre
-          dft[a,"Index"] <- b # output the row index at the END of the slope for plotting the graphs
-        }
+          if (Slm$r.squared > dft[a,"R2"]) {
+            dft[a,"Date"] <- paste0(lubridate::year(data$Time[1]),"-", # the date
+                               lubridate::month(data$Time[1]),"-",
+                               lubridate::day(data$Time[1]))
+            dft[a,"Start"] <- strftime(data$Time[(b-win_f)],format="%H:%M:%S","UTC") # the start time of the slope
+            dft[a,"End"] <- strftime(data$Time[b],format="%H:%M:%S","UTC") # the end time of the slope
+            dft[a,"Gas"] <- flux # CO2 or CH4
+            dft[a,"Slope"] <- try(round(Slm$coefficients[2]/f,digits = digits),silent = TRUE) # slope as against 1s
+            dft[a,"R2"] <- try(round(Slm$r.squared,digits = 2),silent = TRUE) # R2
+            dft[a,"Ta"] <- round(mean(data$AmbT_C[(b-win_f):b]),digits=2) # temperautre
+            dft[a,"Index"] <- b # output the row index at the END of the slope for plotting the graphs
+          } # end of if for R2
         }
       } # end b loop
     } # end a loop, end of calculate the slopes
@@ -199,7 +205,7 @@ FluxCal <- function(data,
     dft <- dft %>%
       dplyr::mutate(Flux=try(round(((Slope*vol)/(R_index*Tk)/area),digits = digits),silent=TRUE)) # umol m-2 s-1
 
-    # when other meta data need to be passed along from the Ta data frame
+    # when other meta data need to be passed along from the df_cue data frame
     if (!is.null(other)){
       dft <- try(data.frame(dft,df_cue[,c(other)]),silent = TRUE)
       if (class(dft=="try-error"))
