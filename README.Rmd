@@ -23,19 +23,17 @@ The goal of FluxCalR is to ...
 
 ## Installation
 
-**Package installation**
-
 First, make sure the package `remotes` is installed in R. If not, install the package by: 
-```R
+```r
 install.packages("remotes")
 ```
 Then, install the `FluxCalR` package in R by:
-```R
+```r
 remotes::install_github("junbinzhao/FluxCalR")
 ```
 The functioning of the package is based on other R packages: `dplyr`, `lubridate`, `assertthat`, `magrittr` and they must be installed before using the functions in the `FluxCalR` package.
 
-**Load data**
+## Load data
 
 The format of data input are specialized to that from **Los Gatos Research (LGR) Ultraportable Gas Analyzers** 
     <http://www.lgrinc.com/analyzers/ultraportable/>. Use the the function **`Load_LGR()`** to load raw data from LGR; 
@@ -44,7 +42,7 @@ The format of data input are specialized to that from **Los Gatos Research (LGR)
 A function (**`Load_other()`**) is provided to load and convert data from other sources (e.g., LICOR) into the format that is 
     compliant with the flux calculation fuction. See details and examples ``?LoadOther()``.
 
-**Calculate fluxes**
+## Calculate fluxes
 
 The function **`FluxCal()`** calculates CO<sub>2</sub> and/or CH<sub>4</sub> flux rates based on the time cues provided for each measurement (i.e., either 
     start or end time). Two options are available to input the time cues: 
@@ -58,7 +56,7 @@ Based on the time cues and window width provided for the calculation, the functi
     calculations are done, a graph with regression lines plotted on the CO<sub>2</sub> and/or CH<sub>4</sub> concentration time series will pop up 
     for checkup purposes. See details and examples ``?FluxCal()``.
 
-**Community Guidelines**
+## Community Guidelines
 
 *To report problems, seek support or contribute, please contact the author Junbin Zhao (junbinzhao1985@gmail.com). Requests/suggestions for new features are also welcome.*
 
