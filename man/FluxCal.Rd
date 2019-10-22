@@ -83,19 +83,31 @@ example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "Flu
 example_data1
 
 # load the data
-Flux_lgr <- Load_LGR(example_data1)
+Flux_lgr <- LoadLGR(file = example_data1,
+                    time_format = "mdy_HMS")
 
-# manually select time cues and calculate the fluxes over a 3-minute window
-Flux_output1 <- FluxCal(data = Flux_lgr, t = 3, vol = 208, Area = 0.26)
+# manually select the end of each measurement as time cues
+time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = F)
+
+# calculate the fluxes over a 3-minute window using the manually selected cues
+Flux_output1 <- FluxCal(data = Flux_lgr,
+                        win = 3,
+                        vol = 208,Area = 0.26,
+                        df_cue = time_cue,
+                        cue_type = "End",
+                        output = FALSE) # don't create a output file
 Flux_output1
 
-# input the time cues as a file and calculate the fluxes over a 3-minute window
-Time_Ta1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
-Flux_output2 <- FluxCal(data = Flux_lgr, t = 3,
-                        Time_keys = Time_Ta1,
-                        Ta = Time_Ta1,
+# input the time cues from a prepared file and calculate the fluxes over a 3-minute window
+Example_cue1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+Time_Ta1 <- read.csv(Example_cue1)
+Flux_output2 <- FluxCal(data = Flux_lgr,
+                        win = 3,
                         vol = 208, Area = 0.26,
-                        output_d = FALSE) # don't create a output file
+                        df_cue = Time_Ta1,
+                        cue_type = "Start_End", # use both start and end time of each measurement as cues
+                        other = c("Plot","Light_Dark"), # also pass other columns into the final output
+                        df_Ta = Time_Ta1) # use separately measured air temperature for calculation
 Flux_output2
 
 #### data from other sources
@@ -104,18 +116,23 @@ example_data2 <- system.file("extdata", "Flux_example_2_other.csv", package = "F
 example_data2
 
 # load the data
-Flux_other <- Load_other(example_data2,
-                         Time_format = "mdy_hms",
-                         Time = "Date_time",
-                         CO2 = "CO2_PPM",
-                         Ta = "Tem_C")
+Flux_other <- LoadOther(file = example_data2,
+                        time = "Date_time",
+                        time_format = "mdy_HMS",
+                        CO2 = "CO2_PPM",
+                        Ta = "Tem_C")
 
-# input the time cues as a file and calculate the fluxes over a 3-minute window
-Time_Ta2 <- system.file("extdata", "Time & Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
-Flux_output3 <- FluxCal(data = Flux_other, t = 3,
-                        Time_keys = Time_Ta2,
+# input the time cues from a prepared file and calculate the fluxes over a 3-minute window
+Example_cue2 <- system.file("extdata", "Time & Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+Time_Ta2 <- read.csv(Example_cue2)
+Flux_output3 <- FluxCal(data = Flux_other,
+                        cal = "CO2", # only calculate CO2 flux
+                        win = 3,
                         vol = 208, Area = 0.26,
-                        output_d = FALSE) # don't create a output file
+                        df_cue = Time_Ta2,
+                        cue_type = "Start",
+                        other = c("Plot","Light_Dark")
+                        output = FALSE) # don't create a output file
 Flux_output3
 
 }
