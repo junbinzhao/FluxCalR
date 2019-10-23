@@ -157,26 +157,42 @@ FluxCal <- function(data,
   if (cue_type == "End"){ ### if end time is given
     In1 <- match(df_cue$End,data$time) # start moving
     In2 <- In1-mov*win_f # end of moving (backwards)
+    # return an error if the indices includes NAs
+    if (anyNA(In1)) {
+      stop(paste0("Error: change the 'End' timestamp of measurement No.",
+                  which(is.na(In1)),which(is.na(In2)),
+                  " in the 'df_cue' 1 second forward..."))
+    }
   } else {
     if (cue_type == "Start"){ ### if start time is given
       In1 <- match(df_cue$Start,data$time)+ext*win_f
       In2 <- In1-mov*win_f
+      # return an error if the indices includes NAs
+      if (anyNA(In1)) {
+        stop(paste0("Error: change the 'Start' timestamp of measurement No.",
+                    which(is.na(In1)),which(is.na(In2)),
+                    " in the 'df_cue' 1 second forward..."))
+      }
     } else { ### if both start and end is given
       In1 <- match(df_cue$End,data$time)
       In2 <- match(df_cue$Start,data$time)+win_f
+      # return an error if the indices includes NAs
+      if (anyNA(In1)) {
+        stop(paste0("Error: change the 'End' timestamp of measurement No.",
+                    which(is.na(In1)),which(is.na(In2)),
+                    " in the 'df_cue' 1 second forward..."))
+      }
+      if (anyNA(In2)) {
+        stop(paste0("Error: change the 'Start' timestamp of measurement No.",
+                    which(is.na(In1)),which(is.na(In2)),
+                    " in the 'df_cue' 1 second forward..."))
+      }
       # return an error if the window length is larger than the range between start and end
       if (any(In1-In2<0,na.rm = TRUE)){
         stop(paste0("Error: differences between start and end time must be larger than the window size (win)!"))
       }
     }
   } # here get two time cues In1 (End) and In2 (Start)!!
-
-  # return an error if the indices includes NAs
-  if (anyNA(In1)|anyNA(In2)) {
-    stop(paste0("Error: change the timestamp of measurement No.",
-                which(is.na(In1)),which(is.na(In2)),
-                " in the 'df_cue' 1 second forward..."))
-  }
 
   # function to calculate R2, slopes and fluxes ----------
   CalFUN <- function(flux = "CO2") {
