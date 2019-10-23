@@ -14,11 +14,11 @@ The data should be provided as what is exported from the LGR analyzer.}
 It also takes the format "dmy_HMS" or "ymd_HMS", depending on the timestamps output from the analyzer.}
 }
 \value{
-A data frame with all data in the right format for the functions `SelCue()` and `FluxCal()`.
+A data frame with all data in the right format for the functions \code{\link{SelCue}} and \code{\link{FluxCal}}.
 }
 \description{
 A function used to load raw data from LGR Ultraportable Gas Analyzers to be called in the functions
-`SelCue()` and `FluxCal()`. This function removes the extra lines without data at the end of the data file output
+\code{\link{SelCue}} and \code{\link{FluxCal}}. This function removes the extra lines without data at the end of the data file output
 by LGR analyzer and convert the timestamps into POSIXct for further processing.
 }
 \examples{
