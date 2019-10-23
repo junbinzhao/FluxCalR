@@ -4,7 +4,7 @@
 #' or \code{\link{LoadOther}}.
 #' It takes a time cue data frame (argument \code{df_cue}), either created by the function \code{\link{SelCue}} or prepared by the
 #' user following the format of
-#'  \link[=https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata]{"Time & Ta_#.csv"}
+#'  \link[=https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata/]{"Time & Ta_#.csv"}
 #' to separate the measurements and then calculate the fluxes for all the measurements at once.
 #' Note that the header for the time cue column must be either \strong{"Start"} or \strong{"End"}.
 #' Based on the time cues and window width provided for the calculation, the function will automatically scan over data that cover
