@@ -51,6 +51,7 @@
 #' checkup purposes.
 #'
 #' @examples
+#' library(FluxCalR)
 #' #### data from LGR
 #' # get the directory of the example LGR raw data
 #' example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
@@ -105,7 +106,7 @@
 #'                         vol = 208, area = 0.26,
 #'                         df_cue = Time_Ta2,
 #'                         cue_type = "Start",
-#'                         other = c("Plot","Light_Dark")
+#'                         other = c("Plot","Light_Dark"),
 #'                         output = FALSE) # don't create a output file
 #' Flux_output3
 #'
@@ -243,7 +244,7 @@ FluxCal <- function(data,
     # when other meta data need to be passed along from the df_cue data frame
     if (!is.null(other)){
       dft <- try(data.frame(dft,df_cue[,c(other)]),silent = TRUE)
-      if (class(dft=="try-error"))
+      if (class(dft)=="try-error")
         stop("Error: please check the 'other' argument is properly specified as column names (see the help)!")
     }
 

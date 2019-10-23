@@ -43,6 +43,7 @@ in the functions `SelCue()` and `FluxCal()`. This function extract the data (i.e
 temperature) required to calculate the fluxes and converts the timestamps into POSIXct for further processing.
 }
 \examples{
+library(FluxCalR)
 # get the directory of the example data
 example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
 # load the data

@@ -42,6 +42,7 @@ Note that the time cue data frame can also be prepared by the user independent o
 "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
 }
 \examples{
+library(FluxCalR)
 #### data from LGR
 # get the directory of the example LGR raw data
 example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")

@@ -22,6 +22,7 @@ A function used to load raw data from LGR Ultraportable Gas Analyzers to be call
 by LGR analyzer and convert the timestamps into POSIXct for further processing.
 }
 \examples{
+library(FluxCalR)
 # get the directory of the example LGR raw data
 example_data <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
 # load the data

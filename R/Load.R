@@ -12,6 +12,7 @@
 #' @return A data frame with all data in the right format for the functions `SelCue()` and `FluxCal()`.
 #'
 #' @examples
+#' library(FluxCalR)
 #' # get the directory of the example LGR raw data
 #' example_data <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
 #' # load the data
@@ -63,6 +64,7 @@ LoadLGR <- function(file,
 #' @return A dataframe with all data in the right format for functions `SelCue()` and `FluxCal()`.
 #'
 #' @examples
+#' library(FluxCalR)
 #' # get the directory of the example data
 #' example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
 #' # load the data
@@ -105,7 +107,7 @@ LoadOther <- function(file,
   if (class(Time)[1]=="try-error"){
     stop("Error: check if the 'time', 'time_format' and/or 'date_ms' arguments are correct!")
   }
-  flux <- Time
+  flux <- data.frame(Time)
   # error if no column of CO2 or CH4 is specified
   if (is.null(CO2) & is.null(CH4)){
     stop("Error: at least one column for CO2 or CH4 has to be specified!")

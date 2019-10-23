@@ -32,6 +32,7 @@
 #' "Start" or "End", the time selected as the start or end of each measurement (HH:MM:SS)
 #'
 #' @examples
+#' library(FluxCalR)
 #' #### data from LGR
 #' # get the directory of the example LGR raw data
 #' example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
