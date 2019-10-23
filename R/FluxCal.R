@@ -66,7 +66,7 @@
 #' # calculate the fluxes over a 3-minute window using the manually selected cues
 #' Flux_output1 <- FluxCal(data = Flux_lgr,
 #'                         win = 3,
-#'                         vol = 208,Area = 0.26,
+#'                         vol = 208, area = 0.26,
 #'                         df_cue = time_cue,
 #'                         cue_type = "End",
 #'                         output = FALSE) # don't create a output file
@@ -77,7 +77,7 @@
 #' Time_Ta1 <- read.csv(Example_cue1)
 #' Flux_output2 <- FluxCal(data = Flux_lgr,
 #'                         win = 3,
-#'                         vol = 208, Area = 0.26,
+#'                         vol = 208, area = 0.26,
 #'                         df_cue = Time_Ta1,
 #'                         cue_type = "Start_End", # use both start and end time of each measurement as cues
 #'                         other = c("Plot","Light_Dark"), # also pass other columns into the final output
@@ -102,7 +102,7 @@
 #' Flux_output3 <- FluxCal(data = Flux_other,
 #'                         cal = "CO2", # only calculate CO2 flux
 #'                         win = 3,
-#'                         vol = 208, Area = 0.26,
+#'                         vol = 208, area = 0.26,
 #'                         df_cue = Time_Ta2,
 #'                         cue_type = "Start",
 #'                         other = c("Plot","Light_Dark")
@@ -165,7 +165,7 @@ FluxCal <- function(data,
       In1 <- match(df_cue$End,data$time)
       In2 <- match(df_cue$Start,data$time)+win_f
       # return an error if the window length is larger than the range between start and end
-      if (any(as.numeric(difftime(df_cue$Start,df_cue$End,units = "secs"))<win*60)){
+      if (any(In1-In2<win_f)){
         stop(paste0("Error: check the differences between start and end time,
                     they must be larger than the window size (win) set for calculation!"))
       }
