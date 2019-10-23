@@ -49,17 +49,17 @@ LoadLGR <- function(file,
 #' @param time_format A string indicates the format of timestamps. Default: "mdy_HMS".
 #' Other format, "dmy_HMS" or "ymd_HMS", can also be taken, depending on the data timestamp from the analyzer.
 #' In case that the date and time are recorded separately, "HMS" can be used here and add the date to the "date_ms" argument.
-#' @param date_ms A string indicates date of the measurements in the format of *"mm/dd/yyyy"*.
+#' @param date_ms A string indicates date of the measurements in the format of \emph{"mm/dd/yyyy"}.
 #' This argument is used only when "HMS" has assigned to the argument `time_format`.
 #' @param CO2 A string indicates column name of the CO2 concentrations in the data file. Default: no CO2 is measured.
-#' Note that at least one of `CO2` and `CH4` has to be specified.
+#' Note that at least one of \code{CO2} and `CH4` argument has to be specified.
 #' @param CH4 A string indicates column name of the CH4 concentrations in the data file. Default: no CH4 is measured.
-#' Note that at least one of `CO2` and `CH4` has to be specified.
+#' Note that at least one of `CO2` and `CH4` argument has to be specified.
 #' @param Ta A string indicates column name of ambient air temperature in the data file. If not measured, a constant
 #' value can be used. Default: 25 (unit: degree C).
 #' @param skip A integer indicates rows to be skipped at the beginning of the data file. Default: 0, no rows will be skipped.
 #' @param sep A string indicates delimiter that separates columns. Default: ",".
-#' @param ... Other arguments used in the function \code{\link[base]{read.table}} `read.table()`. See details `?read.table()`.
+#' @param ... Other arguments used in the function \code{\link[utils]{read.table()}}.
 #'
 #' @return A dataframe with all data in the right format for functions `SelCue()` and `FluxCal()`.
 #'
