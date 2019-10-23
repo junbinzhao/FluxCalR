@@ -135,6 +135,9 @@ FluxCal <- function(data,
   if (!is.numeric(vol) | !is.numeric(area)){
     stop("Error: both 'vol' and 'area' have to be specified!")
   }
+  # ext has to be >=1
+  if (ext < 1) {
+    stop("Error: 'ext' argument can not be < 1 !")}
   # define the pipe from the package "magrittr"
   `%>%` <- magrittr::`%>%`
   # calculate the sampling frequency based on the timestamps (unit: seconds)
