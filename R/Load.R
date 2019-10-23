@@ -1,7 +1,7 @@
 #' @title Load LGR data
 #'
 #' @description A function used to load raw data from LGR Ultraportable Gas Analyzers to be called in the functions
-#' `SelCue()` and `FluxCal()`. This function removes the extra lines without data at the end of the data file output
+#' \code{\link{SelCue}} and \code{\link{FluxCal}}. This function removes the extra lines without data at the end of the data file output
 #' by LGR analyzer and convert the timestamps into POSIXct for further processing.
 #'
 #' @param file A string contains the directory path and file name of the raw data.
@@ -9,7 +9,7 @@
 #' @param Time_format A string indicates the format of timestamps. Default: "mdy_HMS".
 #' It also takes the format "dmy_HMS" or "ymd_HMS", depending on the timestamps output from the analyzer.
 #'
-#' @return A data frame with all data in the right format for the functions `SelCue()` and `FluxCal()`.
+#' @return A data frame with all data in the right format for the functions \code{\link{SelCue}} and \code{\link{FluxCal}}.
 #'
 #' @examples
 #' library(FluxCalR)
@@ -41,7 +41,7 @@ LoadLGR <- function(file,
 #' @title Load data from other analyzers
 #'
 #' @description Function used to load raw data output from other similar analyzers (e.g. LICOR-7810) to be called
-#' in the functions `SelCue()` and `FluxCal()`. This function extract the data (i.e., CO2 and/or CH4 concentration and ambient
+#' in the functions \code{\link{SelCue}} and \code{\link{FluxCal}}. This function extract the data (i.e., CO2 and/or CH4 concentration and ambient
 #' temperature) required to calculate the fluxes and converts the timestamps into POSIXct for further processing.
 #'
 #' @param file A string contains the directory path and file name of the raw data.
@@ -50,18 +50,18 @@ LoadLGR <- function(file,
 #' Other format, "dmy_HMS" or "ymd_HMS", can also be taken, depending on the data timestamp from the analyzer.
 #' In case that the date and time are recorded separately, "HMS" can be used here and add the date to the "date_ms" argument.
 #' @param date_ms A string indicates date of the measurements in the format of \emph{"mm/dd/yyyy"}.
-#' This argument is used only when "HMS" has assigned to the argument `time_format`.
+#' This argument is used only when "HMS" has assigned to the argument \code{time_format}.
 #' @param CO2 A string indicates column name of the CO2 concentrations in the data file. Default: no CO2 is measured.
-#' Note that at least one of \code{CO2} and `CH4` argument has to be specified.
+#' Note that at least one of \code{CO2} and \code{CH4} argument has to be specified.
 #' @param CH4 A string indicates column name of the CH4 concentrations in the data file. Default: no CH4 is measured.
-#' Note that at least one of `CO2` and `CH4` argument has to be specified.
+#' Note that at least one of \code{CO2} and \code{CH4} argument has to be specified.
 #' @param Ta A string indicates column name of ambient air temperature in the data file. If not measured, a constant
 #' value can be used. Default: 25 (unit: degree C).
 #' @param skip A integer indicates rows to be skipped at the beginning of the data file. Default: 0, no rows will be skipped.
 #' @param sep A string indicates delimiter that separates columns. Default: ",".
-#' @param ... Other arguments used in the function \code{\link[utils]{read.table()}}.
+#' @param ... Other arguments used in the function \code{\link[utils]{read.table}}.
 #'
-#' @return A dataframe with all data in the right format for functions `SelCue()` and `FluxCal()`.
+#' @return A dataframe with all data in the right format for functions \code{\link{SelCue}} and \code{\link{FluxCal}}.
 #'
 #' @examples
 #' library(FluxCalR)
