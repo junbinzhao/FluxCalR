@@ -165,9 +165,8 @@ FluxCal <- function(data,
       In1 <- match(df_cue$End,data$time)
       In2 <- match(df_cue$Start,data$time)+win_f
       # return an error if the window length is larger than the range between start and end
-      if (any(In1-In2<win_f)){
-        stop(paste0("Error: check the differences between start and end time,
-                    they must be larger than the window size (win) set for calculation!"))
+      if (any(In1-In2<0,na.rm = TRUE)){
+        stop(paste0("Error: differences between start and end time must be larger than the window size (win)!"))
       }
     }
   } # here get two time cues In1 (End) and In2 (Start)!!
@@ -176,7 +175,7 @@ FluxCal <- function(data,
   if (anyNA(In1)|anyNA(In2)) {
     stop(paste0("Error: change the timestamp of measurement No.",
                 which(is.na(In1)),which(is.na(In2)),
-                " in the 'cue' 1 second forward..."))
+                " in the 'df_cue' 1 second forward..."))
   }
 
   # function to calculate R2, slopes and fluxes ----------
