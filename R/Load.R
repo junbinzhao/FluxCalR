@@ -59,7 +59,7 @@ LoadLGR <- function(file,
 #' value can be used. Default: 25 (unit: degree C).
 #' @param skip A integer indicates rows to be skipped at the beginning of the data file. Default: 0, no rows will be skipped.
 #' @param sep A string indicates delimiter that separates columns. Default: ",".
-#' @param ... Other arguments used in the function `read.table()`. See details `?read.table()`.
+#' @param ... Other arguments used in the function \code{\link[base]{read.table}} `read.table()`. See details `?read.table()`.
 #'
 #' @return A dataframe with all data in the right format for functions `SelCue()` and `FluxCal()`.
 #'
