@@ -15,12 +15,15 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 100)
+```
 
-## Background
+Background
 =============================
 Static chamber is one of the most commonly used approach for measuring greenhouse gas flux (e.g., CO2 and CH4) from ecosystems (e.g., stem/soil respiration, CH4 emission, etc.) for its easy implementation, high accuracy and low cost. To perform the measurements, commercial infrared gas analyzers (IRGA) are usually used to record the changes of greenhouse gas concentrations within a chamber that covers an area of interest (e.g., soil surface) at a certain temporal resolution (e.g., 1s). However, to calculate the fluxes from the measured gas concentrations can be tedious and subjective considering that the original dataset usually includes large amount of unwanted records for the periods between the measurements and that the window for calculating each flux has to be defined manually. Therefore, a tool that can efficiently calculate the concentration changes into fluxes in a more objective fashion is needed.
 
-## What does the package do?
+What does the package do?
 ==============================
 The `FluxCalR` package directly takes the raw data exported by a gas analyzer (e.g. LGR Ultraportable Gas Analyzers) after chamber measurements and calculate fluxes of multiple measurements at once from the data file. Specifically, users can use the function `LoadLGR()` or `LoadOther()` to load the raw data file that includes the gas concentration records. Then, create a separate data frame that includes the time cues that each measurement starts and/or ends corresponding to the time in the raw data file. Based on the time cues, the fluxes of all the measurements can be calculated and exported using the function `FluxCal()`. The package has several features that can facilitate the process of flux calculation:
 
@@ -35,14 +38,14 @@ The `FluxCalR` package directly takes the raw data exported by a gas analyzer (e
 * Easy to be integrated into workflows - The `FluxCal()` returns a data frame with the calculated flux and identifier of each measurement (e.g., plot ID, see argument `Other`) that can be integrated into users' data processing/analyzing workflow. At the same time, it also saves the data frame to a ".csv" file that can be loaded by R again later or used in other programs for non-R users. 
 
 
-## Examples of using the package
+Examples of using the package
 ================================
 ```{r example 1}
 library(FluxCalR)
 #### data from LGR
 # get the directory of the example LGR raw data
 example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
-example_data1
+example_data1 # check the directory
 
 # load the data
 Flux_lgr <- LoadLGR(file = example_data1,
@@ -55,8 +58,10 @@ Then, use the function `SelCue()` to manually select the end point of each measu
 # manually select the end of each measurement as time cues
 time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = F)
 ```
-![](images/timecue.png)
 
+```{r,echo=F,out.width = "700xp"}
+knitr::include_graphics("images/timecue.png") # add time cue graph with limited width
+```
 
 ```{r secretely load time cues,echo = F}
 time_cue <- read.csv("Time_cue.csv")
@@ -71,7 +76,10 @@ Flux_output1 <- FluxCal(data = Flux_lgr,
                         cue_type = "End",
                         output = FALSE) # don't create a output file
 ```
-![](images/output.png)
+
+```{r,echo=F,out.width = "700xp"}
+knitr::include_graphics("images/output.png") # add output graph with limited width
+```
 
 ```{r secretely calculate without showing the checkup plot,echo = F}
 Flux_output1 <- FluxCal(data = Flux_lgr,
@@ -83,14 +91,17 @@ Flux_output1 <- FluxCal(data = Flux_lgr,
                         output = FALSE) # don't create a output file
 ```
 
+This is how the output data frame looks like and the last column ("Flux") includes the calculated flux rates: 
 ```{r show the ouput data frame}
-Flux_output1
+head(Flux_output1)
 ```
 
 
 ```{r example 2}
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
-Example_cue1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+Example_cue1 <- system.file("extdata", 
+                            "Time & Ta_1.csv", # directory of the file with time cues and Ta
+                            package = "FluxCalR") 
 Time_Ta1 <- read.csv(Example_cue1)
 Flux_output2 <- FluxCal(data = Flux_lgr,
                         win = 3,
@@ -101,7 +112,7 @@ Flux_output2 <- FluxCal(data = Flux_lgr,
                         df_Ta = Time_Ta1, # use separately measured air temperature for calculation
                         check_plot = FALSE, # don't show check-up plot
                         output = FALSE) # no ouput file
-Flux_output2
+head(Flux_output2)
 ```
 
 
@@ -109,7 +120,6 @@ Flux_output2
 #### data from other sources
 # get the directory of the example data
 example_data2 <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
-example_data2
 
 # load the data
 Flux_other <- LoadOther(file = example_data2,
@@ -119,7 +129,9 @@ Flux_other <- LoadOther(file = example_data2,
                         Ta = "Tem_C")
 
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
-Example_cue2 <- system.file("extdata", "Time & Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+Example_cue2 <- system.file("extdata", 
+                            "Time & Ta_2.csv", # directory of the file with time cues and Ta
+                            package = "FluxCalR") 
 Time_Ta2 <- read.csv(Example_cue2)
 Flux_output3 <- FluxCal(data = Flux_other,
                         cal = "CO2", # only calculate CO2 flux
@@ -130,6 +142,6 @@ Flux_output3 <- FluxCal(data = Flux_other,
                         other = c("Plot","Light_Dark"),
                         check_plot = FALSE, # don't show check-up plot
                         output = FALSE) # don't create a output file
-Flux_output3
+head(Flux_output3)
 ```
 
