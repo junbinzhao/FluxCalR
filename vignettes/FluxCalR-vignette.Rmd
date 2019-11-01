@@ -55,11 +55,11 @@ Then, use the function `SelCue()` to manually select the end point of each measu
 # manually select the end of each measurement as time cues
 time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = F)
 ```
-
+![](C:/Research Material/R code & function/R Packages/FluxCalR/inst/images/timecue.png)
 
 
 ```{r secretely load time cues,echo = F}
-# load the time cues
+
 
 ```
 
@@ -72,8 +72,7 @@ Flux_output1 <- FluxCal(data = Flux_lgr,
                         cue_type = "End",
                         output = FALSE) # don't create a output file
 ```
-
-Show the check-up graphs
+![](C:/Research Material/R code & function/R Packages/FluxCalR/inst/images/output.png)
 
 ```{r secretely calculate without showing the checkup plot,echo = F}
 Flux_output1 <- FluxCal(data = Flux_lgr,
