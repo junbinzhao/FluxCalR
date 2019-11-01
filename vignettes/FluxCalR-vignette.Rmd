@@ -98,7 +98,9 @@ Flux_output2 <- FluxCal(data = Flux_lgr,
                         df_cue = Time_Ta1,
                         cue_type = "Start_End", # use both start and end time of each measurement as cues
                         other = c("Plot","Light_Dark"), # also pass other columns into the final output
-                        df_Ta = Time_Ta1) # use separately measured air temperature for calculation
+                        df_Ta = Time_Ta1, # use separately measured air temperature for calculation
+                        check_plot = FALSE, # don't show check-up plot
+                        output = FALSE) # no ouput file
 Flux_output2
 ```
 
@@ -126,6 +128,7 @@ Flux_output3 <- FluxCal(data = Flux_other,
                         df_cue = Time_Ta2,
                         cue_type = "Start",
                         other = c("Plot","Light_Dark"),
+                        check_plot = FALSE, # don't show check-up plot
                         output = FALSE) # don't create a output file
 Flux_output3
 ```
