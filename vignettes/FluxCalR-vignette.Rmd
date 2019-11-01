@@ -47,10 +47,23 @@ example_data1
 # load the data
 Flux_lgr <- LoadLGR(file = example_data1,
                     time_format = "mdy_HMS")
+```
 
+Then, use the function `SelCue()` to manually select the end point of each measurement. After executing the function, a interactive graph will pop up for the user to click on the corresponding points. The END points of the measurements are recommended here because they are usually associated with sudden drops or increases in concentrations when removing the chamber, making them easier to be identified then the starting points. 
+
+```{r only show the code for selecting cues,eval=F}
 # manually select the end of each measurement as time cues
 time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = F)
+```
 
+
+
+```{r secretely load time cues,echo = F}
+# load the time cues
+
+```
+
+```{r calculate the flux without being evaluated, eval=F}
 # calculate the fluxes over a 3-minute window using the manually selected cues
 Flux_output1 <- FluxCal(data = Flux_lgr,
                         win = 3,
@@ -58,6 +71,21 @@ Flux_output1 <- FluxCal(data = Flux_lgr,
                         df_cue = time_cue,
                         cue_type = "End",
                         output = FALSE) # don't create a output file
+```
+
+Show the check-up graphs
+
+```{r secretely calculate without showing the checkup plot,echo = F}
+Flux_output1 <- FluxCal(data = Flux_lgr,
+                        win = 3,
+                        vol = 208,area = 0.26,
+                        df_cue = time_cue,
+                        cue_type = "End",
+                        check_plot = FALSE,
+                        output = FALSE) # don't create a output file
+```
+
+```{r show the ouput data frame}
 Flux_output1
 ```
 
