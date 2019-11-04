@@ -68,7 +68,7 @@ install the package by:
 install.packages("remotes")
 ```
 
-Then, install the `FluxCalR` package (with the vignette) in R by:
+Then, install the `FluxCalR` package (with vignettes) in R by:
 
 ``` r
 remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
