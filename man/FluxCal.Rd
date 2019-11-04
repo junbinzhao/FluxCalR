@@ -79,6 +79,7 @@ Based on the time cues and window width provided for the calculation, the functi
  drawn for checkup purposes.
 }
 \examples{
+\donttest{
 library(FluxCalR)
 #### data from LGR
 # get the directory of the example LGR raw data
@@ -90,7 +91,7 @@ Flux_lgr <- LoadLGR(file = example_data1,
                     time_format = "mdy_HMS")
 
 # manually select the end of each measurement as time cues
-time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = F)
+time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = FALSE)
 
 # calculate the fluxes over a 3-minute window using the manually selected cues
 Flux_output1 <- FluxCal(data = Flux_lgr,
@@ -137,5 +138,6 @@ Flux_output3 <- FluxCal(data = Flux_other,
                         other = c("Plot","Light_Dark"),
                         output = FALSE) # don't create a output file
 Flux_output3
+}
 
 }

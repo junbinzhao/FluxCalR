@@ -42,6 +42,7 @@ Note that the time cue data frame can also be prepared by the user independent o
 "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
 }
 \examples{
+\donttest{
 library(FluxCalR)
 #### data from LGR
 # get the directory of the example LGR raw data
@@ -51,5 +52,6 @@ Flux_lgr <- LoadLGR(example_data1)
 # select cues
 Cues <- SelCue(Flux_lgr, save = FALSE)
 Cues
+}
 
 }
