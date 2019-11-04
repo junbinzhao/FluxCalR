@@ -49,7 +49,7 @@ example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "Fl
 # load the data
 Flux <- LoadOther(example_data,
                   Time = "Date_time",
-                  Time_format = "mdy_hms",
+                  Time_format = "mdy_HMS",
                   CO2 = "CO2_PPM",
                   Ta = "Tem_C")
 

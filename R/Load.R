@@ -70,7 +70,7 @@ LoadLGR <- function(file,
 #' # load the data
 #' Flux <- LoadOther(example_data,
 #'                   Time = "Date_time",
-#'                   Time_format = "mdy_hms",
+#'                   Time_format = "mdy_HMS",
 #'                   CO2 = "CO2_PPM",
 #'                   Ta = "Tem_C")
 #'
