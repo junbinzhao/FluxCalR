@@ -68,9 +68,9 @@ LoadLGR <- function(file,
 #' # get the directory of the example data
 #' example_data <- system.file("extdata", "Flux_example_2_other.csv", package = "FluxCalR")
 #' # load the data
-#' Flux <- LoadOther(example_data,
-#'                   Time = "Date_time",
-#'                   Time_format = "mdy_HMS",
+#' Flux <- LoadOther(file = example_data,
+#'                   time = "Date_time",
+#'                   time_format = "mdy_HMS",
 #'                   CO2 = "CO2_PPM",
 #'                   Ta = "Tem_C")
 #'
