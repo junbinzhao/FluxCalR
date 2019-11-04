@@ -68,10 +68,10 @@ install the package by:
 install.packages("remotes")
 ```
 
-Then, install the `FluxCalR` package in R by:
+Then, install the `FluxCalR` package (with the vignette) in R by:
 
 ``` r
-remotes::install_github("junbinzhao/FluxCalR")
+remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
 ```
 
 The functioning of the package is based on other R packages: `dplyr`,
@@ -168,7 +168,7 @@ head(Flux_output1)
 ```
 
 For more details of the functions and examples, please check the
-vignette (`browseVignettes(FluxCalR)`) and the help documents
+vignette (`browseVignettes("FluxCalR")`) and the help documents
 (`?LoadLGR()`,`?LoadOther()`,`?SelCue()`,`?FluxCal()`).
 
 ### Please cite the package as:
