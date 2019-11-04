@@ -1,5 +1,5 @@
 ---
-title: "FluxCalR package"
+title: "FluxCalR-vignette"
 author: "Junbin Zhao (junbinzhao1985@gmail.com)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
