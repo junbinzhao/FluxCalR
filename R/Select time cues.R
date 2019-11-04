@@ -32,6 +32,7 @@
 #' "Start" or "End", the time selected as the start or end of each measurement (HH:MM:SS)
 #'
 #' @examples
+#' \donttest{
 #' library(FluxCalR)
 #' #### data from LGR
 #' # get the directory of the example LGR raw data
@@ -41,6 +42,7 @@
 #' # select cues
 #' Cues <- SelCue(Flux_lgr, save = FALSE)
 #' Cues
+#' }
 #'
 #' @export
 ## function to manually select the time cues --------
