@@ -13,9 +13,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# FluxCalR
+# FluxCalR: a R package for calculating CO<sub>2</sub> and CH<sub>4</sub> fluxes from static chambers
 
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.org/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.org/junbinzhao/FluxCalR)
+<!-- badges: end -->
+
 This R package `FluxCalR` is used to calculate CO<sub>2</sub> and CH<sub>4</sub> gas fluxes measured with static chamber method. It provides an easy way to calculate multiple flux measurements from one data file. The package directly takes the raw data exported by a gas analyzer (e.g. LGR Ultraportable Gas Analyzers) after chamber measurements and calculate fluxes of multiple measurements at once from the data file. Specifically, users can use the function `LoadLGR()` or `LoadOther()` to load the raw data file that includes the gas concentration records. Then, create a separate data frame that includes the time cues that each measurement starts and/or ends corresponding to the time in the raw data file. Based on the time cues, the fluxes of all the measurements can be calculated and exported using the function `FluxCal()`. The package has several features that facilitate the process of flux calculation:
 
 * **An interactive way of selecting the measurement time cues** - The package includes the function `SelCue()` that one can use to select the time cues (start or end of each measurement) manually by clicking on an interactive graph of the entire gas concentration time series from the raw data file. The data frame returned from the function can be directly used as the argument `df_cue` of `FluxCal()` for the flux calculation. The time cue data frame can also be saved (default) and used again to get reproducible results.   
@@ -27,7 +30,6 @@ This R package `FluxCalR` is used to calculate CO<sub>2</sub> and CH<sub>4</sub>
 * **A checkup graph after the calculation** - By default (argument `check_plot`), a graph is plotted after the calculation with regression lines plotted on the CO2 and/or CH4 concentration time series for checkup purposes. This post-calculation feature will help users identify any flux calculation that is based on the unwanted section of the data. 
 
 * **Easy to be integrated into workflows** - The `FluxCal()` returns a data frame with the calculated flux and identifier of each measurement (e.g., plot ID, see argument `Other`) that can be integrated into users' data processing/analyzing workflow. At the same time, it also saves the data frame to a ".csv" file that can be loaded by R again later or used in other programs for non-R users. 
-<!-- badges: end -->
 
 ## Installation
 

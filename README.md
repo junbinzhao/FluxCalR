@@ -1,9 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# FluxCalR
+# FluxCalR: a R package for calculating CO<sub>2</sub> and CH<sub>4</sub> fluxes from static chambers
 
 <!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.org/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.org/junbinzhao/FluxCalR)
+<!-- badges: end -->
 
 This R package `FluxCalR` is used to calculate CO<sub>2</sub> and
 CH<sub>4</sub> gas fluxes measured with static chamber method. It
@@ -57,7 +61,6 @@ process of flux calculation:
     integrated into users’ data processing/analyzing workflow. At the
     same time, it also saves the data frame to a “.csv” file that can be
     loaded by R again later or used in other programs for non-R users.
-    <!-- badges: end -->
 
 ## Installation
 
