@@ -136,10 +136,10 @@ FluxCal <- function(data,
   # check arguments
   cal <- match.arg(cal,c("CO2_CH4","CO2","CH4"))
   cue_type <- match.arg(cue_type,c("End","Start","Start_End"))
-  # if volumn or base area of the chamber are not specified
-  if (!is.numeric(vol) | !is.numeric(area)){
-    stop("Error: both 'vol' and 'area' have to be specified!")
-  }
+  # # if volumn or base area of the chamber are not specified
+  # if (!is.numeric(vol) | !is.numeric(area)){
+  #   stop("Error: both 'vol' and 'area' have to be specified!")
+  # }
   # ext has to be >=1
   if (ext < 1) {
     stop("Error: 'ext' argument can not be < 1 !")}
