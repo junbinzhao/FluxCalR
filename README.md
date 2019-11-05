@@ -6,23 +6,37 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.org/junbinzhao/FluxCalR)
+status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.com/junbinzhao/FluxCalR)
 <!-- badges: end -->
+
+## Applications and features
+
+Close static chamber technique is a widely used approach for measuring
+greenhouse gas fluxes from different sources in an ecosystem (e.g. soil
+respiration). While the method itself is easy and cheap to implement,
+the post-calculation of fluxes from the measured concentrations is a
+cumbersome process. Previous softwares designed to calculate the fluxes
+were either only compatible to one designated system (e.g., [Licor Trace
+Gas Analyzer Platform](https://www.licor.com/env/products/trace_gas/),
+[Flux
+Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
+unable to calculate fluxes for multiple gases (e.g., [Flux
+Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
+or hard to handle continously measured concentrations (e.g., R package
+[‘flux’](https://cran.r-project.org/web/packages/flux/index.html)).
 
 This R package `FluxCalR` is used to calculate CO<sub>2</sub> and
 CH<sub>4</sub> gas fluxes measured with static chamber method. It
 provides an easy way to calculate multiple flux measurements from one
-data file. The package directly takes the raw data exported by a gas
-analyzer (e.g. LGR Ultraportable Gas Analyzers) after chamber
-measurements and calculate fluxes of multiple measurements at once from
-the data file. Specifically, users can use the function `LoadLGR()` or
-`LoadOther()` to load the raw data file that includes the gas
-concentration records. Then, create a separate data frame that includes
-the time cues that each measurement starts and/or ends corresponding to
-the time in the raw data file. Based on the time cues, the fluxes of all
-the measurements can be calculated and exported using the function
-`FluxCal()`. The package has several features that facilitate the
-process of flux calculation:
+continuously measured data file exported by most gas analyzers (e.g. LGR
+Ultraportable Gas Analyzers). Specifically, users can use the function
+`LoadLGR()` or `LoadOther()` to load the raw data file that includes the
+gas concentration records. Then, create a separate data frame by
+`SelCue()` that includes the time cues that each measurement starts
+and/or ends corresponding to the time in the raw data file. Based on the
+time cues, the fluxes of all the measurements can be calculated and
+exported using the function `FluxCal()`. In addition, the package has
+several features that facilitate the process of flux calculation:
 
   - **An interactive way of selecting the measurement time cues** - The
     package includes the function `SelCue()` that one can use to select
@@ -42,11 +56,11 @@ process of flux calculation:
 
   - **A dynamic measurement window** - The flux calculation
     automatically scans through a range of 1.5x (default) of the
-    measurement window and the best linear regression (largest R2) is
-    used to calculate the final fluxes. This protocol optimize the
-    representative and reproducibility of the calculated flux. This
-    dynamic range can be changed in the argument `ext` of the function
-    `FluxCal()`.
+    measurement window and the best linear regression (largest
+    R<sup>2</sup>) is used to calculate the final fluxes. This protocol
+    optimize the representative and reproducibility of the calculated
+    flux. This dynamic range can be changed in the argument `ext` of the
+    function `FluxCal()`.
 
   - **A checkup graph after the calculation** - By default (argument
     `check_plot`), a graph is plotted after the calculation with
@@ -62,7 +76,7 @@ process of flux calculation:
     same time, it also saves the data frame to a “.csv” file that can be
     loaded by R again later or used in other programs for non-R users.
 
-## Installation
+### Installation
 
 First, make sure the package `remotes` is installed in R. If not,
 install the package by:
@@ -84,13 +98,13 @@ before using the functions in the `FluxCalR` package.
 *Note: in case the installation fails in Rstudio, try to install the
 package in the original R program and then load the package in Rstudio.*
 
-## Community Guidelines
+### Community Guidelines
 
 To report problems, seek support or contribute, please contact the
 author Junbin Zhao (<junbinzhao1985@gmail.com>). Requests/suggestions
 for new features are also welcome.
 
-## Example
+### Example
 
 This is a basic example which shows you how to Calculate fluxes from LGR
 raw data with manually selected time cues.
