@@ -213,7 +213,7 @@ FluxCal <- function(data,
           Slm <- try(summary(lm(data$X.CH4.d_ppm[(b-win_f):b]~data$Row[(b-win_f):b])),silent = TRUE)
         }
         # if no data is provided
-        if (class(Slm)=="try-error"){
+        if (class(Slm)=="try-error" | is.na(Slm$r.squared)){
           stop(paste0("Error: make sure ",flux," data are provided and specified in the correct way (See the help)."))
         } else {
           dft[a,"Num"] <- a # the Number of measurements

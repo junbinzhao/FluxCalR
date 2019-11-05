@@ -48,42 +48,43 @@ test_that("temperature output/used is correct when not specified",{
 # test errors
 test_that("error can be triggered",{
   # 'ext' argument < 1
-  expect_warning(FluxCal(data = Flux_lgr,
-                         win = 3,
-                         vol = 208, area = 0.26,
-                         df_cue = Time_Ta,
-                         ext = 0.5,
-                         check_plot = FALSE,
-                         output = FALSE),
-                 "'ext' argument can not be < 1")
+  expect_error(FluxCal(data = Flux_lgr,
+                       win = 3,
+                       vol = 208, area = 0.26,
+                       df_cue = Time_Ta,
+                       ext = 0.5,
+                       check_plot = FALSE,
+                       output = FALSE),
+               "'ext' argument can not be < 1")
 
   # windows size too big
-  expect_warning(FluxCal(data = Flux_lgr,
-                         win = 20,
-                         vol = 208, area = 0.26,
-                         df_cue = Time_Ta,
-                         check_plot = FALSE,
-                         output = FALSE),
-                 "differences between start and end time")
+  expect_error(FluxCal(data = Flux_lgr,
+                       win = 20,
+                       vol = 208, area = 0.26,
+                       df_cue = Time_Ta,
+                       cue_type = "Start_End",
+                       check_plot = FALSE,
+                       output = FALSE),
+               "differences between start and end time")
 
   # no data provided for CH4
-  expect_warning(FluxCal(data = Flux_lgr[,-"X.CH4.d_ppm"],
-                         win = 3,
-                         vol = 208, area = 0.26,
-                         df_cue = Time_Ta,
-                         check_plot = FALSE,
-                         output = FALSE),
-                 "provided and specified in the correct way")
+  expect_error(FluxCal(data = Flux_lgr[,-8], # drop CH4
+                       win = 3,
+                       vol = 208, area = 0.26,
+                       df_cue = Time_Ta,
+                       check_plot = FALSE,
+                       output = FALSE),
+               "provided and specified in the correct way")
 
   # column names for 'other' augument can't be found
-  expect_warning(FluxCal(data = Flux_lgr,
-                         win = 3,
-                         vol = 208, area = 0.26,
-                         df_cue = Time_Ta,
-                         other = "Others",
-                         check_plot = FALSE,
-                         output = FALSE),
-                 "please check the 'other' argument")
+  expect_error(FluxCal(data = Flux_lgr,
+                       win = 3,
+                       vol = 208, area = 0.26,
+                       df_cue = Time_Ta,
+                       other = "Others",
+                       check_plot = FALSE,
+                       output = FALSE),
+               "please check the 'other' argument")
 
 
 
