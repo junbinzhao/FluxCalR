@@ -71,6 +71,10 @@ knitr::include_graphics("images/timecue.png") # add time cue graph with limited 
 time_cue <- read.csv("Time_cue.csv")
 ```
 
+```{r show time cue format}
+# this is how the time cue data frame looks like
+time_cue
+```
 
 After having the time cues saved as a data frame 'time_cue', we can do the calculations now using the function `FluxCal()`! In the function, there are **5 arguments** that have to be assigned by the users without default: `data` (the data frame we got from `LoadLGR()`), `win` (the window size flux calculation, unit: minute),`vol` (chamber volumn in L),`area` (chamber base area in m^2) and `df_cue` (the data frame we got from `SelCue()`). After the function is executed with the arguments assigned, the calculation will be done and a check-up graph with all the regression lines drawn on top of the gas concentration time series will pop up by default for the user to visually check if there is any mistake occured to the calcualtions. 
 
@@ -114,6 +118,9 @@ Example_cue1 <- system.file("extdata",
                             "Time & Ta_1.csv", # directory of the file with time cues and Ta
                             package = "FluxCalR") 
 Time_Ta1 <- read.csv(Example_cue1)
+# this is how the time cue file looks like
+Time_Ta1
+
 Flux_output2 <- FluxCal(data = Flux_lgr,
                         win = 3,
                         vol = 208, area = 0.26,
@@ -147,6 +154,8 @@ Example_cue2 <- system.file("extdata",
                             "Time & Ta_2.csv", # directory of the file with time cues and Ta
                             package = "FluxCalR") 
 Time_Ta2 <- read.csv(Example_cue2)
+Time_Ta2
+
 Flux_output3 <- FluxCal(data = Flux_other,
                         cal = "CO2", # only calculate CO2 flux
                         win = 3,

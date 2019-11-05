@@ -9,21 +9,23 @@
 status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.com/junbinzhao/FluxCalR)
 <!-- badges: end -->
 
-## Applications and features
+### Why is the package needed?
 
-Close static chamber technique is a widely used approach for measuring
-greenhouse gas fluxes from different sources in an ecosystem (e.g. soil
-respiration). While the method itself is easy and cheap to implement,
-the post-calculation of fluxes from the measured concentrations is a
-cumbersome process. Previous softwares designed to calculate the fluxes
-were either only compatible to one designated system (e.g., [Licor Trace
-Gas Analyzer Platform](https://www.licor.com/env/products/trace_gas/),
-[Flux
+The static close chamber technique is a widely used approach for
+measuring greenhouse gas fluxes from different sources in an ecosystem
+(e.g. soil respiration). While the method itself is easy and cheap to
+implement, the post-calculation of fluxes from the measured
+concentrations is a cumbersome process. Previous softwares that can
+calculate the fluxes were either compatible to only one designated
+system (e.g., [Licor Trace Gas Analyzer
+Platform](https://www.licor.com/env/products/trace_gas/), [Flux
 Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
 unable to calculate fluxes for multiple gases (e.g., [Flux
 Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
 or hard to handle continously measured concentrations (e.g., R package
 [‘flux’](https://cran.r-project.org/web/packages/flux/index.html)).
+
+### About the package
 
 This R package `FluxCalR` is used to calculate CO<sub>2</sub> and
 CH<sub>4</sub> gas fluxes measured with static chamber method. It

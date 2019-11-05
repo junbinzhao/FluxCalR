@@ -16,7 +16,7 @@ FluxCal(data, cal = "CO2_CH4", win, vol, area, df_cue,
 
 \item{win}{A number indicates the window width for the flux calculation, unit: minutes.}
 
-\item{vol}{A number indicates volume of the chamber; unit: dm^3 or L.}
+\item{vol}{A number indicates volume of the chamber; unit: dm^3 or l.}
 
 \item{area}{A number indicates base area of the chamber; unit: m^2.}
 
