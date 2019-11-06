@@ -27,7 +27,7 @@ bibliography: paper.bib
 As the main drivers of climate change, greenhouse gas (e.g., CO~2~ and CH~4~) emissions have been monitored intensively across the globe. The static chamber is one of the most commonly used approaches for measuring greenhouse gas flux from ecosystems (e.g., stem/soil respiration, CH~4~ emission, etc.) because of its easy implementation, high accuracy and low cost [@Pumpanen:2004]. To perform the measurements, a gas analyzer is usually used to measure the changes of greenhouse gas concentrations within a closed chamber that covers an area of interest (e.g., soil surface) over a certain period of time (usually several minutes). The flux rates are, then, calculated from the recorded gas concentrations assuming that the changing rate is linear:
 
 $$
-F = vol/(R∙Ta∙area)∙dG/dt
+F = vol/(R \cdot Ta \cdot area) \cdot dG/dt
 $$
 
 where *vol* is the volume of the chamber (l), *R* is universal gas constant (l atm K^-1^ mol^-1^), *Ta* is the ambient temperature (K), *area* is the area of the chamber base (m^2^), and *dG/dt* is the rate (i.e., the slope of the linear regression) of the measured gas concentration change over time *t* (ppm s^-1^).
