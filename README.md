@@ -22,7 +22,7 @@ Platform](https://www.licor.com/env/products/trace_gas/), [Flux
 Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
 unable to calculate fluxes for multiple gases (e.g., [Flux
 Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
-or hard to handle continously measured concentrations (e.g., R package
+or hard to handle continuously measured concentrations (e.g., R package
 [‘flux’](https://cran.r-project.org/web/packages/flux/index.html)).
 
 ### About the package
@@ -147,6 +147,30 @@ time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = F)
 ```
 
 <img src="vignettes/images/timecue.png" width="700xp" />
+
+This is how the “time\_cue” data frame looks like. Instead of having it
+created by the function `SelCue()`, one can also manually create such a
+file and load it into R as a data frame. But the column names (“End” or
+“Start”) and time format must be in line with the “time\_cue” here, or
+see example files “Time & Ta\_1.csv” and “Time & Ta\_2.csv” at
+<https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata>).
+
+``` r
+time_cue
+#>    Num      End
+#> 1    1 12:08:47
+#> 2    2 12:14:06
+#> 3    3 12:23:58
+#> 4    4 12:29:55
+#> 5    5 12:37:55
+#> 6    6 12:42:25
+#> 7    7 12:50:26
+#> 8    8 12:55:53
+#> 9    9 13:04:51
+#> 10  10 13:09:16
+#> 11  11 13:20:53
+#> 12  12 13:27:26
+```
 
 After having the time cues saved as a data frame ‘time\_cue’, we can do
 the calculations now using the function `FluxCal()`\! In the function,
