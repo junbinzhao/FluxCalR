@@ -14,11 +14,11 @@ status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://tr
 The static close chamber technique is a widely used approach for
 measuring greenhouse gas fluxes from different sources in an ecosystem
 (e.g. soil respiration). While the method itself is easy and cheap to
-implement, the post-calculation of fluxes from the measured
-concentrations is a cumbersome process. Previous softwares that can
-calculate the fluxes were either compatible to only one designated
-system (e.g., [Licor Trace Gas Analyzer
-Platform](https://www.licor.com/env/products/trace_gas/), [Flux
+implement, the calculation of fluxes from the measured gas
+concentrations includes many tedious processes. Previous programs that
+can calculate the fluxes measured using the static chamber method were
+either compatible to only one designated system (e.g., [Licor Trace Gas
+Analyzer Platform](https://www.licor.com/env/products/trace_gas/), [Flux
 Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
 unable to calculate fluxes for multiple gases (e.g., [Flux
 Puppy](https://www.sciencedirect.com/science/article/pii/S0168192319301522)),
@@ -45,38 +45,42 @@ several features that facilitate the process of flux calculation:
     the time cues (start or end of each measurement) manually by
     clicking on an interactive graph of the entire gas concentration
     time series from the raw data file. The data frame returned from the
-    function can be directly used as the argument `df_cue` of
-    `FluxCal()` for the flux calculation. The time cue data frame can
-    also be saved (default) and used again to get reproducible results.
+    function can be directly used as the argument `df_cue` in the
+    function `FluxCal()` for the flux calculation. The time cue data
+    frame can also be saved (default) and used again to get reproducible
+    results.
 
   - **Flexible input** - Depending on the measurement protocol and
     requirement of the users, the `FluxCal()` function is flexible in
     the sense that 1) it takes either “Start”, “End” or both
     “Start\_End” of each measurement (argument `cue_type`) as time
     cues to identify each measurement; 2) it calculates “CO2”, “CH4” or
-    both “CO2\_CH4” fluxes at the same time (argument `cal`).
+    both “CO2\_CH4” fluxes at the same time (argument `cal`); 3) the
+    temperature used for calculation can be either measured by the
+    analyzer (default), measured by a separate sensor, or a constant
+    number defined by the user.
 
   - **A dynamic measurement window** - The flux calculation
     automatically scans through a range of 1.5x (default) of the
     measurement window and the best linear regression (largest
     R<sup>2</sup>) is used to calculate the final fluxes. This protocol
-    optimize the representative and reproducibility of the calculated
-    flux. This dynamic range can be changed in the argument `ext` of the
-    function `FluxCal()`.
+    optimize the representativeness and reproducibility of the
+    calculated flux. This dynamic range can be changed in the argument
+    `ext` in the function `FluxCal()`.
 
   - **A checkup graph after the calculation** - By default (argument
     `check_plot`), a graph is plotted after the calculation with
-    regression lines plotted on the CO2 and/or CH4 concentration time
-    series for checkup purposes. This post-calculation feature will help
-    users identify any flux calculation that is based on the unwanted
-    section of the data.
+    regression lines plotted on the CO<sub>2</sub> and/or CH<sub>4</sub>
+    concentration time series for checkup purposes. This
+    post-calculation feature will help users identify any flux
+    calculation that is based on the unwanted section of the data.
 
   - **Easy to be integrated into workflows** - The `FluxCal()` returns a
     data frame with the calculated flux and identifier of each
     measurement (e.g., plot ID, see argument `Other`) that can be
     integrated into users’ data processing/analyzing workflow. At the
     same time, it also saves the data frame to a “.csv” file that can be
-    loaded by R again later or used in other programs for non-R users.
+    loaded by R again later or futher processed in other programs.
 
 ### Installation
 
@@ -108,12 +112,13 @@ for new features are also welcome.
 
 ### Example
 
-This is a basic example which shows you how to Calculate fluxes from LGR
-raw data with manually selected time cues.
+This is a basic example which shows how to calculate fluxes from raw
+data exported from the LGR Ultraportable Gas Analyzer with manually
+selected time cues.
 
 First, we’ll need to load the raw data file exported from LGR into the R
 program by the function `LoadLGR()`. The users just need to assign the
-directory (including the file name) and timestamp format and the
+directory (including the file name) and timestamp format. Then the
 function will take care the rest process and convert the data file into
 a data frame that can be used in the next steps. Here, we take the
 example data file “Flux\_example\_1\_LGR.txt” comes with the package.
@@ -149,8 +154,8 @@ time_cue <- SelCue(Flux_lgr,flux = "CO2",cue = "End",save = F)
 <img src="vignettes/images/timecue.png" width="700xp" />
 
 This is how the “time\_cue” data frame looks like. Instead of having it
-created by the function `SelCue()`, one can also manually create such a
-file and load it into R as a data frame. But the column names (“End” or
+created by the function `SelCue()`, one can also manually prepare such a
+file and load it into R as a data frame. But the column name (“End” or
 “Start”) and time format must be in line with the “time\_cue” here, or
 see example files “Time & Ta\_1.csv” and “Time & Ta\_2.csv” at
 <https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata>).
@@ -176,8 +181,8 @@ After having the time cues saved as a data frame ‘time\_cue’, we can do
 the calculations now using the function `FluxCal()`\! In the function,
 there are **5 arguments** that have to be assigned by the users without
 default: `data` (the data frame we got from `LoadLGR()`), `win` (the
-window size flux calculation, unit: minute),`vol` (chamber volumn in
-L),`area` (chamber base area in m^2) and `df_cue` (the data frame we got
+window size for flux calculation, unit: minute),`vol` (chamber volumn in
+l),`area` (chamber base area in m^2) and `df_cue` (the data frame we got
 from `SelCue()`). After the function is executed with the arguments
 assigned, the calculation will be done and a check-up graph with all the
 regression lines drawn on top of the gas concentration time series will
