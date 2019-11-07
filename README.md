@@ -7,6 +7,7 @@
 
 [![Travis build
 status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.com/junbinzhao/FluxCalR)
+[![status](https://joss.theoj.org/papers/2ed7dce0968c5ae0cf1d00c942502ff8/status.svg)](https://joss.theoj.org/papers/2ed7dce0968c5ae0cf1d00c942502ff8)
 <!-- badges: end -->
 
 ### Why is the package needed?
@@ -27,7 +28,7 @@ or hard to handle continuously measured concentrations (e.g., R package
 
 ### About the package
 
-This R package `FluxCalR` is used to calculate CO<sub>2</sub> and
+This R package `FluxCalR` is designed to calculate CO<sub>2</sub> and
 CH<sub>4</sub> gas fluxes measured with static chamber method. It
 provides an easy way to calculate multiple flux measurements from one
 continuously measured data file exported by most gas analyzers (e.g. LGR

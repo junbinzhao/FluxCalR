@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.com/junbinzhao/FluxCalR)
+[![status](https://joss.theoj.org/papers/2ed7dce0968c5ae0cf1d00c942502ff8/status.svg)](https://joss.theoj.org/papers/2ed7dce0968c5ae0cf1d00c942502ff8)
 <!-- badges: end -->
 
 ### Why is the package needed?
@@ -25,7 +26,7 @@ The static close chamber technique is a widely used approach for measuring green
 
 ### About the package
 
-This R package `FluxCalR` is used to calculate CO<sub>2</sub> and CH<sub>4</sub> gas fluxes measured with static chamber method. It provides an easy way to calculate multiple flux measurements from one continuously measured data file exported by most gas analyzers (e.g. LGR Ultraportable Gas Analyzers). Specifically, users can use the function `LoadLGR()` or `LoadOther()` to load the raw data file that includes the gas concentration records. Then, create a separate data frame by `SelCue()` that includes the time cues that each measurement starts and/or ends corresponding to the time in the raw data file. Based on the time cues, the fluxes of all the measurements can be calculated and exported using the function `FluxCal()`. In addition, the package has several features that facilitate the process of flux calculation:
+This R package `FluxCalR` is designed to calculate CO<sub>2</sub> and CH<sub>4</sub> gas fluxes measured with static chamber method. It provides an easy way to calculate multiple flux measurements from one continuously measured data file exported by most gas analyzers (e.g. LGR Ultraportable Gas Analyzers). Specifically, users can use the function `LoadLGR()` or `LoadOther()` to load the raw data file that includes the gas concentration records. Then, create a separate data frame by `SelCue()` that includes the time cues that each measurement starts and/or ends corresponding to the time in the raw data file. Based on the time cues, the fluxes of all the measurements can be calculated and exported using the function `FluxCal()`. In addition, the package has several features that facilitate the process of flux calculation:
 
 * **An interactive way of selecting the measurement time cues** - The package includes the function `SelCue()` that one can use to select the time cues (start or end of each measurement) manually by clicking on an interactive graph of the entire gas concentration time series from the raw data file. The data frame returned from the function can be directly used as the argument `df_cue` in the function `FluxCal()` for the flux calculation. The time cue data frame can also be saved (default) and used again to get reproducible results.   
 
