@@ -164,7 +164,7 @@ FluxCal <- function(data,
     In2 <- In1-mov*win_f # end of moving (backwards)
     # return an error if the indices includes NAs
     if (anyNA(In1)) {
-      stop(paste0("Error: change the 'End' timestamp of measurement No.",
+      stop(paste0("Time matching fails: change the 'End' timestamp of measurement No.",
                   which(is.na(In1)),which(is.na(In2)),
                   " in the 'df_cue' 1 second forward..."))
     }
@@ -174,7 +174,7 @@ FluxCal <- function(data,
       In2 <- In1-mov*win_f
       # return an error if the indices includes NAs
       if (anyNA(In1)) {
-        stop(paste0("Error: change the 'Start' timestamp of measurement No.",
+        stop(paste0("Time matching fails: change the 'Start' timestamp of measurement No.",
                     which(is.na(In1)),which(is.na(In2)),
                     " in the 'df_cue' 1 second forward..."))
       }
@@ -183,12 +183,12 @@ FluxCal <- function(data,
       In2 <- match(df_cue$Start,data$time)+win_f
       # return an error if the indices includes NAs
       if (anyNA(In1)) {
-        stop(paste0("Error: change the 'End' timestamp of measurement No.",
+        stop(paste0("Time matching fails: change the 'End' timestamp of measurement No.",
                     which(is.na(In1)),which(is.na(In2)),
                     " in the 'df_cue' 1 second forward..."))
       }
       if (anyNA(In2)) {
-        stop(paste0("Error: change the 'Start' timestamp of measurement No.",
+        stop(paste0("Time matching fails: change the 'Start' timestamp of measurement No.",
                     which(is.na(In1)),which(is.na(In2)),
                     " in the 'df_cue' 1 second forward..."))
       }
