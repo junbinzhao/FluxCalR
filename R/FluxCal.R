@@ -172,7 +172,7 @@ FluxCal <- function(data,
     df_cue$End <- lubridate::ymd_hms(paste(date_m,df_cue$End,sep = "_")) # add date of measurement to time cues
     # match the closest
     for(i in seq_len(nrow(df_cue))){
-      In[i] <- threadr::which_closest(data$Time,df_cue$End[i])
+      In[i] <- birk::which.closest(data$Time,df_cue$End[i])
     }
     In1 <- In # start moving
     In2 <- In1-mov*win_f # end of moving (backwards)
@@ -187,7 +187,7 @@ FluxCal <- function(data,
       df_cue$Start <- lubridate::ymd_hms(paste(date_m,df_cue$Start,sep = "_")) # add date of measurement to time cues
       # match the closest
       for(i in seq_len(nrow(df_cue))){
-        In[i] <- threadr::which_closest(data$Time,df_cue$Start[i])
+        In[i] <- birk::which.closest(data$Time,df_cue$Start[i])
       }
       In1 <- In+ext*win_f
       In2 <- In1-mov*win_f
@@ -202,14 +202,14 @@ FluxCal <- function(data,
       df_cue$Start <- lubridate::ymd_hms(paste(date_m,df_cue$Start,sep = "_"))
       # match the closest
       for(i in seq_len(nrow(df_cue))){
-        In[i] <- threadr::which_closest(data$Time,df_cue$End[i])
+        In[i] <- birk::which.closest(data$Time,df_cue$End[i])
       }
       In1 <- In
       # recycle In
       In <- vector()
       #
       for(i in seq_len(nrow(df_cue))){
-        In[i] <- threadr::which_closest(data$Time,df_cue$Start[i])
+        In[i] <- birk::which.closest(data$Time,df_cue$Start[i])
       }
       In2 <- In+win_f
       # return an error if the indices includes NAs
