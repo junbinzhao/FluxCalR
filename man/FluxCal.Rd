@@ -36,7 +36,7 @@ FluxCal(
 \item{df_cue}{A data frame that includes "Start" and/or "End" time (HH:MM:SS) of each measurement.
 The header for the time must be either \strong{"Start"} or \strong{"End"}. This data frame can either be created by the
 function \code{\link{SelCue}} or be prepared by the user
-(see example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).}
+(see example files "Time_&_Ta_1.csv" and "Time_&_Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).}
 
 \item{cue_type}{A string, either "Start", "End" (default) or "Start_End", indicates if start, end or both time in the
 data frame assigned to \code{df_cue} will be used as the cues . When "Start_End" is chosen, both "Start" and "End" columns
@@ -48,7 +48,7 @@ that need to be passed along to the final output data frame. Default: NULL.}
 
 \item{df_Ta}{A data frame contains a column "Ta" with the air temperature values (ideally, this is temperature measured inside
  of the chamber during the flux measurement; unit: degree C. This can be the same data frame as in \code{df_cue}.
- See example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
+ See example files "Time_&_Ta_1.csv" and "Time_&_Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).
  Note the row number of the data frame must be the same as the number of flux measurements.
 Default: NULL, then the temperature used is either the average ambient air temperature measured by the LGR analyzer
 (column "AmbT_C") or, if the data measured by other analyzers, Ta input from function \code{\link{LoadOther}}.}
@@ -82,7 +82,7 @@ for checkup purposes.
 A function to calculate CO2 and CH4 gas fluxes from the data loaded by the function \code{\link{LoadLGR}}
 or \code{\link{LoadOther}}.
 It takes a time cue data frame (argument \code{df_cue}), either created by the function \code{\link{SelCue}} or prepared by the
-user following the format of example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at
+user following the format of example files "Time_&_Ta_1.csv" and "Time_&_Ta_2.csv" at
  https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata
 to separate the measurements and then calculate the fluxes for all the measurements at once.
 Note that the header for the time cue column must be either \strong{"Start"} or \strong{"End"}.
@@ -116,7 +116,7 @@ Flux_output1 <- FluxCal(data = Flux_lgr,
 Flux_output1
 
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
-Example_cue1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+Example_cue1 <- system.file("extdata", "Time_&_Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 Time_Ta1 <- read.csv(Example_cue1)
 head(Time_Ta1)
 Flux_output2 <- FluxCal(data = Flux_lgr,
@@ -141,7 +141,7 @@ Flux_other <- LoadOther(file = example_data2,
                         Ta = "Tem_C")
 
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
-Example_cue2 <- system.file("extdata", "Time & Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+Example_cue2 <- system.file("extdata", "Time_&_Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 Time_Ta2 <- read.csv(Example_cue2)
 head(Time_Ta2)
 Flux_output3 <- FluxCal(data = Flux_other,

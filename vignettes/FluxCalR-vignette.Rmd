@@ -110,12 +110,12 @@ head(Flux_output1)
 
 ## Example 2: Calculate fluxes from LGR raw data (load self-prepared time cues file)
 
-In the second example, we use the same dataset as in *Example 1* from LGR analyzer ('Flux_lgr'), but use a user self-prepared time cue file. A little background: depending on the protocols of the chamber measurements in the field, one may have recorded the starting and/or ending time of each measurement taken. This record can be entered into an excel sheet in the format following the time cue examples (files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata) and loaded into R as the time cue data frame that assigned to the argument `df_cue`. If both the starting and ending time are recorded, the user can change the `cue_type` to "Start_End", so that the calculations will be restricted to the period betweenthem and best linear regression with the length of `win` will be used for flux calculation. In addition, if there are other meta data come along with each measurement (e.g. plot ID), they can also be added to the time cue file and pass to the calculated flux data frame by assigning the column names to the `other` argument. 
+In the second example, we use the same dataset as in *Example 1* from LGR analyzer ('Flux_lgr'), but use a user self-prepared time cue file. A little background: depending on the protocols of the chamber measurements in the field, one may have recorded the starting and/or ending time of each measurement taken. This record can be entered into an excel sheet in the format following the time cue examples (files "Time_&_Ta_1.csv" and "Time_&_Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata) and loaded into R as the time cue data frame that assigned to the argument `df_cue`. If both the starting and ending time are recorded, the user can change the `cue_type` to "Start_End", so that the calculations will be restricted to the period betweenthem and best linear regression with the length of `win` will be used for flux calculation. In addition, if there are other meta data come along with each measurement (e.g. plot ID), they can also be added to the time cue file and pass to the calculated flux data frame by assigning the column names to the `other` argument. 
 
 ```{r example 2}
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
 Example_cue1 <- system.file("extdata", 
-                            "Time & Ta_1.csv", # directory of the file with time cues and Ta
+                            "Time_&_Ta_1.csv", # directory of the file with time cues and Ta
                             package = "FluxCalR") 
 Time_Ta1 <- read.csv(Example_cue1)
 # this is how the time cue file looks like
@@ -151,7 +151,7 @@ Flux_other <- LoadOther(file = example_data2,
 
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
 Example_cue2 <- system.file("extdata", 
-                            "Time & Ta_2.csv", # directory of the file with time cues and Ta
+                            "Time_&_Ta_2.csv", # directory of the file with time cues and Ta
                             package = "FluxCalR") 
 Time_Ta2 <- read.csv(Example_cue2)
 Time_Ta2

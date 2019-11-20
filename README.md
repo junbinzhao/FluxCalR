@@ -99,8 +99,8 @@ remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
 ```
 
 The functioning of the package is based on other R packages: `dplyr`,
-`lubridate`, `assertthat`, `magrittr` and they will/must be installed
-before using the functions in the `FluxCalR` package.
+`lubridate`, `assertthat`, `magrittr`,`threadr` and they will/must be
+installed before using the functions in the `FluxCalR` package.
 
 *Note: in case the installation fails in Rstudio, try to install the
 package in the original R program and then load the package in Rstudio.*
@@ -130,7 +130,7 @@ library(FluxCalR)
 # get the directory of the example LGR raw data
 example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
 example_data1 # check the directory
-#> [1] "C:/Users/Zhao/Documents/R/win-library/3.6/FluxCalR/extdata/Flux_example_1_LGR.txt"
+#> [1] "C:/Users/juzh/Documents/R/R-3.6.1/library/FluxCalR/extdata/Flux_example_1_LGR.txt"
 
 # load the data
 Flux_lgr <- LoadLGR(file = example_data1,
@@ -158,7 +158,7 @@ This is how the “time\_cue” data frame looks like. Instead of having it
 created by the function `SelCue()`, one can also manually prepare such a
 file and load it into R as a data frame. But the column name (“End” or
 “Start”) and time format must be in line with the “time\_cue” here, or
-see example files “Time & Ta\_1.csv” and “Time & Ta\_2.csv” at
+see example files "Time\_&*Ta\_1.csv" and "Time*&\_Ta\_2.csv" at
 <https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata>).
 
 ``` r
@@ -213,7 +213,7 @@ head(Flux_output1)
 #> 3   3 2016-11-21 12:20:08 12:23:12 CO2  0.019 0.97 31.57  0.608
 #> 4   4 2016-11-21 12:25:19 12:28:23 CO2  0.017 0.95 32.11  0.543
 #> 5   5 2016-11-21 12:34:04 12:37:09 CO2  0.009 0.79 32.84  0.287
-#> 6   6 2016-11-21 12:39:21 12:42:25 CO2  0.050 0.99 33.20  1.591
+#> 6   6 2016-11-21 12:39:20 12:42:24 CO2  0.050 0.99 33.20  1.591
 ```
 
 For more details of the functions and examples, please check the

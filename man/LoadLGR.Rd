@@ -10,7 +10,7 @@ LoadLGR(file, time_format = "mdy_HMS")
 \item{file}{A string contains the directory path and file name of the raw data.
 The data should be provided as what is exported from the LGR analyzer.}
 
-\item{Time_format}{A string indicates the format of timestamps. Default: "mdy_HMS".
+\item{time_format}{A string indicates the format of timestamps. Default: "mdy_HMS".
 It also takes the format "dmy_HMS" or "ymd_HMS", depending on the timestamps output from the analyzer.}
 }
 \value{

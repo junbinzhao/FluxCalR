@@ -8,7 +8,7 @@ Flux_lgr <- LoadLGR(file = example_data,
                     time_format = "mdy_HMS")
 # time cues
 Time_Ta <- read.csv(system.file("extdata",
-                                "Time & Ta_1.csv",
+                                "Time_&_Ta_1.csv",
                                 package = "FluxCalR"))
 # calculate
 Flux_output <- FluxCal(data = Flux_lgr,

@@ -48,7 +48,7 @@ Then, install the `FluxCalR` package (with vignettes) in R by:
 ```r
 remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
 ```
-The functioning of the package is based on other R packages: `dplyr`, `lubridate`, `assertthat`, `magrittr` and they will/must be installed before using the functions in the `FluxCalR` package.
+The functioning of the package is based on other R packages: `dplyr`, `lubridate`, `assertthat`, `magrittr`,`threadr` and they will/must be installed before using the functions in the `FluxCalR` package.
 
 *Note: in case the installation fails in Rstudio, try to install the package in the original R program and then load the package in Rstudio.* 
 
@@ -93,7 +93,7 @@ knitr::include_graphics("vignettes/images/timecue.png") # add time cue graph wit
 time_cue <- read.csv("vignettes/Time_cue.csv")
 ```
 
-This is how the "time_cue" data frame looks like. Instead of having it created by the function `SelCue()`, one can also manually prepare such a file and load it into R as a data frame. But the column name ("End" or "Start") and time format must be in line with the "time_cue" here, or see example files "Time & Ta_1.csv" and "Time & Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).  
+This is how the "time_cue" data frame looks like. Instead of having it created by the function `SelCue()`, one can also manually prepare such a file and load it into R as a data frame. But the column name ("End" or "Start") and time format must be in line with the "time_cue" here, or see example files "Time_&_Ta_1.csv" and "Time_&_Ta_2.csv" at https://github.com/junbinzhao/FluxCalR/tree/master/inst/extdata).  
 
 ```{r}
 time_cue
