@@ -79,7 +79,7 @@ SelCue <- function(data,
 
   # define the instructions
   exp1 <- paste0("1. Select time cues by left-clicking on the points at the ",cue," of each measurement;")
-  exp2 <- "2. After finishing selecting, click 'Stop -> Stop locator' in the up-left corner of the window."
+  exp2 <- "2. After finishing selecting, click 'Stop -> Stop locator' in the up-left corner of the window (Mac users press 'Esc'.)."
 
   # plot flux vs time for locating the peaks and valleys
   In <- c() # create a variable as Index
