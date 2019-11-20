@@ -79,6 +79,7 @@
 #' # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
 #' Example_cue1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 #' Time_Ta1 <- read.csv(Example_cue1)
+#' head(Time_Ta1)
 #' Flux_output2 <- FluxCal(data = Flux_lgr,
 #'                         win = 3,
 #'                         vol = 208, area = 0.26,
@@ -103,6 +104,7 @@
 #' # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
 #' Example_cue2 <- system.file("extdata", "Time & Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 #' Time_Ta2 <- read.csv(Example_cue2)
+#' head(Time_Ta2)
 #' Flux_output3 <- FluxCal(data = Flux_other,
 #'                         cal = "CO2", # only calculate CO2 flux
 #'                         win = 3,
@@ -159,38 +161,67 @@ FluxCal <- function(data,
 
   ### get the row index for the moving window in calculation ---------
   mov <- ext-1 # the extend of moving
+
+  # # extract the date
+  date_m <- strftime(data$Time[1],format="%y-%m-%d","UTC")
+  # create the index
+  In <- vector()
+
+  # get the timestamp cues that are closest to what in the data
   if (cue_type == "End"){ ### if end time is given
-    In1 <- match(df_cue$End,data$time) # start moving
+    df_cue$End <- lubridate::ymd_hms(paste(date_m,df_cue$End,sep = "_")) # add date of measurement to time cues
+    # match the closest
+    for(i in 1:nrow(df_cue)){
+      In[i] <- threadr::which_closest(data$Time,df_cue$End[i])
+    }
+    In1 <- In # start moving
     In2 <- In1-mov*win_f # end of moving (backwards)
     # return an error if the indices includes NAs
     if (anyNA(In1)) {
-      stop(paste0("Time matching fails: change the 'End' timestamp of measurement No.",
+      stop(paste0("Time matching fails: check if time cue of the measurement No.",
                   which(is.na(In1)),which(is.na(In2)),
-                  " in the 'df_cue' 1 second forward..."))
+                  " in the 'df_cue' is correct; also, please split the dataset if the period covers several days!"))
     }
   } else {
     if (cue_type == "Start"){ ### if start time is given
-      In1 <- match(df_cue$Start,data$time)+ext*win_f
+      df_cue$Start <- lubridate::ymd_hms(paste(date_m,df_cue$Start,sep = "_")) # add date of measurement to time cues
+      # match the closest
+      for(i in 1:nrow(df_cue)){
+        In[i] <- threadr::which_closest(data$Time,df_cue$Start[i])
+      }
+      In1 <- In+ext*win_f
       In2 <- In1-mov*win_f
       # return an error if the indices includes NAs
       if (anyNA(In1)) {
-        stop(paste0("Time matching fails: change the 'Start' timestamp of measurement No.",
+        stop(paste0("Time matching fails: check if time cue of the measurement No.",
                     which(is.na(In1)),which(is.na(In2)),
-                    " in the 'df_cue' 1 second forward..."))
+                    " in the 'df_cue' is correct; also, please split the dataset if the period covers several days!"))
       }
     } else { ### if both start and end is given
-      In1 <- match(df_cue$End,data$time)
-      In2 <- match(df_cue$Start,data$time)+win_f
+      df_cue$End <- lubridate::ymd_hms(paste(date_m,df_cue$End,sep = "_")) # add date of measurement to time cues
+      df_cue$Start <- lubridate::ymd_hms(paste(date_m,df_cue$Start,sep = "_"))
+      # match the closest
+      for(i in 1:nrow(df_cue)){
+        In[i] <- threadr::which_closest(data$Time,df_cue$End[i])
+      }
+      In1 <- In
+      # recycle In
+      In <- vector()
+      #
+      for(i in 1:nrow(df_cue)){
+        In[i] <- threadr::which_closest(data$Time,df_cue$Start[i])
+      }
+      In2 <- In+win_f
       # return an error if the indices includes NAs
       if (anyNA(In1)) {
-        stop(paste0("Time matching fails: change the 'End' timestamp of measurement No.",
+        stop(paste0("Time matching fails: check if time cue of the measurement No.",
                     which(is.na(In1)),which(is.na(In2)),
-                    " in the 'df_cue' 1 second forward..."))
+                    " in the 'df_cue' is correct; also, please split the dataset if the period covers several days!"))
       }
       if (anyNA(In2)) {
-        stop(paste0("Time matching fails: change the 'Start' timestamp of measurement No.",
+        stop(paste0("Time matching fails: check if time cue of the measurement No.",
                     which(is.na(In1)),which(is.na(In2)),
-                    " in the 'df_cue' 1 second forward..."))
+                    " in the 'df_cue' is correct; also, please split the dataset if the period covers several days!"))
       }
       # return an error if the window length is larger than the range between start and end
       if (any(In1-In2<0,na.rm = TRUE)){

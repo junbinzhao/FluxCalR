@@ -118,6 +118,7 @@ Flux_output1
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
 Example_cue1 <- system.file("extdata", "Time & Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 Time_Ta1 <- read.csv(Example_cue1)
+head(Time_Ta1)
 Flux_output2 <- FluxCal(data = Flux_lgr,
                         win = 3,
                         vol = 208, area = 0.26,
@@ -142,6 +143,7 @@ Flux_other <- LoadOther(file = example_data2,
 # input the time cues from a prepared file and calculate the fluxes over a 3-minute window
 Example_cue2 <- system.file("extdata", "Time & Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
 Time_Ta2 <- read.csv(Example_cue2)
+head(Time_Ta2)
 Flux_output3 <- FluxCal(data = Flux_other,
                         cal = "CO2", # only calculate CO2 flux
                         win = 3,
