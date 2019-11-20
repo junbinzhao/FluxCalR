@@ -31,6 +31,9 @@
 #' "Num", the number of each measurement;
 #' "Start" or "End", the time selected as the start or end of each measurement (HH:MM:SS)
 #'
+#' @importFrom grDevices dev.new dev.off
+#' @importFrom graphics abline axis.POSIXct lines par plot text
+#'
 #' @examples
 #' \donttest{
 #' library(FluxCalR)

@@ -115,16 +115,18 @@ Flux_output1 <- FluxCal(data = Flux_lgr,
                         output = FALSE) # don't create a output file
 Flux_output1
 
-# input the time cues from a prepared file and calculate the fluxes over a 3-minute window
-Example_cue1 <- system.file("extdata", "Time_&_Ta_1.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+## input the time cues from a prepared file and calculate the fluxes over a 3-minute window
+# get directory of the example file with time cues and Ta
+Example_cue1 <- system.file("extdata", "Time_&_Ta_1.csv", package = "FluxCalR")
 Time_Ta1 <- read.csv(Example_cue1)
+# this is how this file should look like
 head(Time_Ta1)
 Flux_output2 <- FluxCal(data = Flux_lgr,
                         win = 3,
                         vol = 208, area = 0.26,
                         df_cue = Time_Ta1,
-                        cue_type = "Start_End", # use both start and end time of each measurement as cues
-                        other = c("Plot","Light_Dark"), # also pass other columns into the final output
+                        cue_type = "Start_End", # use both start and end time as time cues
+                        other = c("Plot","Light_Dark"), # pass other columns into the final output
                         df_Ta = Time_Ta1) # use separately measured air temperature for calculation
 Flux_output2
 
@@ -140,8 +142,9 @@ Flux_other <- LoadOther(file = example_data2,
                         CO2 = "CO2_PPM",
                         Ta = "Tem_C")
 
-# input the time cues from a prepared file and calculate the fluxes over a 3-minute window
-Example_cue2 <- system.file("extdata", "Time_&_Ta_2.csv", package = "FluxCalR") # directory of the file with time cues and Ta
+## input the time cues from a prepared file and calculate the fluxes over a 3-minute window
+# get directory of the example file with time cues and Ta
+Example_cue2 <- system.file("extdata", "Time_&_Ta_2.csv", package = "FluxCalR")
 Time_Ta2 <- read.csv(Example_cue2)
 head(Time_Ta2)
 Flux_output3 <- FluxCal(data = Flux_other,
