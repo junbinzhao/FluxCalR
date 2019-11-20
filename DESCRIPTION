@@ -10,7 +10,7 @@ Depends: R (>= 3.4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: dplyr, lubridate, assertthat, magrittr, threadr, utils
+Imports: dplyr, threadr, lubridate, assertthat, magrittr, utils
 RoxygenNote: 7.0.0
 Suggests: 
     knitr,
