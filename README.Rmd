@@ -39,6 +39,7 @@ This R package `FluxCalR` is designed to calculate CO<sub>2</sub> and CH<sub>4</
 
 * **Easy to be integrated into workflows** - The `FluxCal()` returns a data frame with the calculated flux and identifier of each measurement (e.g., plot ID, see argument `Other`) that can be integrated into users' data processing/analyzing workflow. At the same time, it also saves the data frame to a ".csv" file that can be loaded by R again later or futher processed in other programs. 
 
+
 ### Installation
 
 First, make sure the package `remotes` is installed in R. If not, install the package by: 
@@ -49,7 +50,7 @@ Then, install the `FluxCalR` package (with vignettes) in R by:
 ```r
 remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
 ```
-The functioning of the package is based on other R packages: `dplyr`, `lubridate`, `assertthat`, `magrittr`,`threadr` and they will/must be installed before using the functions in the `FluxCalR` package.
+The functioning of the package is based on other R packages: `dplyr`, `lubridate`, `assertthat`, `magrittr`,`birk` and they will/must be installed before using the functions in the `FluxCalR` package.
 
 *Note: in case the installation fails in Rstudio, try to install the package in the original R program and then load the package in Rstudio.* 
 

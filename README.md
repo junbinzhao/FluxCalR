@@ -100,7 +100,7 @@ remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
 ```
 
 The functioning of the package is based on other R packages: `dplyr`,
-`lubridate`, `assertthat`, `magrittr`,`threadr` and they will/must be
+`lubridate`, `assertthat`, `magrittr`,`birk` and they will/must be
 installed before using the functions in the `FluxCalR` package.
 
 *Note: in case the installation fails in Rstudio, try to install the
