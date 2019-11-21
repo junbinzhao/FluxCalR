@@ -24,13 +24,13 @@ bibliography: paper.bib
 
 # Summary
 
-As the main drivers of climate change, greenhouse gas (e.g., CO~2~ and CH~4~) emissions have been monitored intensively across the globe. The static chamber is one of the most commonly used approaches for measuring greenhouse gas fluxes from ecosystems (e.g., stem/soil respiration, CH~4~ emission, etc.) because of its easy implementation, high accuracy and low cost [@Pumpanen:2004]. To perform the measurements, a gas analyzer is usually used to measure the changes of greenhouse gas concentrations within a closed chamber that covers an area of interest (e.g., soil surface) over a certain period of time (usually several minutes). The flux rates are, then, calculated from the recorded gas concentrations assuming that the changing rate is linear:
+As the main drivers of climate change, greenhouse gas (e.g., CO~2~ and CH~4~) emissions have been monitored intensively across the globe. The static chamber is one of the most commonly used approaches for measuring greenhouse gas fluxes from ecosystems (e.g., stem/soil respiration, CH~4~ emission, etc.) because of its easy implementation, high accuracy and low cost [@Pumpanen:2004]. To perform the measurements, a gas analyzer is usually used to measure the changes of greenhouse gas concentrations within a closed chamber that covers an area of interest (e.g., soil surface) over a certain period of time (usually several minutes). The flux rates (*F*) are, then, calculated from the recorded gas concentrations assuming that the changing rate is linear:
 
 $$
 F = vol/(R \cdot Ta \cdot area) \cdot dG/dt
 $$
 
-where *vol* is the volume of the chamber (l), *R* is universal gas constant (l atm K^-1^ mol^-1^), *Ta* is the ambient temperature (K), *area* is the area of the chamber base (m^2^), and *dG/dt* is the rate of the measured gas concentration change over time *t* (ppm s^-1^) (i.e., the slope of the linear regression).
+where *vol* is the volume of the chamber (l), *R* is the universal gas constant (l atm K^-1^ mol^-1^), *Ta* is the ambient temperature (K), *area* is the area of the chamber base (m^2^), and *dG/dt* is the rate of the measured gas concentration change over time *t* (ppm s^-1^) (i.e., the slope of the linear regression).
 
 Even though the method itself appears to be straightforward, to calculate the fluxes from the raw gas concentration data can be tedious, because one usually has to manually extract the data for each measurement from an irregular mix of valid data and unwanted records. After selecting the valid data, it is important to choose a window that delivers the best regression for each measurement to ensure the quality and representativeness of the calculated flux. The R^2^ of the regression is usually taken to determine the quality of a flux measurement and a regression with low R^2^ is usually discarded [@Zhao:2016; @Zhao:2017]. Therefore, a tool that calculates the gas concentration changes into fluxes in an efficient and objective fashion is needed. 
 
