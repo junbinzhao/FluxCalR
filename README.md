@@ -7,7 +7,7 @@
 
 [![Travis build
 status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://travis-ci.com/junbinzhao/FluxCalR)
-[![status](https://joss.theoj.org/papers/2ed7dce0968c5ae0cf1d00c942502ff8/status.svg)](https://joss.theoj.org/papers/2ed7dce0968c5ae0cf1d00c942502ff8)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01751/status.svg)](https://doi.org/10.21105/joss.01751)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3549398.svg)](https://doi.org/10.5281/zenodo.3549398)
 <!-- badges: end -->
 
