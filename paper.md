@@ -45,6 +45,7 @@ This R package ``FluxCalR`` is designed to calculate CO~2~ and CH~4~ gas fluxes 
 
 # Acknowledgements
 
-I acknowledge the helps of Matthew J. Simon and Michal Gazovic for testing the code on different datasets.
+This work is partially supported by Department of Energy's (DOE) National Institute for Climate Change Research (07‐SC‐NICCR‐1059) and
+National Science Foundation Division of Atmospheric & Geospace Sciences Atmospheric Chemistry Program (1561161, 1561139, 1233006 and 1807533). I acknowledge the suggestions from Sparkle L. Malone and the helps of Matthew J. Simon and Michal Gazovic for testing the code on different datasets.
 
 # References
