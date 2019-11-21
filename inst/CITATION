@@ -1,0 +1,14 @@
+citHeader("To cite FluxCalR in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "FluxCalR: a R package for calculating CO2 and CH4 fluxes from static chambers",
+  author   = "Junbin Zhao",
+  journal  = "Journal of Open Source Software",
+  year     = "2019",
+  volume   = "4",
+  number   = "43",
+  pages    = "1751",
+  url      = "https://doi.org/10.21105/joss.01751",
+  textVersion = "Junbin Zhao (2019). FluxCalR: a R package for calculating CO2 and CH4 fluxes from static chambers. Journal of Open Source Software, 4(43), 1751, https://doi.org/10.21105/joss.01751"
+)

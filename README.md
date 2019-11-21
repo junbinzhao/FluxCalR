@@ -223,6 +223,6 @@ vignette (`browseVignettes("FluxCalR")`) and the help documents
 
 ### Please cite the package as:
 
-Junbin Zhao (2018). FluxCalR: a R package for calculating CO<sub>2</sub>
-and CH<sub>4</sub> fluxes from static chambers. R package version 0.2.0.
-<https://github.com/junbinzhao/FluxCalR/>
+Junbin Zhao (2019). FluxCalR: a R package for calculating CO<sub>2</sub>
+and CH<sub>4</sub> fluxes from static chambers. Journal of Open Source
+Software, 4(43), 1751, <https://doi.org/10.21105/joss.01751>
