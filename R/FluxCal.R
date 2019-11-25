@@ -33,6 +33,8 @@
 #'  Note the row number of the data frame must be the same as the number of flux measurements.
 #' Default: NULL, then the temperature used is either the average ambient air temperature measured by the LGR analyzer
 #' (column "AmbT_C") or, if the data measured by other analyzers, Ta input from function \code{\link{LoadOther}}.
+#' @param f A number indicates the sampling (recording) frequency of the data (unit: second). If not provided (Default), the
+#' frequency is computed based on the difference of timestamps of the first two rows in the data.
 #' @param ext A number indicates a range of how many times of the window width (\code{win}) should the calculation scan through to
 #' choose the regression with the largest R2. Default: 1.5. This argument is ignored when \code{df_cue} is "Start_End".
 #' @param output A string includes output directory and file name (.csv) to export the calculated fluxes.
@@ -134,6 +136,7 @@ FluxCal <- function(data,
                     cue_type = "End",
                     other = NULL,
                     df_Ta = NULL,
+                    f = NULL,
                     ext = 1.5,
                     output = "Flux_output.csv",
                     digits = 3,
@@ -155,7 +158,10 @@ FluxCal <- function(data,
   # define the pipe from the package "magrittr"
   `%>%` <- magrittr::`%>%`
   # calculate the sampling frequency based on the timestamps (unit: seconds)
-  f <- round(as.numeric(difftime(data$Time[2],data$Time[1],units = "secs")))
+  if (is.null(f)){
+    f <- round(as.numeric(difftime(data$Time[2],data$Time[1],units = "secs")))
+  }
+
   # constants
   R_index <- 0.08205783 # universal gas constant; unit: L*atm*K^-1*mol^-1
   win_f <- win*60/f # the number of rows for the defined window

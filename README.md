@@ -11,7 +11,17 @@ status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://tr
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3549398.svg)](https://doi.org/10.5281/zenodo.3549398)
 <!-- badges: end -->
 
-### Why is the package needed?
+#### *Version 0.2.0 update notes:*
+
+1.  Separated the interactive mannual time cue selection from the main
+    function for a more flexible workflow.
+2.  Fixed the timestamp mismatch issue.
+3.  Added the option in the argument `cue_type` of taking the start and
+    end of a measurement at the same time as the time cues.
+4.  Added the `ext` argument for users to define the window range for
+    choosing the best regression.
+
+### Why the package?
 
 The static close chamber technique is a widely used approach for
 measuring greenhouse gas fluxes from different sources in an ecosystem
