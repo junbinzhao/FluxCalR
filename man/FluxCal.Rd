@@ -54,7 +54,7 @@ that need to be passed along to the final output data frame. Default: NULL.}
 Default: NULL, then the temperature used is either the average ambient air temperature measured by the LGR analyzer
 (column "AmbT_C") or, if the data measured by other analyzers, Ta input from function \code{\link{LoadOther}}.}
 
-\item{f}{A number indicates the sampling (recording) frequency of the data (unit: second). If not provided (Default), the
+\item{f}{A number indicates the sampling (recording) frequency of the data (unit: second). If not provided (default), the
 frequency is computed based on the difference of timestamps of the first two rows in the data.}
 
 \item{ext}{A number indicates a range of how many times of the window width (\code{win}) should the calculation scan through to

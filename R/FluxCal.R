@@ -33,7 +33,7 @@
 #'  Note the row number of the data frame must be the same as the number of flux measurements.
 #' Default: NULL, then the temperature used is either the average ambient air temperature measured by the LGR analyzer
 #' (column "AmbT_C") or, if the data measured by other analyzers, Ta input from function \code{\link{LoadOther}}.
-#' @param f A number indicates the sampling (recording) frequency of the data (unit: second). If not provided (Default), the
+#' @param f A number indicates the sampling (recording) frequency of the data (unit: second). If not provided (default), the
 #' frequency is computed based on the difference of timestamps of the first two rows in the data.
 #' @param ext A number indicates a range of how many times of the window width (\code{win}) should the calculation scan through to
 #' choose the regression with the largest R2. Default: 1.5. This argument is ignored when \code{df_cue} is "Start_End".
