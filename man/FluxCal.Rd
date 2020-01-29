@@ -18,9 +18,7 @@ FluxCal(
   ext = 1.5,
   output = "Flux_output.csv",
   digits = 3,
-  check_plot = TRUE,
-  ylim_CO2 = NULL,
-  ylim_CH4 = NULL
+  check_plot = TRUE
 )
 }
 \arguments{
@@ -67,12 +65,6 @@ FALSE, do not create a file.}
 \item{digits}{An integer indicates the number of decimal digits to be used for the calculated fluxes and slopes.}
 
 \item{check_plot}{A logic value indicates whether a checking plot should be drawn after the calculation. Default: TRUE.}
-
-\item{ylim_CO2}{A numeric vector of length 2, giving the y-axis scale range for CO2 concentration (ppm) for \code{check_plot}.
-If not specified (default), it will be set based on the CO2 range of the entire dataset.}
-
-\item{ylim_CH4}{A numeric vector of length 2, giving the y-axis scale range for CH4 concentration (ppm) for \code{check_plot}.
-If not specified (default), it will be set based on the CH4 range of the entire dataset.}
 }
 \value{
 A data frame with 9 columns, including number of measurement ("Num"), date of measurement ("Date"), start and end time

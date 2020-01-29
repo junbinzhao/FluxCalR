@@ -42,10 +42,6 @@
 #' FALSE, do not create a file.
 #' @param digits An integer indicates the number of decimal digits to be used for the calculated fluxes and slopes.
 #' @param check_plot A logic value indicates whether a checking plot should be drawn after the calculation. Default: TRUE.
-#' @param ylim_CO2 A numeric vector of length 2, giving the y-axis scale range for CO2 concentration (ppm) for \code{check_plot}.
-#' If not specified (default), it will be set based on the CO2 range of the entire dataset.
-#' @param ylim_CH4 A numeric vector of length 2, giving the y-axis scale range for CH4 concentration (ppm) for \code{check_plot}.
-#' If not specified (default), it will be set based on the CH4 range of the entire dataset.
 #'
 #' @return A data frame with 9 columns, including number of measurement ("Num"), date of measurement ("Date"), start and end time
 #' for each flux calculation ("Start" and "End"), gas name ("Gas", either CO2 or CH4), slope ("Slope") and R2 ("R2") of the
@@ -54,7 +50,7 @@
 #' argument \code{output}) and a graph with regression lines plotted on the CO2 and/or CH4 concentration time series will pop up
 #' for checkup purposes.
 #'
-#' @importFrom grDevices dev.new dev.off
+#' @importFrom grDevices dev.new dev.off rgb
 #' @importFrom graphics abline axis.POSIXct lines par plot text
 #' @importFrom stats lm
 #'
@@ -140,10 +136,7 @@ FluxCal <- function(data,
                     ext = 1.5,
                     output = "Flux_output.csv",
                     digits = 3,
-                    check_plot = TRUE,
-                    ylim_CO2 = NULL,
-                    ylim_CH4 = NULL
-
+                    check_plot = TRUE
 ) {
   # check arguments
   cal <- match.arg(cal,c("CO2_CH4","CO2","CH4"))
@@ -297,67 +290,141 @@ FluxCal <- function(data,
     }
 
     ######### 4. plot the result if required
-    if (check_plot == TRUE){ # if checking plot is needed, then make a graph
-      # determine if the CO2 or CH4 column is used for ploting and ylim range
-      if (flux=="CO2"){ # for CO2
-        var <- "X.CO2.d_ppm"
-        if (is.null(ylim_CO2)){
-          ylim <- range(data$X.CO2.d_ppm)
-        } else {
-          ylim <- ylim_CO2
-        }
-      } else { # for CH4
-        var <- "X.CH4.d_ppm"
-        if (is.null(ylim_CH4)){
-          ylim <- range(data$X.CH4.d_ppm)
-        } else {
-          ylim <- ylim_CH4
-        }
-      }
-      # plot the data against the row index
-      try(plot(data[,var],
-               ylab=paste0(flux," readings in ppm"),
-               xlab="Time",bty="n", xaxt="n",
-               ylim=ylim),silent=TRUE)
-      # plot the regression lines
-      for (i in seq_len(nrow(dft))){
-        Slm <- try(lm(data[(dft[i,"Index"]-win_f):dft[i,"Index"],var]~
-                        data$Row[(dft[i,"Index"]-win_f):dft[i,"Index"]]),silent=TRUE)
-        try(lines(data$Row[(dft[i,"Index"]-win_f):dft[i,"Index"]], Slm$fitted.values,
-                  col="green", lwd=3),silent=TRUE)
-        try(text(data[dft[i,"Index"]-win_f,"Row"],data[dft[i,"Index"]-win_f,var],
-                 labels = paste(dft[i,"Num"]),
-                 col="red",cex=1.2,pos = 3),silent=TRUE)
-      }
-      # add x-axis as time
-      par(new=T)
-      try(plot(data[,"Time"],data[,var],
-               type = "n",axes = F, xlab = "", ylab = ""),silent=TRUE)
-      # add time interval ticks
-      c <- try(lubridate::pretty_dates(data$Time,n=10),silent=TRUE)
-      try(axis.POSIXct(1, at= c,format = "%H:%M"),silent=TRUE)
-    }
+    # if (check_plot == TRUE){ # if checking plot is needed, then make a graph
+    #   # determine if the CO2 or CH4 column is used for ploting and ylim range
+    #   if (flux=="CO2"){ # for CO2
+    #     var <- "X.CO2.d_ppm"
+    #     if (is.null(ylim_CO2)){
+    #       ylim <- range(data$X.CO2.d_ppm)
+    #     } else {
+    #       ylim <- ylim_CO2
+    #     }
+    #   } else { # for CH4
+    #     var <- "X.CH4.d_ppm"
+    #     if (is.null(ylim_CH4)){
+    #       ylim <- range(data$X.CH4.d_ppm)
+    #     } else {
+    #       ylim <- ylim_CH4
+    #     }
+    #   }
+    #   # plot the data against the row index
+    #   try(plot(data[,var],
+    #            ylab=paste0(flux," readings in ppm"),
+    #            xlab="Time",bty="n", xaxt="n",
+    #            ylim=ylim),silent=TRUE)
+    #   # plot the regression lines
+    #   for (i in seq_len(nrow(dft))){
+    #     Slm <- try(lm(data[(dft[i,"Index"]-win_f):dft[i,"Index"],var]~
+    #                     data$Row[(dft[i,"Index"]-win_f):dft[i,"Index"]]),silent=TRUE)
+    #     try(lines(data$Row[(dft[i,"Index"]-win_f):dft[i,"Index"]], Slm$fitted.values,
+    #               col="green", lwd=3),silent=TRUE)
+    #     try(text(data[dft[i,"Index"]-win_f,"Row"],data[dft[i,"Index"]-win_f,var],
+    #              labels = paste(dft[i,"Num"]),
+    #              col="red",cex=1.2,pos = 3),silent=TRUE)
+    #   }
+    #   # add x-axis as time
+    #   par(new=T)
+    #   try(plot(data[,"Time"],data[,var],
+    #            type = "n",axes = F, xlab = "", ylab = ""),silent=TRUE)
+    #   # add time interval ticks
+    #   c <- try(lubridate::pretty_dates(data$Time,n=10),silent=TRUE)
+    #   try(axis.POSIXct(1, at= c,format = "%H:%M"),silent=TRUE)
+    # }
     return(dft)
   } # end of the function
 
   ###### calculate the flux using the function and, if required, output the file and plot the result ------------------
-  if (check_plot == TRUE){ # if the checking plot is needed, create a window for plotting
-    if (cal == "CO2_CH4"){ # both CO2 and CH4 are calculated, plot 2 graphs
-      dev.new(width = 16,height = 12,noRStudioGD=TRUE)
-      par(mfrow=c(2,1),mar=c(2,1,2,1),xpd=NA,oma=c(4,4,1,1))
-    } else { # only CO2 or CH4 is calculated, plot 1 graph
-      dev.new(width = 16,height = 5,noRStudioGD=TRUE)
-      par(mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
-    }
-  }
+  # if (check_plot == TRUE){ # if the checking plot is needed, create a window for plotting
+  #   if (cal == "CO2_CH4"){ # both CO2 and CH4 are calculated, plot 2 graphs
+  #     dev.new(width = 16,height = 12,noRStudioGD=TRUE)
+  #     par(mfrow=c(2,1),mar=c(2,1,2,1),xpd=NA,oma=c(4,4,1,1))
+  #   } else { # only CO2 or CH4 is calculated, plot 1 graph
+  #     dev.new(width = 16,height = 5,noRStudioGD=TRUE)
+  #     par(mar=c(0.5,1,0.5,1),xpd=NA,oma=c(4,4,1,1))
+  #   }
+  # }
+
+  # function for plotting check plot with "plotly"
+  # data points
+  plotck <- function(flux,dft) {
+    # determine if the CO2 or CH4 column is used for ploting and ylim range
+      if (flux=="CO2"){ # for CO2
+        var <- "X.CO2.d_ppm"
+      } else { # for CH4
+        var <- "X.CH4.d_ppm"
+      }
+    # scatter plot
+    p <- plotly::plot_ly(x = data[,"Time"],
+                         y = data[,var],
+                         mode = "markers",
+                         type = "scatter",
+                         color = I(rgb(0,0,0,alpha = 0.5)),
+                         ) %>%
+      plotly::layout(xaxis = list(title = ""),
+                     yaxis = list(title = paste0(flux," readings in ppm")),
+                     showlegend = FALSE)
+    # add regression lines
+    for (i in seq_len(nrow(dft))){
+      Slm <- try(lm(data[(dft[i,"Index"]-win_f):dft[i,"Index"],var]~
+                    data$Row[(dft[i,"Index"]-win_f):dft[i,"Index"]]),silent=TRUE)
+      # add regression lines
+      p <- try(plotly::add_lines(p,
+                                 x = data$Time[(dft[i,"Index"]-win_f):dft[i,"Index"]],
+                                 y = Slm$fitted.values,
+                                 line = list(width = 3,color="chartreuse")),
+                   silent=TRUE)
+    } # end of regression line loop
+
+    # add index to all regression line
+    p <- try(plotly::add_text(p,
+                              x = data[dft[,"Index"]-win_f,"Time"],
+                              y = data[dft[,"Index"]-win_f,var],
+                              text = paste(dft[,"Num"]),
+                              textfont = list(color = "red"),
+                              textposition = "top"),
+             silent=TRUE)
+    return(p)
+  } # end of check plot function
+
+  # function to create a temporary HTML file to show plotly check plot
+  htmlplotly <- function(p_=pp){
+    tempDir <- tempfile()
+    dir.create(tempDir)
+    htmlFile <- file.path(tempDir, "index.html")
+    # add the plotly graph to the html file
+    htmlwidgets::saveWidget(plotly::as_widget(p_), htmlFile)
+    # view the graph
+    viewer <- getOption("viewer")
+    viewer(htmlFile)
+  } # end of HTML file for plotly
+
   # calculate and plot
   if (cal == "CO2_CH4"){ # both CO2 and CH4 are calculated
     df_CO2 <- CalFUN(flux = "CO2")
     df_CH4 <- CalFUN(flux = "CH4")
+    # plot the check plot
+    if (check_plot == TRUE) {
+      p_CO2 <- plotck(flux = "CO2",dft = df_CO2)
+      p_CH4 <- plotck(flux = "CH4",dft = df_CH4)
+      pp <- plotly::subplot(p_CO2,p_CH4,
+                            nrows = 2,
+                            titleY = TRUE)
+      htmlplotly()
+    } # end of plotting check plot
+
+    # the output
     dfoutput <- rbind(df_CO2,df_CH4) %>%
       dplyr::select(-Index,-Tk) # don't output the row index and Tk
   } else { # only CO2 or CH4 is calculated
-    dfoutput <- CalFUN(flux = cal) %>%
+    df_var <- CalFUN(flux = cal)
+    # plot the check plot
+    if (check_plot == TRUE){
+      pp <- plotck(flux = cal,dft = df_var)
+      htmlplotly()
+    }
+
+    # the output
+    dfoutput <- df_var %>%
       dplyr::select(-Index,-Tk) # don't output the row index and Tk
   }
   # check if the data frame needs to be output as a file

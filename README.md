@@ -11,7 +11,12 @@ status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://tr
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3549398.svg)](https://doi.org/10.5281/zenodo.3549398)
 <!-- badges: end -->
 
-#### *Version 0.2.0 update notes:*
+#### *Version 0.2.1 update notes: (2020-1-29)*
+
+Used `plotly` package for the final checkup graph, so that it can be
+zoomed in for more accurate screenings.
+
+#### *Version 0.2.0 update notes: (2019-11-20)*
 
 1.  Separated the interactive mannual time cue selection from the main
     function for a more flexible workflow.
