@@ -16,7 +16,7 @@
 #' @param win A number indicates the window width for the flux calculation, unit: minutes.
 #' @param vol A number indicates volume of the chamber; unit: dm^3 or l.
 #' @param area A number indicates base area of the chamber; unit: m^2.
-#' @param Pa A number indicates the air pressure during measurements; unit: atm. Default: 1.
+#' @param pa A number indicates the air pressure during measurements; unit: atm. Default: 1.
 #' @param cal A string, either "CO2_CH4" (default),"CO2" or "CH4", indicates which gas flux it is calculated for.
 #' @param df_cue A data frame that includes "Start" and/or "End" time (HH:MM:SS) of each measurement.
 #' The header for the time must be either \strong{"Start"} or \strong{"End"}. This data frame can either be created by the
@@ -38,6 +38,8 @@
 #' frequency is computed based on the difference of timestamps of the first two rows in the data.
 #' @param ext A number indicates a range of how many times of the window width (\code{win}) should the calculation scan through to
 #' choose the regression with the largest R2. Default: 1.5. This argument is ignored when \code{df_cue} is "Start_End".
+#' @param metric A string to indicate the evaluation metric for selecting the regression. Possible options: "R2" (default) and
+#' "RMSE".
 #' @param output A string includes output directory and file name (.csv) to export the calculated fluxes.
 #' Default: a file named "Flux_output.csv" with calculated fluxes will be created under the current work directory.
 #' FALSE, do not create a file.
@@ -128,7 +130,7 @@ FluxCal <- function(data,
                     win,
                     vol,
                     area,
-                    Pa = 1,
+                    pa = 1,
                     cal = "CO2_CH4",
                     df_cue,
                     cue_type = "End",
@@ -136,6 +138,7 @@ FluxCal <- function(data,
                     df_Ta = NULL,
                     f = NULL,
                     ext = 1.5,
+                    metric = "R2",
                     output = "Flux_output.csv",
                     digits = 3,
                     check_plot = TRUE
@@ -143,6 +146,7 @@ FluxCal <- function(data,
   # check arguments
   cal <- match.arg(cal,c("CO2_CH4","CO2","CH4"))
   cue_type <- match.arg(cue_type,c("End","Start","Start_End"))
+  metric <- match.arg(metric,c("R2","RMSE"))
   # # if volumn or base area of the chamber are not specified
   # if (!is.numeric(vol) | !is.numeric(area)){
   #   stop("Error: both 'vol' and 'area' have to be specified!")
@@ -240,8 +244,8 @@ FluxCal <- function(data,
 
   # function to calculate R2, slopes and fluxes ----------
   CalFUN <- function(flux = "CO2") {
-    dft <- data.frame(matrix(0,nrow(df_cue),9)) # for record the data
-    names(dft) <- c("Num","Date","Start","End","Gas","Slope","R2","Ta","Index")
+    dft <- data.frame(matrix(-999,nrow(df_cue),9)) # for record the data
+    names(dft) <- c("Num","Date","Start","End","Gas","Slope","metric","Ta","Index")
     ########## 1. calculate the max R2 and slopes of the regression winthin the window with an extended range
     for (a in seq_len(nrow(df_cue))){
       # the window is moving backwards from the end point
@@ -256,7 +260,13 @@ FluxCal <- function(data,
           stop(paste0("Error: make sure ",flux," data are provided and specified in the correct way (See the help)."))
         } else {
           dft[a,"Num"] <- a # the Number of measurements
-          if (Slm$r.squared > dft[a,"R2"]) {
+          # define argument for "if" based on the evaluation metric
+          met <- ifelse(metric == "R2",
+                        Slm$r.squared > dft[a,"metric"], # metric == "R2"
+                        sqrt(mean(Slm$residuals^2)) < dft[a,"metric"] # metric == "RMSE"
+                        )
+          # if the new regression is better than the one already saved
+          if (met | dft[a,"metric"] == -999) {
             dft[a,"Date"] <- paste0(lubridate::year(data$Time[1]),"-", # the date
                                lubridate::month(data$Time[1]),"-",
                                lubridate::day(data$Time[1]))
@@ -264,13 +274,20 @@ FluxCal <- function(data,
             dft[a,"End"] <- strftime(data$Time[b],format="%H:%M:%S","UTC") # the end time of the slope
             dft[a,"Gas"] <- flux # CO2 or CH4
             dft[a,"Slope"] <- try(round(Slm$coefficients[2]/f,digits = digits),silent = TRUE) # slope as against 1s
-            dft[a,"R2"] <- try(round(Slm$r.squared,digits = 2),silent = TRUE) # R2
+            dft[a,"metric"] <- try(ifelse(metric == "R2",
+                                          round(Slm$r.squared,digits = 2), # metric == "R2"
+                                          round(sqrt(mean(Slm$residuals^2)),digits = 2) # metric == "RMSE"
+                                          ),
+                                   silent = TRUE) # R2 or RMSE
             dft[a,"Ta"] <- round(mean(data$AmbT_C[(b-win_f):b]),digits=2) # temperautre
             dft[a,"Index"] <- b # output the row index at the END of the slope for plotting the graphs
-          } # end of if for R2
+          } # end of if for R2 or RMSE
         }
       } # end b loop
     } # end a loop, end of calculate the slopes
+
+    # change the name for the metric
+    names(dft)[7] <- metric
 
     ####### 2. determine which temperature will be used for flux calculation
     if (is.null(df_Ta)){ # if no Ta provided, use the ones measured by analyzer
@@ -282,7 +299,7 @@ FluxCal <- function(data,
 
     ######## 3. calculate the flux
     dft <- dft %>%
-      dplyr::mutate(Flux=try(round(((Slope*vol)/(R_index*Tk)/area)*Pa,digits = digits),silent=TRUE)) # umol m-2 s-1
+      dplyr::mutate(Flux=try(round(((Slope*vol)/(R_index*Tk)/area)*pa,digits = digits),silent=TRUE)) # umol m-2 s-1
 
     # when other meta data need to be passed along from the df_cue data frame
     if (!is.null(other)){

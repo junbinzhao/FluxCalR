@@ -9,7 +9,7 @@ FluxCal(
   win,
   vol,
   area,
-  Pa = 1,
+  pa = 1,
   cal = "CO2_CH4",
   df_cue,
   cue_type = "End",
@@ -17,6 +17,7 @@ FluxCal(
   df_Ta = NULL,
   f = NULL,
   ext = 1.5,
+  metric = "R2",
   output = "Flux_output.csv",
   digits = 3,
   check_plot = TRUE
@@ -31,7 +32,7 @@ FluxCal(
 
 \item{area}{A number indicates base area of the chamber; unit: m^2.}
 
-\item{Pa}{A number indicates the air pressure during measurements; unit: atm. Default: 1.}
+\item{pa}{A number indicates the air pressure during measurements; unit: atm. Default: 1.}
 
 \item{cal}{A string, either "CO2_CH4" (default),"CO2" or "CH4", indicates which gas flux it is calculated for.}
 
@@ -60,6 +61,9 @@ frequency is computed based on the difference of timestamps of the first two row
 
 \item{ext}{A number indicates a range of how many times of the window width (\code{win}) should the calculation scan through to
 choose the regression with the largest R2. Default: 1.5. This argument is ignored when \code{df_cue} is "Start_End".}
+
+\item{metric}{A string to indicate the evaluation metric for selecting the regression. Possible options: "R2" (default) and
+"RMSE".}
 
 \item{output}{A string includes output directory and file name (.csv) to export the calculated fluxes.
 Default: a file named "Flux_output.csv" with calculated fluxes will be created under the current work directory.

@@ -11,6 +11,14 @@ status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://tr
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3549398.svg)](https://doi.org/10.5281/zenodo.3549398)
 <!-- badges: end -->
 
+#### *Version 0.2.2 update notes: (2020-12-2)*
+
+1.  Added an argument `pa` for air pressure input (unit: atm).
+2.  Added an argument `metric` with an option of using RMSE, other than
+    R2 (default), as evaluation metric for selecting regressions.
+
+*(Acknowledge to Thomas Gremmen who made suggestions for the updates\!)*
+
 #### *Version 0.2.1 update notes: (2020-1-29)*
 
 Used `plotly` package for the final checkup graph, so that it can be
@@ -18,7 +26,7 @@ zoomed in for more accurate screenings.
 
 #### *Version 0.2.0 update notes: (2019-11-20)*
 
-1.  Separated the interactive mannual time cue selection from the main
+1.  Separated the interactive manual time cue selection from the main
     function for a more flexible workflow.
 2.  Fixed the timestamp mismatch issue.
 3.  Added the option in the argument `cue_type` of taking the start and
@@ -147,7 +155,7 @@ library(FluxCalR)
 # get the directory of the example LGR raw data
 example_data1 <- system.file("extdata", "Flux_example_1_LGR.txt", package = "FluxCalR")
 example_data1 # check the directory
-#> [1] "C:/Users/juzh/Documents/R/R-3.6.1/library/FluxCalR/extdata/Flux_example_1_LGR.txt"
+#> [1] "C:/Users/juzh/Documents/R/win-library/4.0/FluxCalR/extdata/Flux_example_1_LGR.txt"
 
 # load the data
 Flux_lgr <- LoadLGR(file = example_data1,
