@@ -16,6 +16,7 @@
 #' @param win A number indicates the window width for the flux calculation, unit: minutes.
 #' @param vol A number indicates volume of the chamber; unit: dm^3 or l.
 #' @param area A number indicates base area of the chamber; unit: m^2.
+#' @param Pa A number indicates the air pressure during measurements; unit: atm. Default: 1.
 #' @param cal A string, either "CO2_CH4" (default),"CO2" or "CH4", indicates which gas flux it is calculated for.
 #' @param df_cue A data frame that includes "Start" and/or "End" time (HH:MM:SS) of each measurement.
 #' The header for the time must be either \strong{"Start"} or \strong{"End"}. This data frame can either be created by the
@@ -127,6 +128,7 @@ FluxCal <- function(data,
                     win,
                     vol,
                     area,
+                    Pa = 1,
                     cal = "CO2_CH4",
                     df_cue,
                     cue_type = "End",
@@ -280,7 +282,7 @@ FluxCal <- function(data,
 
     ######## 3. calculate the flux
     dft <- dft %>%
-      dplyr::mutate(Flux=try(round(((Slope*vol)/(R_index*Tk)/area),digits = digits),silent=TRUE)) # umol m-2 s-1
+      dplyr::mutate(Flux=try(round(((Slope*vol)/(R_index*Tk)/area)*Pa,digits = digits),silent=TRUE)) # umol m-2 s-1
 
     # when other meta data need to be passed along from the df_cue data frame
     if (!is.null(other)){

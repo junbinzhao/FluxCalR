@@ -9,6 +9,7 @@ FluxCal(
   win,
   vol,
   area,
+  Pa = 1,
   cal = "CO2_CH4",
   df_cue,
   cue_type = "End",
@@ -29,6 +30,8 @@ FluxCal(
 \item{vol}{A number indicates volume of the chamber; unit: dm^3 or l.}
 
 \item{area}{A number indicates base area of the chamber; unit: m^2.}
+
+\item{Pa}{A number indicates the air pressure during measurements; unit: atm. Default: 1.}
 
 \item{cal}{A string, either "CO2_CH4" (default),"CO2" or "CH4", indicates which gas flux it is calculated for.}
 
