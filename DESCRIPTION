@@ -1,7 +1,7 @@
 Package: FluxCalR
 Type: Package
 Title: FluxCalR: a R package for calculating CO2 and CH4 fluxes from static chambers
-Version: 0.2.1
+Version: 0.2.2
 Author: Junbin Zhao
 Maintainer: Junbin Zhao <junbinzhao1985@gmail.com>
 Year: 2019
