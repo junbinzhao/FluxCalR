@@ -306,6 +306,8 @@ FluxCal <- function(data,
       dft <- try(data.frame(dft,df_cue[,c(other)]),silent = TRUE)
       if (class(dft)=="try-error")
         stop("Error: please check the 'other' argument is properly specified as column names (see the help)!")
+      # rename the variables passed along
+      names(dft)[(ncol(dft)-length(other)+1):ncol(dft)] <- other
     }
 
     ######### 4. plot the result if required
