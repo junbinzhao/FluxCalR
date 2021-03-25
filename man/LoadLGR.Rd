@@ -4,7 +4,7 @@
 \alias{LoadLGR}
 \title{Load LGR data}
 \usage{
-LoadLGR(file, time_format = "mdy_HMS")
+LoadLGR(file, time_format = "mdy_HMS", Ta_ignore = FALSE)
 }
 \arguments{
 \item{file}{A string contains the directory path and file name of the raw data.
@@ -12,6 +12,10 @@ The data should be provided as what is exported from the LGR analyzer.}
 
 \item{time_format}{A string indicates the format of timestamps. Default: "mdy_HMS".
 It also takes the format "dmy_HMS" or "ymd_HMS", depending on the timestamps output from the analyzer.}
+
+\item{Ta_ignore}{A logic value indicates whether air temperature in the dataset is ignored.
+Default: FALSE. If this is set to "TRUE", the column name of the air temperature will not be checked, but
+air temperature data will have to be added to the argument \code{df_Ta} in the function \code{\link{FluxCal}}.}
 }
 \value{
 A data frame with all data in the right format for the functions \code{\link{SelCue}} and \code{\link{FluxCal}}.

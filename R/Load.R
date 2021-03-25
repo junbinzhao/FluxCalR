@@ -8,7 +8,9 @@
 #' The data should be provided as what is exported from the LGR analyzer.
 #' @param time_format A string indicates the format of timestamps. Default: "mdy_HMS".
 #' It also takes the format "dmy_HMS" or "ymd_HMS", depending on the timestamps output from the analyzer.
-#'
+#' @param Ta_ignore A logic value indicates whether air temperature in the dataset is ignored.
+#' Default: FALSE. If this is set to "TRUE", the column name of the air temperature will not be checked, but
+#' air temperature data will have to be added to the argument \code{df_Ta} in the function \code{\link{FluxCal}}.
 #' @return A data frame with all data in the right format for the functions \code{\link{SelCue}} and \code{\link{FluxCal}}.
 #'
 #' @examples
@@ -21,7 +23,8 @@
 #' @export
 ## Function for loading data from LGR ----------
 LoadLGR <- function(file,
-                    time_format="mdy_HMS"
+                    time_format = "mdy_HMS",
+                    Ta_ignore = FALSE
 ){
   # argument check
   time_format <- match.arg(time_format,c("mdy_HMS","dmy_HMS","ymd_HMS"))
@@ -35,6 +38,38 @@ LoadLGR <- function(file,
   if (class(flux$Time)[1]=="try-error" | is.na(flux$Time)[1]){
     stop("Error: check if the 'time_format' argument is correct!")
   }
+
+  # check the CO2 column names
+  flux$X.CO2.d_ppm <- try(flux$X.CO2.d_ppm,silent = TRUE)
+  # if column name is not found, try find "wet" CO2 instead
+  if (class(flux$X.CO2.d_ppm[1])=="try-error"){
+    flux$X.CO2.d_ppm <- try(flux$X.CO2._ppm,silent = TRUE)
+  }
+  # error if column name is not found
+  if (class(flux$X.CO2.d_ppm[1])=="try-error"){
+    stop("Column names do not match! Use 'LoadOther()' function to load data.")
+  }
+
+  # check the CH4 column names
+  flux$X.CH4.d_ppm <- try(flux$X.CH4.d_ppm,silent = TRUE)
+  # if column name is not found, try find "wet" CH4 instead
+  if (class(flux$X.CH4.d_ppm[1])=="try-error"){
+    flux$X.CH4.d_ppm <- try(flux$X.CH4._ppm,silent = TRUE)
+  }
+  # error if column name is not found
+  if (class(flux$X.CH4.d_ppm[1])=="try-error"){
+    stop("Column names do not match! Use 'LoadOther()' function to load data.")
+  }
+
+  # check the air temperature column name if it is not ignored
+  if (Ta_ignore == FALSE) {
+    flux$AmbT_C <- try(flux$AmbT_C,silent = TRUE)
+    # error if column name is not found
+    if (class(flux$AmbT_C[1])=="try-error"){
+      stop("Column names do not match! Use 'LoadOther()' function to load data.")
+    }
+  }
+
   return(flux)
 }
 ##----------------------
