@@ -35,7 +35,7 @@
 #' @importFrom graphics abline axis.POSIXct lines par plot text
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(FluxCalR)
 #' #### data from LGR
 #' # get the directory of the example LGR raw data

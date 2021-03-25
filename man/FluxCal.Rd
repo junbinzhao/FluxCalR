@@ -95,7 +95,7 @@ Based on the time cues and window width provided for the calculation, the functi
  drawn for checkup purposes.
 }
 \examples{
-\donttest{
+\dontrun{
 library(FluxCalR)
 #### data from LGR
 # get the directory of the example LGR raw data

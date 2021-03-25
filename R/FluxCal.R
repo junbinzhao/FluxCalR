@@ -58,7 +58,7 @@
 #' @importFrom stats lm
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(FluxCalR)
 #' #### data from LGR
 #' # get the directory of the example LGR raw data
