@@ -11,6 +11,12 @@ status](https://travis-ci.com/junbinzhao/FluxCalR.svg?branch=master)](https://tr
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3549398.svg)](https://doi.org/10.5281/zenodo.3549398)
 <!-- badges: end -->
 
+### Please cite the package as:
+
+Junbin Zhao (2019). FluxCalR: a R package for calculating CO<sub>2</sub>
+and CH<sub>4</sub> fluxes from static chambers. Journal of Open Source
+Software, 4(43), 1751, <https://doi.org/10.21105/joss.01751>
+
 #### *Version 0.2.2 update notes: (2020-12-2)*
 
 1.  Added an argument `pa` for air pressure input (unit: atm).
@@ -244,9 +250,3 @@ head(Flux_output1)
 For more details of the functions and examples, please check the
 vignette (`browseVignettes("FluxCalR")`) and the help documents
 (`?LoadLGR()`,`?LoadOther()`,`?SelCue()`,`?FluxCal()`).
-
-### Please cite the package as:
-
-Junbin Zhao (2019). FluxCalR: a R package for calculating CO<sub>2</sub>
-and CH<sub>4</sub> fluxes from static chambers. Journal of Open Source
-Software, 4(43), 1751, <https://doi.org/10.21105/joss.01751>
