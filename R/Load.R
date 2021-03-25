@@ -40,32 +40,32 @@ LoadLGR <- function(file,
   }
 
   # check the CO2 column names
-  flux$X.CO2.d_ppm <- try(flux$X.CO2.d_ppm,silent = TRUE)
+  flux$X.CO2.d_ppm <- try(flux[,"X.CO2.d_ppm"],silent = TRUE)
   # if column name is not found, try find "wet" CO2 instead
-  if (class(flux$X.CO2.d_ppm[1])=="try-error"){
-    flux$X.CO2.d_ppm <- try(flux$X.CO2._ppm,silent = TRUE)
+  if (class(flux$X.CO2.d_ppm[1])=="character" | class(flux$X.CO2.d_ppm[1])=="try-error"){
+    flux$X.CO2.d_ppm <- try(flux[,"X.CO2._ppm"],silent = TRUE)
   }
   # error if column name is not found
-  if (class(flux$X.CO2.d_ppm[1])=="try-error"){
+  if (class(flux$X.CO2.d_ppm[1])=="character" | class(flux$X.CO2.d_ppm[1])=="try-error"){
     stop("Column names do not match! Use 'LoadOther()' function to load data.")
   }
 
   # check the CH4 column names
-  flux$X.CH4.d_ppm <- try(flux$X.CH4.d_ppm,silent = TRUE)
+  flux$X.CH4.d_ppm <- try(flux[,"X.CH4.d_ppm"],silent = TRUE)
   # if column name is not found, try find "wet" CH4 instead
-  if (class(flux$X.CH4.d_ppm[1])=="try-error"){
-    flux$X.CH4.d_ppm <- try(flux$X.CH4._ppm,silent = TRUE)
+  if (class(flux$X.CH4.d_ppm[1])=="character" | class(flux$X.CH4.d_ppm[1])=="try-error"){
+    flux$X.CH4.d_ppm <- try(flux[,"X.CH4._ppm"],silent = TRUE)
   }
   # error if column name is not found
-  if (class(flux$X.CH4.d_ppm[1])=="try-error"){
+  if (class(flux$X.CH4.d_ppm[1])=="character" | class(flux$X.CH4.d_ppm[1])=="try-error"){
     stop("Column names do not match! Use 'LoadOther()' function to load data.")
   }
 
   # check the air temperature column name if it is not ignored
   if (Ta_ignore == FALSE) {
-    flux$AmbT_C <- try(flux$AmbT_C,silent = TRUE)
+    flux$AmbT_C <- try(flux[,"AmbT_C"],silent = TRUE)
     # error if column name is not found
-    if (class(flux$AmbT_C[1])=="try-error"){
+    if (class(flux$AmbT_C[1])=="character" | class(flux$AmbT_C[1])=="try-error"){
       stop("Column names do not match! Use 'LoadOther()' function to load data.")
     }
   }
@@ -154,7 +154,7 @@ LoadOther <- function(file,
   if (!is.null(CO2)){
     X.CO2.d_ppm <- try(flux1[,CO2],silent = TRUE)
     # error if column name is not found
-    if (class(X.CO2.d_ppm)=="try-error"){
+    if (class(X.CO2.d_ppm[1])=="try-error" | class(X.CO2.d_ppm[1])=="character"){
       stop("Error: check if column name for CO2 is correct!")
     }
     flux <- data.frame(flux,X.CO2.d_ppm)
@@ -163,7 +163,7 @@ LoadOther <- function(file,
   if (!is.null(CH4)){
     X.CH4.d_ppm <- try(flux1[,CH4],silent = TRUE)
     # error if column name is not found
-    if (class(X.CH4.d_ppm)=="try-error"){
+    if (class(X.CH4.d_ppm[1])=="try-error" | class(X.CH4.d_ppm[1])=="character"){
       stop("Error: check if column name for CH4 is correct!")
     }
     flux <- data.frame(flux,X.CH4.d_ppm)
